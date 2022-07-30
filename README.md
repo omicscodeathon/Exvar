@@ -1,2 +1,1 @@
-# cerebral_malaria_snps
-Predicting Drug Resistance Associated Single Nucleotide Polymorphisms in Cerebral Malaria Patients
+# ECeQ: Shiny app for gene expression, CNV and eQTL analysis 
