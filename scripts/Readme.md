@@ -58,11 +58,12 @@ we use the Benjamini-Hockberg = ((p-value of gene)*(Total genes tested))/(rank o
 - filter genes with NA padj values using  myResAsDF[!is.na(myResAsDF$padj), ]
 
 
-###Annotation
+### Annotation
 - retrieve Gene Symbols for the Entrez IDs using the select() function from the "org.db" packages
 - merge the Entrez ID to Symbol table into  differential expression results table using the "merge()" function
 
 ## Genomic Variants (CNVs)
+- variant calling using the "Samtools" package
 
     
 
