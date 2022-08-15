@@ -63,7 +63,8 @@ we use the Benjamini-Hockberg = ((p-value of gene)*(Total genes tested))/(rank o
 - merge the Entrez ID to Symbol table into  differential expression results table using the "merge()" function
 
 ## Genomic Variants (CNVs)
-- variant calling using the "Samtools" package
+- variant calling using the "Bcftools" package
+- annotation using the "ensemblVEP" package 
 
     
 
