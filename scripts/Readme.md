@@ -89,16 +89,27 @@ we use the Benjamini-Hockberg = ((p-value of gene)*(Total genes tested))/(rank o
 
 ## eQTL
 - quality control
+
          - remove markers with excessive missing genotypes
+       
          - exclude subjects with excessive missing genotypes
+         
          - exclude subjects with gender-mismatch
+         
          - remove markers with heterozygous haploid genotypes
+         
          - remove markers violating Hardy-Weinberg Equilibrium (HWE)
+         
          - remove markers with informative missingness
+         
          - remove markers with low minor allele frequency (MAF)
+         
          - exclude subjects with abnormal heterozygosity rate
+         
          - exclude related subjects
+         
          - identify and exclude individuals with divergent ancestry
+         
 - eQTL mapping using the " MatrixEQTL" package
 - cis-eQTL association
 - trans-eQTL association
