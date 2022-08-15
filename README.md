@@ -1,1 +1,1 @@
-# ECeQ: Shiny App for Gene Expression, CNV and eQTL analysis 
+# ECeQ: Shiny App for Gene Expression, CNV and eQTL data visualization
