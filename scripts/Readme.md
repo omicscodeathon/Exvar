@@ -71,10 +71,15 @@ we use the Benjamini-Hockberg = ((p-value of gene)*(Total genes tested))/(rank o
         - Extract chromosome name from the VRange object: seqnames()@values
         - Retrive SNPs by chromosome: snpsBySeqname()
 - update the seqlevelsStyle to "UCSC"
+- 
     #change seqlevelsStyle
+    
     seqlevelsStyle(my_snps) <- "UCSC"
+    
     #change genome
+    
     genome(my_snps) <- "hg19"
+    
 - make a rsID table
 - Extract information of variants using the gsub() function
 - marge the variant and rsID data.frames using the "merge()" function
