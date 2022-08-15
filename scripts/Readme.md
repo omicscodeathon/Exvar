@@ -115,7 +115,12 @@ we use the Benjamini-Hockberg = ((p-value of gene)*(Total genes tested))/(rank o
 - trans-eQTL association
     
 ## Allele-specific expression (ASE) analysis
-
-
+- Using "ASEsetFromBam()" function from the "AllelicImbalance" package
+- 
     
+# Pipeline Outputs 
+- expression csv file
+- variant vcf file
+- genotype vcf file 
+
     
