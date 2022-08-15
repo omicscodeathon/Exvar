@@ -116,7 +116,7 @@ we use the Benjamini-Hockberg = ((p-value of gene)*(Total genes tested))/(rank o
     
 ## Allele-specific expression (ASE) analysis
 - Using "ASEsetFromBam()" function from the "AllelicImbalance" package
-- 
+    ( or the "MBASED" package).
     
 # Pipeline Outputs 
 - expression csv file
