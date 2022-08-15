@@ -114,7 +114,7 @@ we use the Benjamini-Hockberg = ((p-value of gene)*(Total genes tested))/(rank o
 - cis-eQTL association
 - trans-eQTL association
     
-
+## Allele-specific expression (ASE) analysis
 
 
     
