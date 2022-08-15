@@ -71,7 +71,7 @@ we use the Benjamini-Hockberg = ((p-value of gene)*(Total genes tested))/(rank o
         - Extract chromosome name from the VRange object: seqnames()@values
         - Retrive SNPs by chromosome: snpsBySeqname()
 - update the seqlevelsStyle to "UCSC"
-- 
+
     #change seqlevelsStyle
     
     seqlevelsStyle(my_snps) <- "UCSC"
