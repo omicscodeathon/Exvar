@@ -1,5 +1,5 @@
 # Raw data Analysis Pipelines
-
+# Note : This is not the final pipeline !!
 ## Fastq files preprocessing
 
 - Read fastq files using "ShortRead" package
@@ -29,7 +29,7 @@
 - creat "RangedSummarizedExperiment" object 
     - "exonsBy()"
     - "summarizeOverlaps()"
-- parallelization. using the "BiocParallel" package
+- parallelization using the "BiocParallel" package
 - "assay()" function
 - rowRanges() 
 
@@ -64,11 +64,25 @@ we use the Benjamini-Hockberg = ((p-value of gene)*(Total genes tested))/(rank o
 
 ## Genomic Variants (CNVs)
 - variant calling using the "Bcftools" package
-- annotation using the "ensemblVEP" package 
-
-    
-
-
+-
+-
+- read vcf files using the readVcf() function
+- annotation using the "VariantAnnotation" package 
+- The variant information is recorded in a VRange object; rowRanges(vcf)
+- retrive dbSNP data from refernce genome (SNPlocs.Hsapiens.dbSNP144.GRCh37)
+        - Extract chromosome name from the VRange object: seqnames()@values
+        - Retrive SNPs by chromosome: snpsBySeqname()
+- update the seqlevelsStyle to "UCSC"
+    #change seqlevelsStyle
+    seqlevelsStyle(my_snps) <- "UCSC"
+    #change genome
+    genome(my_snps) <- "hg19"
+- make a rsID table
+- Extract information of variants using the gsub() function
+- marge the variant and rsID data.frames using the "merge()" function
+- predict amino acid changes using the predictcoding() function
+- annotate and determnie mutation types
+- integrate SNP and amino acid changes
 
     
 
