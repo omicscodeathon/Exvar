@@ -14,8 +14,13 @@ The developed R package is publicly available in the GitHub repository (github.c
 ![image](https://user-images.githubusercontent.com/73958439/184840354-a90d0600-0184-466c-a097-efb3522acc42.png)
 
 ## Case study
+To demonstrate the utility of the tool, we performed a case study on the Cerebral Malaria disease.
 
-
+## Abbreviations
+ECeQ : expression, CNV and eQTL analysis 
+CNV : Copy Number Variation
+eQTL : Expressed Quantitative Trait Loci
+ASE: Allele-specific expression
 
 ## Acknowledgements
 The authors thank the National Institutes of Health (NIH) Office of Data Science Strategy (ODSS) and the National Center for Biotechnology Information (NCBI) for their immense support before and during the April 2022 Omics codeathon organized in collaboration with the African Society for Bioinformatics and Computational Biology (ASBCB).
