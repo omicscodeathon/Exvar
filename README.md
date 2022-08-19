@@ -14,7 +14,9 @@ The developed R package is publicly available in the GitHub repository (github.c
 ![image](https://user-images.githubusercontent.com/73958439/184840354-a90d0600-0184-466c-a097-efb3522acc42.png)
 
 ## Case study
-To demonstrate the utility of the tool, we performed a case study on the Cerebral Malaria disease.
+To demonstrate the utility of the developed tool, we performed a study on the Brain-Blood-Barrier dysfunction in different neurological diseases ( HD, AD, ASD and  brain tumor) and in infectious diseases with neurological manifestation (SARS-CoV-2, TBEV, WNV, and Borrelia Garinii infection).
+  ).
+
 
 ## Abbreviations
 ECeQ : expression, CNV and eQTL analysis 
