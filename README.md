@@ -18,8 +18,11 @@ To demonstrate the utility of the tool, we performed a case study on the Cerebra
 
 ## Abbreviations
 ECeQ : expression, CNV and eQTL analysis 
+
 CNV : Copy Number Variation
+
 eQTL : Expressed Quantitative Trait Loci
+
 ASE: Allele-specific expression
 
 ## Acknowledgements
