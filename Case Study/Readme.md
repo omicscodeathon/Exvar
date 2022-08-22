@@ -18,7 +18,7 @@ To demonstrate the utility of the developed tool, we performed a study on the Br
 ## The datasets
 
 | Dataset  | Pathology | | Specie | Cell | 
-| ------------- | ------------- |
+| ------------- | ------------- | | ------------- | ------------- |
 | ERP124971 |  | Borrelia Garinii infection  | | Brain endothelial cells |   | Human  |
 | ERP125026  |  | West Nile virus (WNV) infection  | | Brain endothelial cells |   | Human  |
 | ERP125052 |  | Tick-borne encephalitis virus (TBEV) infection | | Brain endothelial cells |   | Human  |
