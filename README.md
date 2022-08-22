@@ -1,9 +1,5 @@
 # ECeQ: Shiny App for Gene Expression, CNV and eQTL data visualization
 
-## Introduction 
-
-The rapid development of high-throughput sequencing technology represents great opportunities for researchers to investigate genomic variations and transcriptomic changes. Multiple sequencing data are publicly available on multiple databases. But unfortunately, the analysis techniques are complexe and require multiple skills. 
-
 ## About ECeQ
 ECeQ is a biologist-friendly interactive interface that performs gene expression, genetic variation (CNV) and eQTL analysis and data visualization.
 The ECeQ package could be used to perform one of the analyses or all of them simultaneously. The data visualization could be performed offline using the R studio software, or online using the  web app.
