@@ -1,5 +1,5 @@
 # Raw data Analysis Pipelines
-# Note : This is not the final pipeline !!
+
 ## Fastq files preprocessing
 
 - Read fastq files using "ShortRead" package
