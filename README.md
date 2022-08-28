@@ -5,7 +5,7 @@ The rapid development of high-throughput sequencing technology represents great 
 
 ## About ECeQ : Shiny App for Gene Expression, CNV and eQTL data visualization
 ECeQ project aims to create a biologist-friendly workflow to perform gene expression, genetic variation (CNV) and eQTL data analysis and  visualization.
-The project include a data analysis R package " AECeQ" and data visualization shiny app "VECeQ".
+The project includes a data analysis R package " AECeQ" and data visualization shiny app "VECeQ".
 
 ## AECeQ R package for data analysis
 - 
