@@ -28,7 +28,7 @@ The guidelines for implementing this tool and related updates, are available at:
 ## Case study
 To demonstrate the utility of the developed tool, we performed a study on the Brain-Blood-Barrier dysfunction in different neurological diseases ( HD, AD, ASD and  brain tumor) and in infectious diseases with neurological manifestation (SARS-CoV-2, TBEV, WNV, and Borrelia Garinii infection).
 
-The analyzed data and results are available in : github.com/omicscodeathon/eceq/case_study.
+The analyzed data and results are available in : https://github.com/omicscodeathon/ECeQ/case_study.
 
 ## Abbreviations
 - ECeQ : expression, CNV and eQTL analysis 
