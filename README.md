@@ -44,7 +44,7 @@ The authors thank the National Institutes of Health (NIH) Office of Data Science
 
 ## Contributors
 
-- Hiba Ben Aribi , Faculty of Sciences of Tunis, University of Tunis El Manar (UTM), Tunis, Tunisia
+- Hiba Ben Aribi, Faculty of Sciences of Tunis, University of Tunis El Manar (UTM), Tunis, Tunisia
 
 - Imraan Dixon, Faculty of Health Sciences, University of Cape Town (UCT), Cape Town, South Africa 
 
