@@ -21,7 +21,7 @@ The guidelines for implementing this tool and related updates, are available at:
 
 The VECeQ RShiny package can be downloaded from  https://github.com/omicscodeathon/ECeQ/VECeQ_package. 
 
-The VECeQ Web shhiny app  is publicly available at www.shinyapps.io/VECeQ.
+The VECeQ Web shiny app  is publicly available at www.shinyapps.io/VECeQ.
 
 The guidelines for implementing this tool and related updates, are available at:  https://github.com/omicscodeathon/ECeQ/VECeQ/README.md.
 
