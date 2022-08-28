@@ -1,7 +1,7 @@
 # ECeQ Project
 
 ## Introduction
-The rapid development of high-throughput sequencing technology represents great opportunities for researchers to investigate genomic variations and transcriptomic changes. Multiple sequencing data are publicly available on multiple databases. But unfortunately, the analysis techniques are complexe and require multiple skills. 
+The rapid development of high-throughput sequencing technology represents great opportunities for researchers to investigate genomic variations and transcriptomic changes. Multiple sequencing data are publicly available on multiple databases. But unfortunately, the analysis techniques are complexe and require multiple skills. The ECeQ provides the solution.
 
 ## About ECeQ : Shiny App for Gene Expression, CNV and eQTL data visualization
 ECeQ project aims to create a biologist-friendly workflow to perform gene expression, genetic variation (CNV) and eQTL data analysis and  visualization.
