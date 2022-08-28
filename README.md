@@ -12,6 +12,7 @@ The project include a data analysis R package " AECeQ" and data visualization sh
 - 
 
 The AECeQ R package can be downloaded from  https://github.com/omicscodeathon/ECeQ/AECeQ_package. 
+
 The guidelines for implementing this tool and related updates, are available at:  https://github.com/omicscodeathon/ECeQ/AECeQ/README.md.
 
 ## VECeQ Shiny App for data visualization
@@ -19,7 +20,9 @@ The guidelines for implementing this tool and related updates, are available at:
 - 
 
 The VECeQ RShiny package can be downloaded from  https://github.com/omicscodeathon/ECeQ/VECeQ_package. 
+
 The VECeQ Web shhiny app  is publicly available at www.shinyapps.io/ECeQ.
+
 The guidelines for implementing this tool and related updates, are available at:  https://github.com/omicscodeathon/ECeQ/VECeQ/README.md.
 
 
