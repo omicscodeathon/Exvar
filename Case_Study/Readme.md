@@ -15,7 +15,7 @@ To demonstrate the utility of the developed tool, we performed a study on the Br
 .
 .
 
-## The datasets
+## Analyzed datasets
 
 | Dataset  | Pathology | Cell | Specie | 
 | ------------- | ------------- | ------------- | ------------- |
@@ -28,3 +28,5 @@ To demonstrate the utility of the developed tool, we performed a study on the Br
 | SRP383012  |   Alzheimer’s disease | Brain endothelial cells  | Human  |
 | SRP327947 |   Cerebral amyloid angiopathy (CAA)  | BBB microvessels  | Mouse |
 | SRP091374  |   Autism spectrum disorder ( ASD)  | Cerebellum  | Mouse |
+
+## Results
