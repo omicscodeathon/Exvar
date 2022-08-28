@@ -1,30 +1,48 @@
-# ECeQ: Shiny App for Gene Expression, CNV and eQTL data visualization
+# ECeQ Project
 
-## About ECeQ
-ECeQ is a biologist-friendly interactive interface that performs gene expression, genetic variation (CNV) and eQTL analysis and data visualization.
-The ECeQ package could be used to perform one of the analyses or all of them simultaneously. The data visualization could be performed offline using the R studio software, or online using the  web app.
+## Introduction
+The rapid development of high-throughput sequencing technology represents great opportunities for researchers to investigate genomic variations and transcriptomic changes. Multiple sequencing data are publicly available on multiple databases. But unfortunately, the analysis techniques are complexe and require multiple skills. 
 
-The developed R package is publicly available in the GitHub repository (github.com/omicscodeathon/eceq/R_ECeQ) and the Shiny web app is publicly available at (shinyapps.io/ECeQ).
+## About ECeQ : Shiny App for Gene Expression, CNV and eQTL data visualization
+ECeQ project aims to create a biologist-friendly workflow to perform gene expression, genetic variation (CNV) and eQTL data analysis and  visualization.
+The project include a data analysis R package " AECeQ" and data visualization shiny app "VECeQ".
 
-## Workflow
-![image](https://user-images.githubusercontent.com/73958439/184840354-a90d0600-0184-466c-a097-efb3522acc42.png)
+## AECeQ R package for data analysis
+- 
+- 
+
+The AECeQ R package can be downloaded from  https://github.com/omicscodeathon/ECeQ/AECeQ_package. 
+The guidelines for implementing this tool and related updates, are available at:  https://github.com/omicscodeathon/ECeQ/AECeQ/README.md.
+
+## VECeQ Shiny App for data visualization
+- 
+- 
+
+The VECeQ RShiny package can be downloaded from  https://github.com/omicscodeathon/ECeQ/VECeQ_package. 
+The VECeQ Web shhiny app  is publicly available at www.shinyapps.io/ECeQ.
+The guidelines for implementing this tool and related updates, are available at:  https://github.com/omicscodeathon/ECeQ/VECeQ/README.md.
+
 
 ## Case study
 To demonstrate the utility of the developed tool, we performed a study on the Brain-Blood-Barrier dysfunction in different neurological diseases ( HD, AD, ASD and  brain tumor) and in infectious diseases with neurological manifestation (SARS-CoV-2, TBEV, WNV, and Borrelia Garinii infection).
+The analyzed data and results are available in : github.com/omicscodeathon/eceq/case_study
 
 ## Abbreviations
-ECeQ : expression, CNV and eQTL analysis 
+- ECeQ : expression, CNV and eQTL analysis 
 
-CNV : Copy Number Variation
+- DEGs : Differentially Expressed Genes
 
-eQTL : Expressed Quantitative Trait Loci
+- CNV : Copy Number Variation
 
-ASE: Allele-specific expression
+- eQTL : Expressed Quantitative Trait Loci
 
 ## Acknowledgements
-The authors thank the National Institutes of Health (NIH) Office of Data Science Strategy (ODSS) and the National Center for Biotechnology Information (NCBI) for their immense support before and during the April 2022 Omics codeathon organized in collaboration with the African Society for Bioinformatics and Computational Biology (ASBCB).
-
+The authors thank the National Institutes of Health (NIH) Office of Data Science Strategy (ODSS) and the National Center for Biotechnology Information (NCBI) for their immense support before and during the October 2022 Omics codeathon organized in collaboration with the African Society for Bioinformatics and Computational Biology (ASBCB).
 
 ## Contributors
 
 - Hiba Ben Aribi , Faculty of Sciences of Tunis, University of Tunis El Manar (UTM), Tunis, Tunisia
+
+- Imraan Dixon2, Faculty of Health Sciences, University of Cape Town (UCT), Cape Town, South Africa 
+
+- Kathryn Step, Faculty of Medicine and Health Sciences, Stellenbosch University (SU), Cape Town, South Africa
