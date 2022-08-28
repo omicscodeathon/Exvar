@@ -33,7 +33,7 @@ The analyzed data and results are available in : https://github.com/omicscodeath
 ## Abbreviations
 - ECeQ : expression, CNV and eQTL analysis 
 
-- AECeQ : Analyse expression, CNV and eQTL data
+- AECeQ : Analyze expression, CNV and eQTL data
 
 - VECeQ : Visualize expression, CNV and eQTL data
 
