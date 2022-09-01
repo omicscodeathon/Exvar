@@ -26,7 +26,7 @@ The VECeQ Web shiny app  is publicly available at www.shinyapps.io/VECeQ.
 The guidelines for implementing this tool and related updates, are available at:  https://github.com/omicscodeathon/ECeQ/VECeQ/README.md.
 
 ## Case study
-To demonstrate the utility of the developed tool, we performed a study on the Brain-Blood-Barrier dysfunction in different neurological diseases ( HD, AD, ASD and  brain tumor) and in infectious diseases with neurological manifestation (SARS-CoV-2, TBEV, WNV, and Borrelia Garinii infection).
+To demonstrate the utility of the developed tool, we performed two case studies: First, in order to study the different BBBD mechanisms, we studied the BBB endothelial cells genomics changes in different neurological diseases (in human patients) : the  neurodegenerative disorder Huntington’s disease (HD), the infectious disease with neurological manifestation H1N1 disease and the brain tumor pathology; Second, we studied the BBB forming cells ( endothelial cells, pericytes and the astrocytes) in the Alzheimer’s disease mouse models.
 
 The analyzed data and results are available in : https://github.com/omicscodeathon/ECeQ/case_study.
 
