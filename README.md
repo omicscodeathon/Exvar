@@ -52,4 +52,4 @@ This project was performed during the October 2022 Omics codeathon organized in 
 
 - Imraan Dixon, Faculty of Health Sciences, University of Cape Town (UCT), Cape Town, South Africa 
 
-- Kathryn Step, Faculty of Medicine and Health Sciences, Stellenbosch University (SU), Cape Town, South Africa
+- Najla Abassi, Higher Institute of Biotechnology Sidi Thabet, Manouba University (UMA), Tunisia
