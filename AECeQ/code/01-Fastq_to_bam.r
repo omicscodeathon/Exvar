@@ -17,7 +17,7 @@ refgen <- GmapGenome(BSgenome.Hsapiens.UCSC.hg19, create = TRUE,
                      directory = getwd())
 print("Obtaining GSNAP parameters...")
 snapParam <- GsnapParam(refgen, unique_only = TRUE,
-                    molecule = "RNA", nthreads = 4)
+                    molecule = "RNA", nthreads = 28)
 
 ## QC reads of multiple fastq files using rfastp 
 ## Files can be in .fastq or .gz format
@@ -44,7 +44,7 @@ for (x in inputfl) {
                         outputFastq = 
                           paste0(file_path_sans_ext(basename(inputFastq[c(x)])), 
                                  '_quality_checked'),
-                        thread = 4)
+                        thread = 28)
   QC <- qcSummary(json_report)
   write.csv(QC, "QC_summary.csv")
   gc()
