@@ -1,29 +1,29 @@
-# ECeQ Project
+# EveQ Project
 
 ## Introduction
 The rapid development of high-throughput sequencing technology represents great opportunities for researchers to investigate genomic variations and transcriptomic changes. Multiple sequencing data are publicly available on multiple databases. But unfortunately, the analysis techniques are complexe and require multiple skills. The ECeQ provides the solution.
 
 ## About ECeQ : Shiny App for Gene Expression, CNV and eQTL data visualization
-ECeQ project aims to create a biologist-friendly workflow to perform gene expression, genetic variation (CNV) and eQTL data analysis and  visualization.
-The project includes a data analysis R package " AECeQ" and data visualization shiny app "VECeQ".
+EveQ project aims to create a workflow to perform gene expression, genetic variats (SNPs, Indels, and CNVs) and eQTL data analysis and  visualization.
+The project includes a data analysis R package "EVeQ" and data visualization shiny app "VEVeQ".
 
 ## AECeQ R package for data analysis
 - 
 - 
 
-The AECeQ R package can be downloaded from  https://github.com/omicscodeathon/ECeQ/AECeQ_package. 
+The EVeQ R package can be downloaded from  https://github.com/omicscodeathon/EVeQ/EVeQ_package. 
 
-The guidelines for implementing this tool and related updates, are available at:  https://github.com/omicscodeathon/ECeQ/AECeQ/README.md.
+The guidelines for implementing this tool and related updates, are available at:  https://github.com/omicscodeathon/EVeQ/EVeQ_R_Package/README.md.
 
-## VECeQ Shiny App for data visualization
+## VEveQ Shiny App for data visualization
 - 
 - 
 
-The VECeQ RShiny package can be downloaded from  https://github.com/omicscodeathon/ECeQ/VECeQ_package. 
+The VEveQ RShiny package can be downloaded from  https://github.com/omicscodeathon/EVeQ/VEveQ_package. 
 
-The VECeQ Web shiny app  is publicly available at www.shinyapps.io/VECeQ.
+The VEVeQ Web shiny app  is publicly available at www.shinyapps.io/VECeQ.
 
-The guidelines for implementing this tool and related updates, are available at:  https://github.com/omicscodeathon/ECeQ/VECeQ/README.md.
+The guidelines for implementing this tool and related updates, are available at:  https://github.com/omicscodeathon/EVeQ/VEVeQ_Shinyapp/README.md.
 
 ## Case study
 To demonstrate the utility of the developed tool, we performed two case studies: First, in order to study the different BBBD mechanisms, we studied the BBB endothelial cells genomics changes in different neurological diseases (in human patients) : the  neurodegenerative disorder Huntington’s disease (HD), the infectious disease with neurological manifestation H1N1 disease and the brain tumor pathology; Second, we studied the BBB forming cells ( endothelial cells, pericytes and the astrocytes) in the Alzheimer’s disease mouse models.
@@ -31,11 +31,9 @@ To demonstrate the utility of the developed tool, we performed two case studies:
 The analyzed data and results are available in : https://github.com/omicscodeathon/ECeQ/case_study.
 
 ## Abbreviations
-- ECeQ : expression, CNV and eQTL analysis 
+- EVeQ : expression, genetic Variants and eQTL analysis 
 
-- AECeQ : Analyze expression, CNV and eQTL data
-
-- VECeQ : Visualize expression, CNV and eQTL data
+- VEVeQ : Visualize expression, CNV and eQTL data
 
 - DEGs : Differentially Expressed Genes
 
