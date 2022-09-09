@@ -1,13 +1,13 @@
-# EveQ Project
+# EVeQ Project
 
 ## Introduction
-The rapid development of high-throughput sequencing technology represents great opportunities for researchers to investigate genomic variations and transcriptomic changes. Multiple sequencing data are publicly available on multiple databases. But unfortunately, the analysis techniques are complexe and require multiple skills. The ECeQ provides the solution.
+The rapid development of high-throughput sequencing technology represents great opportunities for researchers to investigate genomic variations and transcriptomic changes. Multiple sequencing data are publicly available on multiple databases. But unfortunately, the analysis techniques are complexe and require multiple skills. The EVeQ provides the solution.
 
-## About ECeQ : Shiny App for Gene Expression, CNV and eQTL data visualization
+## About EVeQ : Shiny App for Gene Expression, CNV and eQTL data visualization
 EveQ project aims to create a workflow to perform gene expression, genetic variats (SNPs, Indels, and CNVs) and eQTL data analysis and  visualization.
 The project includes a data analysis R package "EVeQ" and data visualization shiny app "VEVeQ".
 
-## AECeQ R package for data analysis
+## EVeQ R package for data analysis
 - 
 - 
 
