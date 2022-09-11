@@ -6,7 +6,7 @@ Numerous open source bioinformatics analysis tools/pipelines are implemented wit
  
 ## Dashboard
 
-![image](https://user-images.githubusercontent.com/73958439/186021944-54db1cea-bdcc-4284-9d88-ac7ceb3bb717.png)
+![image](https://user-images.githubusercontent.com/73958439/189546760-3478a498-7759-444f-a365-00a5d4b26444.png)
 
 VEVeQ can be divided into three independent parts:
 
