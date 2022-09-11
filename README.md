@@ -8,16 +8,12 @@ EveQ project aims to create a workflow to perform gene expression, genetic varia
 The project includes a data analysis R package "EVeQ" and data visualization shiny app "VEVeQ".
 
 ## EVeQ R package for data analysis
-- 
-- 
 
 The EVeQ R package can be downloaded from  https://github.com/omicscodeathon/EVeQ/EVeQ_package. 
 
 The guidelines for implementing this tool and related updates, are available at:  https://github.com/omicscodeathon/EVeQ/EVeQ_R_Package/README.md.
 
 ## VEveQ Shiny App for data visualization
-- 
-- 
 
 The VEveQ RShiny package can be downloaded from  https://github.com/omicscodeathon/EVeQ/VEveQ_package. 
 
@@ -26,7 +22,7 @@ The VEVeQ Web shiny app  is publicly available at www.shinyapps.io/VECeQ.
 The guidelines for implementing this tool and related updates, are available at:  https://github.com/omicscodeathon/EVeQ/VEVeQ_Shinyapp/README.md.
 
 ## Case study
-To demonstrate the utility of the developed tool, we performed two case studies: First, in order to study the different BBBD mechanisms, we studied the BBB endothelial cells genomics changes in different neurological diseases (in human patients) : the  neurodegenerative disorder Huntington’s disease (HD), the infectious disease with neurological manifestation H1N1 disease and the brain tumor pathology; Second, we studied the BBB forming cells ( endothelial cells, pericytes and the astrocytes) in the Alzheimer’s disease mouse models.
+To demonstrate the utility of the developed tool, we performed a case study investigating the different Blood-Brain-barrier dysfunction mechanisms, in different neurological diseases Huntington’s disease (HD),  neuroinfectious disease and the brain tumor pathology.
 
 The analyzed data and results are available in : https://github.com/omicscodeathon/ECeQ/case_study.
 
