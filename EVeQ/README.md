@@ -6,6 +6,8 @@ EVeQ ia a  Gene Expression, Genomic Variants and eQTL Data  Analysis R package
 
 The package could be installed in R studio using this command :
 
+install.packages("devtools")
+
 devtools::install_github("omicscodeathon/EveQ/EVeQ/EVeQ_package")
 
 ## Workflow
