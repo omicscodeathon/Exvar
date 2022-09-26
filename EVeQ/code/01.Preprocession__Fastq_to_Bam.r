@@ -13,8 +13,15 @@ library("R.utils")
 ## If index already exists in working directory, the script will skip to
 ## GsnapParam
 print("Creating reference genome index...")
-refgen <- GmapGenome(BSgenome.Hsapiens.UCSC.hg19, create = TRUE, 
+chr <- 1:22
+chrxym <- c("X", "Y", "MT")
+chr <- append(chr, chrxym)
+mainChromosomes <- paste0("chr", chr)
+
+refSeq <- getSeq(BSgenome.Hsapiens.UCSC.hg19, mainChromosomes)
+refgen <- GmapGenome(refSeq, create = TRUE, name = "hg19",
                      directory = getwd())
+rm(refSeq)
 print("Obtaining GSNAP parameters...")
 snapParam <- GsnapParam(refgen, unique_only = TRUE,
                         molecule = "RNA", nthreads = 28)
