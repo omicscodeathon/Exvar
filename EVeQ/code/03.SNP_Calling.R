@@ -5,6 +5,7 @@ library("VariantTools")
 library("VariantAnnotation")
 library("BiocParallel")
 library("SNPlocs.Hsapiens.dbSNP144.GRCh37")
+library("dplyr")
 
 ##Variant calling requires a reference genome so one is created
 chr <- 1:22
