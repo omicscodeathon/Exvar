@@ -21,6 +21,7 @@ rm(refSeq)
 ##The output vcf is a read into memory again so that the rsIDs from dbSNP can
 ##be integrated into the ID column
 bamfl <- BamFile("Insert bam path here")
+print("Tallying variants...")
 bpp <- BiocParallel::MulticoreParam(28L)
 tally.Param <- TallyVariantsParam(refgen, high_base_quality = 23L)
 tallies <- tallyVariants(bamfl, tally.Param, BPPARAM = bpp)
@@ -29,6 +30,7 @@ post.filters <- VariantPostFilters()
 snp <- callVariants(tallies, calling.filters, post.filters)
 sampleNames(snp) <- file_path_sans_ext(basename(bamfl))
 mcols(snp) <- NULL
+print("Formatting variant information as VCF...")
 vcf <- asVCF(snp)
 writeVcf(vcf, paste0(file_path_sans_ext(basename(bamfl)), ".vcf"), index = TRUE)
 vcf <- readVcf(paste0(file_path_sans_ext(basename(bamfl)), ".vcf.bgz"))
@@ -37,8 +39,11 @@ vcf <- readVcf(paste0(file_path_sans_ext(basename(bamfl)), ".vcf.bgz"))
 ##basis
 ##The resulting data frame is sorted as per the vcf and the rsIDs are injected
 ##into the vcf before writing it as a file again
+print("Loading dbSNP information...")
 all_snps <- SNPlocs.Hsapiens.dbSNP144.GRCh37
 vcfID <- data.frame()
+
+print("Finding rsIDs...")
 for (x in mainChromosomes) {
   vcf_chrom <- vcf[grepl(names(vcf),
                          pattern = paste0(x, ":"))]
@@ -66,10 +71,16 @@ for (x in mainChromosomes) {
   matS <- dplyr::select(matS,-posIDX)
   vcfID <- merge(vcfID, matS, all.x = TRUE, all.y = TRUE)
   vcfID <- merge(vcfID, matS, all.x = TRUE, all.y = TRUE)
-}
-vcfID$chr <-  as.integer(gsub("chr", "", vcfID$chromosome)) 
-dd <- vcfID[order(vcfID$chr, vcfID$Variant),]
+}  
+
+print("Injecting rsIDs into VCF...")
+vcfID$chr <-  as.integer(gsub("chr", "", vcfID$chromosome))
+vcfID$chr[vcfID$chromosome == "chrX"] <- 23L
+vcfID$chr[vcfID$chromosome == "chrY"] <- 24L
+vcfID$chr[vcfID$chromosome == "chrMT"] <- 25L
+dd <- vcfID[order(vcfID$chr, as.integer(vcfID$start)),]
 dd$rsID[is.na(dd$rsID)] <- "."
 names(vcf) <- dd$rsID
 
+print("Writing to VCF file...")
 writeVcf(vcf, paste0(file_path_sans_ext(basename(bamfl)), ".vcf"), index = TRUE)
