@@ -27,11 +27,11 @@ The package consists of 6 Functions : preprocessing(); gene_counting() ; snps_ca
 
 | Function  | Role| Input | Output | 
 | ------------- | ------------- | ------------- | ------------- |
-| preprocess() |  preprocess raw data |  Fastq   | Bam  |
-| expression()  |   genes expression analysis  | Bam   | csv  |
-| SNPs()  |   SNPs calling  | Bam   | vcf  |
-| Indels()  |   Indels calling  | Bam   | vcf  |
-| CNVs()  |   CNVs calling  | Bam   | vcf  |
+| preprocessing() |  preprocess raw data |  Fastq   | Bam  |
+| gene_counting()  |   genes expression analysis  | Bam   | csv  |
+| snps_calling()  |   SNPs calling  | Bam   | vcf  |
+| indels_calling()  |   Indels calling  | Bam   | vcf  |
+| cnvs_calling()  |   CNVs calling  | Bam   | vcf  |
 
 
 ## 2. Data visualization Shiny App 
