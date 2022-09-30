@@ -1,17 +1,37 @@
-# EVeQ Project
+# Gene Expression And  Genetic Variants Data Analysis And Visualization
 
 ## Introduction
-The rapid development of high-throughput sequencing technology represents great opportunities for researchers to investigate genomic variations and transcriptomic changes. Multiple sequencing data are publicly available on multiple databases. But unfortunately, the analysis techniques are complexe and require multiple skills. The EVeQ provides the solution.
+The rapid development of high-throughput sequencing technology represents great opportunities for researchers to investigate genomic variations and transcriptomic changes. Multiple sequencing data are publicly available on multiple databases. But unfortunately, the analysis techniques are complexe and require multiple skills. 
 
-## About EVeQ : Shiny App for Gene Expression, genetic variants and eQTL data visualization
-EveQ project aims to create a workflow to perform gene expression, genetic variats (SNPs, Indels, and CNVs) and eQTL data analysis and  visualization.
-The project includes a data analysis R package "EVeQ" and data visualization shiny app "VEVeQ".
+## The project : Shiny App for gene expression and genetic variants  data visualization
 
-## EVeQ R package for data analysis
+The project aims to create a workflow to perform gene expression and  genetic variats (SNPs, Indels, and CNVs) data analysis and  visualization.
+The project includes a data analysis R package  and data visualization shiny app .
 
-The EVeQ R package can be downloaded from  https://github.com/omicscodeathon/EVeQ/EVeQ_package. 
+## The  data analysis R package 
 
-The guidelines for implementing this tool and related updates, are available at:  https://github.com/omicscodeathon/EVeQ/EVeQ_R_Package/README.md.
+The NamePackage  R package is developed to facilitate the data analysis and minimize the skills required for the genetic expression and  variants calling. It only includes 5 functions, providing an easy biologist-friendly workflow. Standard analysis and  filtering settings are used as default
+
+![r worklow](https://user-images.githubusercontent.com/73958439/193316510-27dbd891-a406-4f7f-a4a8-03c2c11ddbf2.png)
+
+
+The package could be installed in R studio using this command :
+
+install.packages("devtools")
+
+devtools::install_github("omicscodeathon/EveQ/install_package")
+
+The package consists of 6 Functions : preprocessing(); gene_counting() ; snps_calling(); cnvs_calling(); and indels_calling(). The package workflow is represented in Table1.
+
+
+| Function  | Role| Input | Output | 
+| ------------- | ------------- | ------------- | ------------- |
+| preprocess() |  preprocess raw data |  Fastq   | Bam  |
+| expression()  |   genes expression analysis  | Bam   | csv  |
+| SNPs()  |   SNPs calling  | Bam   | vcf  |
+| Indels()  |   Indels calling  | Bam   | vcf  |
+| CNVs()  |   CNVs calling  | Bam   | vcf  |
+
 
 ## VEveQ Shiny App for data visualization
 
