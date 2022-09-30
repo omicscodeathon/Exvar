@@ -16,23 +16,5 @@ The blood–brain barrier (BBB), first described by Paul Ehrlich in the 19th cen
 ## The Brain-Blood-Barrier dysfunction
 BBB dysfunction (BBBD) contributes to multiple issues including the extravasation of plasma proteins and immune cells into the brain neuropil, changes in astroglial functions, and potential entry of toxins, drugs, and pathogens into the CNS, which in turn, may lead to neuronal dysfunction, neuroinflammation, and neurodegeneration (Obermeier B et al 2013).
 
-## Case study 1:
-We studied the BBB endothelial cells genomics changes in different neurological diseases (in human patients) : the  neurodegenerative disorder Huntington’s disease (HD), the infectious disease with neurological manifestation H1N1 disease and the brain tumor pathology.
-
-### Analyzed datasets
-
-| Dataset  | Pathology | Cell | Specie | 
-| ------------- | ------------- | ------------- | ------------- |
-| SRP254086 |  H1N1 infection  |  Brain microvascular endothelial cells   | Human  |
-| SRP356704  |  Huntington’s disease | iPSCs and iBMECs  | Human  |
-| SRP288330   |   Brain Tumor  | Brain endothelial cells   | Human  |
-
-## Case study 2:
-We studied the BBB forming cells ( endothelial cells, pericytes and the astrocytes) in the Alzheimer’s disease mouse models.
-
-### Analyzed datasets
-| Dataset  | Pathology | Cell | Specie | 
-| ------------- | ------------- | ------------- | ------------- |
-| - |   Alzheimer’s disease | Pericytes | Mouse  |
-| SRP383012|   Alzheimer’s disease  | Brain endothelial cells | Mouse |
-| -  |    Alzheimer’s disease  | Astrocytes  | Mouse|
+## The BBBD is Brain tumor patients 
+To validate the pipelines and demonstrate the utility of the developed tool, we performed a case study investigating the Blood-Brain-barrier dysfunction mechanisms in the brain tumor patients.
