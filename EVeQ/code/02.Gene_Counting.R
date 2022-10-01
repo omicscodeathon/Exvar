@@ -98,8 +98,15 @@ for (x in num_comparison) {
                                             "_vs_",
                                             groupmatrix[c(2*x-1)]))
   lfc_compare <- append(lfc_compare, myRes_lfc)
+  
+    write.csv(annotatedRes, paste0("Group_",
+                                 groupmatrix[c(2*x)],
+                                 "_vs_",
+                                 groupmatrix[c(2*x-1)],
+                                 ".csv"))
 }
 ##Outputs contrast results as a dataframe
 ##Each result is indexed in DFcompare
 ##Genes are ordered according to p-value
 ##compare and lfc compare can be used to extract plots using plotMA
+
