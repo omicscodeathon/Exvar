@@ -81,10 +81,10 @@ for (x in num_comparison) {
   myResAsDF <- myResAsDF[!is.na(myResAsDF$padj), ]
   myResAsDF <- myResAsDF[order(myResAsDF$pvalue), ]
   
-  eToSym <- select(org.Hs.eg.db,
+  eToSym <- AnnotationDbi::select(org.Hs.eg.db,
                    keys = rownames(myResAsDF),
                    keytype = "ENTREZID",
-                   columns="SYMBOL")
+                   columns= c("SYMBOL", "ENSEMBL"))
   annotatedRes <- merge(eToSym,myResAsDF,
                         by.x=1,
                         by.y=0,
