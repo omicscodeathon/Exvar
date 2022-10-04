@@ -43,8 +43,8 @@ The apps integrate multiple analysis, however, with a biologist friendly web int
 ## 2.1. EXPviz
 
 The EXPviz requires as input the genes count data csv file and a metadata file (defining the study design)  for the expression data visualization.  The count data is visualized before and after the log2 transformation performance.
-![image](https://user-images.githubusercontent.com/73958439/193951030-037a84e3-fc2b-4845-928e-6d9e7e7b26be.png)
-![image](https://user-images.githubusercontent.com/73958439/193951092-fcc1ba40-a6e9-4629-9d02-8b8dd3d4e6f9.png)
+![image](https://user-images.githubusercontent.com/73958439/193951030-037a84e3-fc2b-4845-928e-6d9e7e7b26be.png | width=100)
+![image](https://user-images.githubusercontent.com/73958439/193951092-fcc1ba40-a6e9-4629-9d02-8b8dd3d4e6f9.png | width=100)
 
 
 
