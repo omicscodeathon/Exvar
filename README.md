@@ -34,9 +34,26 @@ The package consists of 6 Functions : preprocessing(); gene_counting() ; snps_ca
 | cnvs_calling()  |   CNVs calling  | Bam   | vcf  |
 
 
-## 2. Data visualization Shiny App 
+## 2. Data visualization Shiny Apps
 
-We developed an interactive shiny app. The app integrate multiple analysis, however, it shows a biologist friendly web interface. It provides the possiblity to perform advance analysis and setting customization options without the need for any programming skills.
+Three shiny apps were developed: EXPviz for genetic expression data visualization, SNPviz for SNPs data visualization, and CNVviz for CNVs  data visualization.
+
+The apps integrate multiple analysis, however, with a biologist friendly web interface. They provides the possiblity to perform advance analysis and setting customization options without the need for any programming skills.
+
+## 2.1. EXPviz
+
+The EXPviz requires as input the genes count data csv file and a metadata file (defining the study design)  for the expression data visualization.  The count data is visualized before and after the log2 transformation performance.
+![image](https://user-images.githubusercontent.com/73958439/193951030-037a84e3-fc2b-4845-928e-6d9e7e7b26be.png)
+![image](https://user-images.githubusercontent.com/73958439/193951092-fcc1ba40-a6e9-4629-9d02-8b8dd3d4e6f9.png)
+
+
+
+## 2.2. SNPviz
+
+
+## 2.3. CNVviz
+
+## Installation
 
 The Shiny package could be installed in R studio using this command :
 
@@ -46,7 +63,7 @@ devtools::install_github("omicscodeathon/EveQ/install_app")
 
 The  Web shiny app  is publicly available at www.shinyapps.io/app
 
-The guidelines for implementing this tool are available in the dowument named "Shinny_app_user_guide.pdf"
+The guidelines for implementing these tool are available in the dowument named "Shinny_app_user_guide.pdf"
 
 ## Case study
 To validate the pipelines and demonstrate the utility of the developed tool, we performed a case study investigating the Blood-Brain-barrier dysfunction mechanisms in the brain tumor patients.
