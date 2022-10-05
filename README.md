@@ -73,8 +73,11 @@ The app includes 3 parts :
 The app includes 3 parts : 
 
 (I) Recurrent CNV regions
+<p align="center">
+  <![image](https://user-images.githubusercontent.com/73958439/193952944-ed598959-462a-4845-9571-7e1ea40b5b12.png) width="300"/>
+</p>
 
-![image](https://user-images.githubusercontent.com/73958439/193952944-ed598959-462a-4845-9571-7e1ea40b5b12.png)
+
 
 
 (II) CNVs - genes overlapping
