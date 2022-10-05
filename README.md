@@ -76,7 +76,7 @@ The ExpVar package could be installed in R studio using this command :
 
 install.packages("devtools")
 
-devtools::install_github("omicscodeathon/EveQ/ExpVar")
+devtools::install_github("omicscodeathon/ExpVar/ExpVar")
 
 The  Web shiny apps  is publicly available at www.shinyapps.io/......
 
