@@ -16,14 +16,6 @@ The NamePackage  R package is developed to facilitate the data analysis and mini
 
 ![r worklow](https://user-images.githubusercontent.com/73958439/193316510-27dbd891-a406-4f7f-a4a8-03c2c11ddbf2.png)
 
-
-The package could be installed in R studio using this command :
-
-install.packages("devtools")
-
-devtools::install_github("omicscodeathon/EveQ/install_package")
-The guidelines for implementing this tool are available in the dowument named "Package_user_guide.pdf"
-
 The package consists of 6 Functions : preprocessing(); gene_counting() ; snps_calling(); cnvs_calling(); and indels_calling(). The package workflow is represented in Table1.
 
 
@@ -87,6 +79,8 @@ install.packages("devtools")
 devtools::install_github("omicscodeathon/EveQ/ExpVar")
 
 The  Web shiny apps  is publicly available at www.shinyapps.io/......
+
+The guidelines for implementing this tool are available in the dowument named "Package_user_guide.pdf"
 
 The guidelines for implementing these tool are available in the dowument named "Shinny_app_user_guide.pdf"
 
