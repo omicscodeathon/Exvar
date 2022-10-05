@@ -3,7 +3,7 @@
 ![image](https://user-images.githubusercontent.com/73958439/193952491-dba21569-10ea-4e9e-b651-66f6cde66aa9.png)
 
 ## Introduction
-The rapid development of high-throughput sequencing technology represents great opportunities for researchers to investigate genomic variations and transcriptomic changes. Multiple sequencing data are publicly available on multiple databases. But unfortunately, the analysis techniques are complexe and require multiple skills. 
+The rapid development of high-throughput sequencing technology represents great opportunities for researchers to investigate genomic variations and transcriptomic changes. Multiple sequencing data are publicly available on multiple databases. But unfortunately, the analysis techniques are complex and require multiple skills. 
 
 ## The project :
 
