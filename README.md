@@ -80,13 +80,13 @@ The app includes 3 parts :
 
 ## Installation
 
-The Shiny package could be installed in R studio using this command :
+The ExpVar package could be installed in R studio using this command :
 
 install.packages("devtools")
 
-devtools::install_github("omicscodeathon/EveQ/install_app")
+devtools::install_github("omicscodeathon/EveQ/ExpVar")
 
-The  Web shiny app  is publicly available at www.shinyapps.io/app
+The  Web shiny apps  is publicly available at www.shinyapps.io/......
 
 The guidelines for implementing these tool are available in the dowument named "Shinny_app_user_guide.pdf"
 
