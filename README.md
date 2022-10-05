@@ -80,9 +80,9 @@ devtools::install_github("omicscodeathon/EveQ/ExpVar")
 
 The  Web shiny apps  is publicly available at www.shinyapps.io/......
 
-The guidelines for implementing this tool are available in the dowument named "Package_user_guide.pdf"
+The guidelines for implementing this tool are available in the document named "Package_user_guide.pdf"
 
-The guidelines for implementing these tool are available in the dowument named "Shinny_app_user_guide.pdf"
+The guidelines for implementing these tool are available in the document named "Shinny_app_user_guide.pdf"
 
 ## Case study
 To validate the pipelines and demonstrate the utility of the developed tool, we performed a case study investigating the Blood-Brain-barrier dysfunction mechanisms in the brain tumor patients.
