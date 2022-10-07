@@ -78,8 +78,6 @@ install.packages("devtools")
 
 devtools::install_github("omicscodeathon/ExpVar/ExpVar")
 
-The  Web shiny apps  is publicly available at www.shinyapps.io/......
-
 The guidelines for implementing this tool are available in the document named "Package_user_guide.pdf"
 
 The guidelines for implementing these tool are available in the document named "Shinny_app_user_guide.pdf"
