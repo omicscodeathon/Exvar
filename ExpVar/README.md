@@ -11,17 +11,9 @@ install.packages("devtools")
 devtools::install_github("omicscodeathon/ExpVar/ExpVar/ExpVar_package")
 
 ## Workflow
-![image](https://user-images.githubusercontent.com/73958439/189546512-fa42662b-9005-47f4-94ac-91a11ef3b328.png)
+
+![image](https://user-images.githubusercontent.com/73958439/194729911-b0c74261-0a3f-4fcf-8608-454fec8592c6.png)
 
 ## Functions
-
-| Function  | Role| Input | Output | 
-| ------------- | ------------- | ------------- | ------------- |
-| preprocess() |  preprocess raw data |  Fastq   | Bam  |
-| expression()  |   genes expression analysis  | Bam   | csv  |
-| SNPs()  |   SNPs calling  | Bam   | vcf  |
-| Indels()  |   Indels calling  | Bam   | vcf  |
-| CNVs()  |   CNVs calling  | Bam   | vcf  |
-| eQTL()  |   eQTL analysis  | Bam   |  vcf + csv |
-
+![image](https://user-images.githubusercontent.com/73958439/194729901-b86f19ba-fbb1-4ce0-9c48-3318eb5e2b5c.png)
 
