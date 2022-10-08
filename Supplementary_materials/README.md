@@ -10,7 +10,7 @@ The  PCA of the dataset showed that the samples were clustered according to the 
 When comparing control and adenocarcinoma brain metastasis (BM) samples, we detected 1757 differentially expressed genes (DEG), of which 718 were upregulated and 1039 were downregulated genes (p-value < 0.05 and logFC >2).
 The expression is represented in the MA,volcano plots, and heatmaps.
 
-# Ontology
+### Ontology
 The ontology analysis is performed by the EXPviz app and the top 20 ontologies (BP, CC, MF) and  are represented in Barplot and dotplot.
 
 Figures are in EXPviz.pdf
