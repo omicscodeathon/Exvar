@@ -8,11 +8,12 @@ The rapid development of high-throughput sequencing technology represents great 
 ## The project :
 
 The project aims to create a workflow to perform gene expression and  genetic variats (SNPs, Indels, and CNVs) data analysis and  visualization.
-The project includes a data analysis R package  and data visualization shiny app .
 
-## 1. Data analysis R package : ExpVar
 
-The ExpVar  R package is developed to facilitate the data analysis and minimize the skills required for the genetic expression and  variants calling. It only includes 5 functions, providing an easy biologist-friendly workflow. Standard analysis and  filtering settings are used as default
+## 1. ExpVar R package :
+
+The ExpVar  R package performs gene expression and  genetic variats (SNPs, Indels, and CNVs) data analysis and  visualization.
+IT is developed to facilitate and minimize the skills required for the genetic expression and  variants calling. It includes 8 functions, providing an easy biologist-friendly workflow. 
 
 The package functions are represented in Table1.
 
@@ -20,7 +21,7 @@ The package functions are represented in Table1.
 
 ## 2. Data visualization Shiny Apps
 
-Three shiny apps were developed: EXPviz for genetic expression data visualization, SNPviz for SNPs data visualization, and CNVviz for CNVs  data visualization.
+Three shiny apps were developed and integrated as function to ExpVar: EXPviz for genetic expression data visualization, SNPviz for SNPs data visualization, and CNVviz for CNVs  data visualization.
 
 The apps integrate multiple analysis, however, with a biologist friendly web interface. They provides the possiblity to perform advance analysis and setting customization options without the need for any programming skills.
 
