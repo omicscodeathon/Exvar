@@ -18,15 +18,7 @@ The ExpVar  R package is developed to facilitate the data analysis and minimize 
 
 The package consists of 6 Functions : preprocessing(); gene_counting() ; snps_calling(); cnvs_calling(); and indels_calling(). The package workflow is represented in Table1.
 
-
-| Function  | Role| Input | Output | 
-| ------------- | ------------- | ------------- | ------------- |
-| preprocessing() |  preprocess raw data |  Fastq   | Bam  |
-| gene_counting()  |   genes expression analysis  | Bam   | csv  |
-| snps_calling()  |   SNPs calling  | Bam   | vcf  |
-| indels_calling()  |   Indels calling  | Bam   | vcf  |
-| cnvs_calling()  |   CNVs calling  | Bam   | vcf  |
-
+![image](https://user-images.githubusercontent.com/73958439/194703211-02d5b899-f51a-4c6d-906d-d4ada8d6b570.png)
 
 ## 2. Data visualization Shiny Apps
 
