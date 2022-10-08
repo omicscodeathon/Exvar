@@ -1,9 +1,5 @@
-ERP124971
-ERP125026
-ERP125052
-SRP327947
-SRP356704
-SRP288330
-SRP383012
-SRP327947
-SRP091374
+Two datasets were used for the pipeline validation
+
+SRP288330 = single-end read
+
+SRP074425 = paired-end reads
