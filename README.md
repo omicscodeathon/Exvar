@@ -61,13 +61,6 @@ The app includes 3 parts :
 
 (III)overlap mutated test
 
-
-## Pipeline validation
-To validate the pipelines and demonstrate the utility of the developed tool, we performed a case study investigating the Blood-Brain-barrier dysfunction mechanisms in the brain tumor patients.
-
-The analyzed data and results are available in "Case_Study_Results.pdf"
-
-
 ## Acknowledgements
 This project was performed during the October 2022 Omics codeathon organized in collaboration with the African Society for Bioinformatics and Computational Biology (ASBCB). The authors thank the National Institutes of Health (NIH) Office of Data Science Strategy (ODSS) and the National Center for Biotechnology Information (NCBI) for their immense support before and during the codeathon.
 
