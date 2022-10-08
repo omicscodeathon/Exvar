@@ -75,7 +75,7 @@ The guidelines for implementing these tool are available in the document named "
 ## Pipeline validation
 To validate the pipelines and demonstrate the utility of the developed tool, we performed a case study investigating the Blood-Brain-barrier dysfunction mechanisms in the brain tumor patients.
 
-The analyzed data and results are available in "Supplementary_Materials.pdf"
+The analyzed data and results are available in "Case_Study_Results.pdf"
 
 
 ## Acknowledgements
