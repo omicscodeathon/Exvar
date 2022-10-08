@@ -1,5 +1,0 @@
-Two datasets were used for the pipeline validation
-
-SRP288330 = single-end read
-
-SRP074425 = paired-end reads
