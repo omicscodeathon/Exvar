@@ -60,17 +60,6 @@ The app includes 3 parts :
 
 (III)overlap mutated test
 
-## Installation
-
-The ExpVar package could be installed in R studio using this command :
-
-install.packages("devtools")
-
-devtools::install_github("omicscodeathon/ExpVar/ExpVar")
-
-The guidelines for implementing this tool are available in the document named "Package_user_guide.pdf"
-
-The guidelines for implementing these tool are available in the document named "Shinny_app_user_guide.pdf"
 
 ## Pipeline validation
 To validate the pipelines and demonstrate the utility of the developed tool, we performed a case study investigating the Blood-Brain-barrier dysfunction mechanisms in the brain tumor patients.
