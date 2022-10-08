@@ -14,8 +14,6 @@ The project includes a data analysis R package  and data visualization shiny app
 
 The ExpVar  R package is developed to facilitate the data analysis and minimize the skills required for the genetic expression and  variants calling. It only includes 5 functions, providing an easy biologist-friendly workflow. Standard analysis and  filtering settings are used as default
 
-![r worklow](https://user-images.githubusercontent.com/73958439/193316510-27dbd891-a406-4f7f-a4a8-03c2c11ddbf2.png)
-
 The package consists of 6 Functions : preprocessing(); gene_counting() ; snps_calling(); cnvs_calling(); and indels_calling(). The package workflow is represented in Table1.
 
 ![image](https://user-images.githubusercontent.com/73958439/194703211-02d5b899-f51a-4c6d-906d-d4ada8d6b570.png)
