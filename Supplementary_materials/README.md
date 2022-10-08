@@ -1,4 +1,4 @@
-# Results
+# Workflow
 
 ## Expression data
 FASTQ files obtained from the SRA database were first preprocessed. Quality was controlled and then reads were aligned to the Homo sapiens genome, assembly hg19. 
