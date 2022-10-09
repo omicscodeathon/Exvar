@@ -12,6 +12,7 @@ devtools::install_github("omicscodeathon/ExpVar/ExpVar/ExpVar_package")
 
 ## Workflow
 
+Note: gmapR::GmapGenome() replaces createReference() functionality
 ![image](https://user-images.githubusercontent.com/73958439/194729911-b0c74261-0a3f-4fcf-8608-454fec8592c6.png)
 
 ## Functions
