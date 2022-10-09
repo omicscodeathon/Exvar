@@ -1,7 +1,5 @@
-# Pipeline validation Workflow
+# Pipeline validation Workflow (Datset1)
 To validate the pipelines and demonstrate the utility of the developed tool, we performed a case study investigating the Blood-Brain-barrier dysfunction mechanisms in the brain tumor patients.
-
-## Datset1
 
 ### Expression data
 FASTQ files obtained from the SRA database were first preprocessed. Quality was controlled and then reads were aligned to the Homo sapiens genome, assembly hg19. 
