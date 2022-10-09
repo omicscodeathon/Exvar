@@ -1,0 +1,37 @@
+Package: ExpVar
+Title: Visualization and Analysis of Gene Expression and Genomic Variants
+Version: 0.0.0.9000
+Authors@R: 
+    person("Imraan", "Dixon", , "imraandixon@gmail.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-5399-5182"))
+Description: Enables easy and streamlined visualization of analytical
+    functionality for biologists with limited computational skills. It supports
+    alignment of FASTQ files to a reference genome, SNP, indel, and CNV calling,
+    as well as generating gene count information and performing differential
+    expression analysis. Additionally, it has built-in GUI functionality for
+    visualizing these data.
+License: use_mit_license() 
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.2
+Depends: 
+    BiocParallel,
+    DESeq2,
+    dplyr,
+    GenomeInfoDb,
+    GenomicAlignments,
+    GenomicFeatures,
+    gmapR,
+    panelcn.mops,
+    R.utils,
+    Rfastp,
+    Rsamtools,
+    tools,
+    VariantAnnotation,
+    VariantTools
+Suggests: 
+    BSgenome.Hsapiens.UCSC.hg19,
+    org.Hs.eg.db,
+    SNPlocs.Hsapiens.dbSNP144.GRCh37,
+    TxDb.Hsapiens.UCSC.hg19.knownGene,
+    XtraSNPlocs.Hsapiens.dbSNP144.GRCh37
