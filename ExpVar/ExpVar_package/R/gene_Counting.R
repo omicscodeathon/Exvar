@@ -15,7 +15,7 @@
 #' @param paired Indicates whether the samples are from paired-end reads.
 #' @return A data frame containing gene counts.
 #' @export
-geneExpression <- function(dir = getwd(),
+gene_Counting <- function(dir = getwd(),
                            groups,
                            TxDb,
                            orgDb,
