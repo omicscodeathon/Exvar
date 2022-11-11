@@ -10,7 +10,7 @@ The rapid development of high-throughput sequencing technology represents great 
 The project aims to create a workflow to perform gene expression and  genetic variats (SNPs, Indels, and CNVs) data analysis and  visualization.
 
 
-## 1. ExpVar R package :
+## ExpVar R package :
 
 The ExpVar  R package performs gene expression and  genetic variats (SNPs, Indels, and CNVs) data analysis and  visualization.
 IT is developed to facilitate and minimize the skills required for the genetic expression and  variants calling. It includes 8 functions, providing an easy biologist-friendly workflow. 
@@ -19,47 +19,35 @@ The package functions are represented in Table1.
 
 ![image](https://user-images.githubusercontent.com/73958439/194703211-02d5b899-f51a-4c6d-906d-d4ada8d6b570.png)
 
-## 2. Data visualization Shiny Apps
+The apps interfaces are documented in:
 
-Three shiny apps were developed and integrated as function to ExpVar: EXPviz for genetic expression data visualization, SNPviz for SNPs data visualization, and CNVviz for CNVs  data visualization.
+  * EXPviz: 
+ 
+ https://github.com/omicscodeathon/ExpVar/blob/main/Supplementary_materials/EXPviz.pdf
+ 
+  * SNPviz: 
+ 
+ https://github.com/omicscodeathon/ExpVar/blob/main/Supplementary_materials/SNPviz.pdf
+ 
+  * CNVviz: 
+ 
+ https://github.com/omicscodeathon/ExpVar/blob/main/Supplementary_materials/CNVviz.pdf
 
-The apps integrate multiple analysis, however, with a biologist friendly web interface. They provides the possiblity to perform advance analysis and setting customization options without the need for any programming skills.
 
-## 2.1. EXPviz
+## Install 
 
-The EXPviz requires as input the genes count data csv file and a metadata file (defining the study design)  for the expression data visualization.  
+The package could be installed in R studio using this command :
 
-The app includes 3 parts : 
+install.packages("devtools")
 
-(I) Count data visualization: the count data is visualized before and after the log transformation for quality control purposes. The genes count data are visualized in a density plot.  
+devtools::install_github("omicscodeathon/ExpVar/ExpVar/ExpVar_package")
 
-(II) the expression analysis is performed, and the differentially expressed genes are defined. The user can customize the p-value and the LogFC value to be used. As default, the p-value is set to < 0.05 and the LogFC value to |logFC|>2 to identify the DEGs. 
-The DEGs are then visualized in a volcano plot, an MA plot, a heatmap, and a PCA plot. The non-significant genes, the upregulated, and the downregulated gene are marked in different colors in the volcano plot. 
+## Workflow
 
-(III) the ontology analysis is performed, and the adjusted p-value<0.05 is set as default to identify significant ontologies. The p-value could be customized by the user.
+Note: gmapR::GmapGenome() replaces createReference() functionality
+![image](https://user-images.githubusercontent.com/73958439/194729911-b0c74261-0a3f-4fcf-8608-454fec8592c6.png)
 
-The significant ontologies will be represented in tables and the top ontologies are represented in six barplots and dotplots: (i) BP associated with upregulated genes, (ii) MF associated with upregulated genes, (iii) CC associated with upregulated genes, (iv) BP associated with downregulated genes, (v) MF associated with downregulated genes, and (vi) CC associated with downregulated genes.
 
-## 2.2. SNPviz
-
-The app includes 3 parts : 
-
-(I)  The SNPs types are determined in comparison with the reference genome (AtoC, AtoG, AtoT, CtoA, CtoG, CtoT, TtoC, TtoG, TtoA, GtoA, GtoC, GtoT), and the are represented in a pie chart.
-
-(II) The SNPs are then divided into The Transition (Ti): purine-to-purine, pyrimidine-to-pyrimidine, and Transveersion (Tv): purine-to-pyrimidine, pyrimidine-to-purine. And the result is represented in a barplot.
-
-(III) The Trinucleotide motif analysis results are represented in a barplot showing the trinucleotide distributions.
-
-(III) amino Acids changes are determined and counted.
-
-## 2.3. CNVviz
-The app includes 3 parts : 
-
-(I) Recurrent CNV regions
-
-(II) CNVs - genes overlapping
-
-(III)overlap mutated test
 
 ## Acknowledgements
 This project was performed during the October 2022 Omics codeathon organized in collaboration with the African Society for Bioinformatics and Computational Biology (ASBCB). The authors thank the National Institutes of Health (NIH) Office of Data Science Strategy (ODSS) and the National Center for Biotechnology Information (NCBI) for their immense support before and during the codeathon.
