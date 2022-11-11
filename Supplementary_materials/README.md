@@ -1,4 +1,4 @@
-# Pipeline validation Workflow (Datset1)
+# Pipeline validation Workflow 
 To validate the pipelines and demonstrate the utility of the developed tool, we performed a case study investigating the Blood-Brain-barrier dysfunction mechanisms in the brain tumor patients.
 
 ### Expression data
