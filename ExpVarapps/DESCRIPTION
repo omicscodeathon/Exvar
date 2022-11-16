@@ -2,8 +2,9 @@ Package: ExpVarapps
 Type: Package
 Title: What the Package Does (Title Case)
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
+Author:Author: person("Hiba", "Ben Aribi", , "benaribi.hiba@gmail.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0001-9547-8725"))
+Maintainer: The package maintainer <benaribi.hiba@gmail.com>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
 License: MIT
