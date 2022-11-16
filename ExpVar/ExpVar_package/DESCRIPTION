@@ -4,6 +4,8 @@ Version: 0.0.0.9000
 Authors@R: 
     person("Imraan", "Dixon", , "imraandixon@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-5399-5182"))
+    person("Hiba", "Ben Aribi", , "benaribi.hiba@gmail.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0001-9547-8725"))
 Description: Enables easy and streamlined visualization of analytical
     functionality for biologists with limited computational skills. It supports
     alignment of FASTQ files to a reference genome, SNP, indel, and CNV calling,
