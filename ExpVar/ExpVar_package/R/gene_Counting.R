@@ -60,6 +60,15 @@ gene_Counting <- function(dir = getwd(),
   ##folders)
   
   ##A DESeq object is created from the gene counts
+  ##If bam files aren't indexed, they are sorted and indexed first
+  for (x in bamFilesToCount) {
+    if (isTRUE(file.exists(paste0(x, ".bai")))) {
+      setwd(dirname(x))
+      sortBam(x, x)
+      indexBam(x)
+    }
+  }
+  setwd(wd)
   names(bamFilesToCount) <- samples
   myBams <- BamFileList(bamFilesToCount, yieldSize = 10000, asMates = paired)
   geneCounts <- summarizeOverlaps(geneExons, myBams, ignore.strand = TRUE,
