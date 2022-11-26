@@ -14,7 +14,7 @@ The package functions :
 
 ![image](https://user-images.githubusercontent.com/73958439/194703211-02d5b899-f51a-4c6d-906d-d4ada8d6b570.png)
 
-
+Examples of each function output : https://github.com/omicscodeathon/ExpVar/tree/main/Supplementary_materials
 ## Installation
 
 The package could be installed as follows:
