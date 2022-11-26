@@ -10,7 +10,7 @@ The ExpVar  R package performs gene expression and  genetic variats (SNPs, Indel
 
 It is developed to facilitate and minimize the skills required for the genetic expression and variants calling. It includes 9 functions, providing an easy biologist-friendly workflow. 
 
-The package functions are represented in Table1.
+The package functions :
 
 ![image](https://user-images.githubusercontent.com/73958439/194703211-02d5b899-f51a-4c6d-906d-d4ada8d6b570.png)
 
