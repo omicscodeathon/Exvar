@@ -13,11 +13,13 @@ It is developed to facilitate and minimize the skills required for the genetic e
 
 The package functions :
 
-![image](https://user-images.githubusercontent.com/73958439/194703211-02d5b899-f51a-4c6d-906d-d4ada8d6b570.png)
+![image](https://user-images.githubusercontent.com/73958439/216056825-f40b8737-aa2e-41ee-ba70-540204ba1b6f.png)
+![image](https://user-images.githubusercontent.com/73958439/216056956-3e7a2d7c-e126-4564-b638-70201b75275c.png)
 
-Documentation : https://github.com/omicscodeathon/ExpVar/blob/main/ExpVar/Function%20Documentation.pdf
 
-Examples of each function output : https://github.com/omicscodeathon/ExpVar/tree/main/Supplementary_materials
+Documentation : 
+
+Examples of each function output : https://github.com/omicscodeathon/Exvar/tree/main/Supplementary_materials
 
 ## Installation
 
