@@ -1,12 +1,13 @@
-# Gene Expression And  Genetic Variants Data Analysis And Visualization
+# Exvar: A Gene Expression And Genetic Variants Data Analysis And Visualization R package
 
 ## Introduction
+
 The rapid development of high-throughput sequencing technology represents great opportunities for researchers to investigate genomic variations and transcriptomic changes. Multiple sequencing data are publicly available on multiple databases. But unfortunately, the analysis techniques are complex and require multiple skills. 
 
 
-## Solution = ExpVar R package :
+## Solution = Exvar R package :
 
-The ExpVar  R package performs gene expression and  genetic variats (SNPs, Indels, and CNVs) data analysis and  visualization.
+The Exvar R package performs gene expression and  genetic variats (SNPs, Indels, and CNVs) data analysis and  visualization.
 
 It is developed to facilitate and minimize the skills required for the genetic expression and variants calling. It includes 9 functions, providing an easy biologist-friendly workflow. 
 
@@ -24,19 +25,21 @@ The package could be installed as follows:
 
 install.packages("devtools")
 
-devtools::install_github("omicscodeathon/ExpVar/ExpVar/ExpVar_package")
+devtools::install_github("omicscodeathon/ExpVar/Exvar/Exvar_package")
 
-Library(ExpVar)
+Library(Exvar)
 
 ## Workflow
 
- STEP1: preprocess the fastq files using the Preprocession() function.
+ STEP1: Install the requirements using the requirement() function.
  
- STEP2 : perform the gene counting using the gene_counting() function and visualize the output csv file using the EXPviz() function.
+ STEP2: preprocess the fastq files using the processfastq() function.
  
- STEP3: Call variants using the callSNP(), callCNV(), and callIndel() functions and visualize the data using the SNPviz() and CNVviz() functions.
+ STEP3 : perform the gene counting using the counts() function and visualize the output csv file using the vizexp() function.
  
- STEP4: download the results.
+ STEP4: Call variants using the callSNP(), callCNV(), and callIndel() functions and visualize the data using the vizsnp() and vizcnv() functions.
+ 
+ STEP5: download the results.
 
 
 ## Acknowledgements
