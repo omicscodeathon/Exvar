@@ -27,7 +27,7 @@ The package could be installed as follows:
 
 install.packages("devtools")
 
-devtools::install_github("omicscodeathon/ExpVar/Exvar/Exvar_package")
+https://github.com/omicscodeathon/Exvar/tree/main/ExpVar/ExpVar_package
 
 Library(Exvar)
 
