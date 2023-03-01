@@ -8,57 +8,176 @@
 #'  
 #' @param file A list of paths to FASTQ files. If no paths are entered, defaults to all fastq files in dir.
 #' @param dir Output directory.
-#' @param genome A BSgenome object, GmapGenome object, or a character string indicating the genome name eg. "hg19".
-#' @param genomedir A directory containing the reference genome. Otherwise, it is the parent directory of the reference genome is genome is a character string or BSgenome object.
-#' @param paired Indicates whether the samples are from paired-end or single-end reads.
 #' @param threads The number of cores to use in the process.
 #' @param molecule A character string indicating either DNA or RNA samples.
 #' @return A list of file paths to created BAM files
 #' @export
-fastqProcession <- function(file = list_files_with_exts(dir = dir, 
-                                                        exts = "fastq"),
+processfastq <- function(file = list_files_with_exts(dir = dir, 
+                                                     exts = "fastq"),
                             dir = getwd(), 
-                            genome,
-                            genomedir,
                             paired = FALSE, 
                             threads = 4L,
                             molecule = "RNA") {
-  wd <- getwd()
-  if (class(genome) != "GmapGenome") {
-    if(isFALSE(exists("genome"))) {
-      if (exists("genomedir")) {
-        if (dir.exists(genomedir)) {
-          refgen <- GmapGenome(BSgenome.Hsapiens.UCSC.hg19, 
-                               directory = dirname(genomedir),
-                               name = basename(genomedir))
-        }
-      }
-    } else {
-      if (isFALSE(exists("genomedir"))) {
-        genomedir <- getwd()
-      }
-      if (class(genome) == "character") {
-        if (dir.exists(genome)) {
-          refgen <- GmapGenome(BSgenome.Hsapiens.UCSC.hg19, genomedir, 
-                               name = genome)
-        } 
-      } else {
-        if (dir.exists(paste0(genomdir, "/", metadata(genome)$genome))) {
-          refgen <- GmapGenome(genome, genomedir, create = FALSE) 
-        } else {
-          outcome <- readline("Reference genome doesn't exist in directory. Create one? [y/n]")
-          if (outcome == "y") {
-            refgen <- GmapGenome(genome, genomedir, create = TRUE)
-          } else {
-            stop("Cannot proceed without reference genome.")
-          }
-        }
-      }
-    }
-  } else {
-    refgen <- genome
-  }
-
+  cat(paste0("These are the species currently supported by ExpVar: \n",
+             "[1] Homo sapiens (hg19) \n",
+             "[2] Homo sapiens (hg38) \n", 
+             "[3] Mus musculus \n",
+             "[4] Arabidopsis thaliana \n",
+             "[5] Drosophila melanogaster \n",
+             "[6] Danio rerio \n",
+             "[7] Rattus norvegicus \n",
+             "[8] Saccharomyces cerevisiae \n",
+             "[9] Caenorhabditis elegans \n"))
+  species <- readline("Type the number of the species that you would like to use as a reference: ")
+  
+  ##Sets the reference genome that corresponds to the species chosen by the user
+  switch(species,
+         "1"={
+           ##Homo sapiens hg19
+           organism <- BSgenome.Hsapiens.UCSC.hg19
+         
+           ##Selects hg19 as the reference genome
+           ##If reference doesn't exist within package directory, create one
+           if (dir.exists(paste0(find.package("ExpVar"), "/hg19"))) {
+             refgen <- GmapGenome(organism,
+                                  directory = find.package("ExpVar"))
+           } else {
+             print("Reference genome not found. Creating reference. This might take a while...")
+             refgen <- GmapGenome(organism,
+                                  directory = find.package("ExpVar"),
+                                  create = TRUE)
+           }
+         },
+         "2"={
+           ##Homo sapiens hg38
+           organism <- BSgenome.Hsapiens.UCSC.hg38
+           
+           ##Selects hg38 as the reference genome
+           ##If reference doesn't exist within package directory, create one
+           if (dir.exists(paste0(find.package("ExpVar"), "/hg38"))) {
+             refgen <- GmapGenome(organism,
+                                  directory = find.package("ExpVar"))
+           } else {
+             print("Reference genome not found. Creating reference. This might take a while...")
+             refgen <- GmapGenome(organism,
+                                  directory = find.package("ExpVar"),
+                                  create = TRUE)
+           }
+         },
+         "3"={
+           ##Mus musculus mm10
+           organism <- BSgenome.Mmusculus.UCSC.mm10
+         
+           ##Selects mm10 as the reference genome
+           ##If reference doesn't exist within package directory, create one
+           if (dir.exists(paste0(find.package("ExpVar"), "/mm10"))) {
+             refgen <- GmapGenome(organism,
+                                  directory = find.package("ExpVar"))
+           } else {
+             print("Reference genome not found. Creating reference. This might take a while...")
+             refgen <- GmapGenome(organism,
+                                  directory = find.package("ExpVar"),
+                                  create = TRUE)
+           }
+         },
+         "4"={
+           ##Arabidopsis thaliana TAIR9
+           organism <- BSgenome.Athaliana.TAIR.TAIR9
+         
+           ##Selects hg19 as the reference genome
+           ##If reference doesn't exist within package directory, create one
+           if (dir.exists(paste0(find.package("ExpVar"), "/TAIR9"))) {
+             refgen <- GmapGenome(organism,
+                                  directory = find.package("ExpVar"))
+           } else {
+             print("Reference genome not found. Creating reference. This might take a while...")
+             refgen <- GmapGenome(organism,
+                                  directory = find.package("ExpVar"),
+                                  create = TRUE)
+           }
+         },
+         "5"={
+           ##Drosophilia melanogaster dm6
+           organism <- BSgenome.Dmelanogaster.UCSC.dm6
+         
+           ##Selects dm6 as the reference genome
+           ##If reference doesn't exist within package directory, create one
+           if (dir.exists(paste0(find.package("ExpVar"), "/dm6"))) {
+             refgen <- GmapGenome(organism,
+                                  directory = find.package("ExpVar"))
+           } else {
+             print("Reference genome not found. Creating reference. This might take a while...")
+             refgen <- GmapGenome(organism,
+                                  directory = find.package("ExpVar"),
+                                  create = TRUE)
+           }
+         },
+         "6"={
+           ##Danio rerio danRer11
+           organism <- BSgenome.Drerio.UCSC.danRer11
+         
+           ##Selects danRer11 as the reference genome
+           ##If reference doesn't exist within package directory, create one
+           if (dir.exists(paste0(find.package("ExpVar"), "/danRer11"))) {
+             refgen <- GmapGenome(organism,
+                                  directory = find.package("ExpVar"))
+           } else {
+             print("Reference genome not found. Creating reference. This might take a while...")
+             refgen <- GmapGenome(organism,
+                                  directory = find.package("ExpVar"),
+                                  create = TRUE)
+           }
+         },
+         "7"={
+           ##Rattus norvegicus rn5
+           organism <- BSgenome.Rnorvegicus.UCSC.rn5
+         
+           ##Selects danRer11 as the reference genome
+           ##If reference doesn't exist within package directory, create one
+           if (dir.exists(paste0(find.package("ExpVar"), "/rn5"))) {
+             refgen <- GmapGenome(organism,
+                                  directory = find.package("ExpVar"))
+           } else {
+             print("Reference genome not found. Creating reference. This might take a while...")
+             refgen <- GmapGenome(organism,
+                                  directory = find.package("ExpVar"),
+                                  create = TRUE)
+           }
+         },
+         "8"={
+           ##Saccharomyces cerevisiae sacCer3
+           organism <- BSgenome.Scerevisiae.UCSC.sacCer3
+         
+           ##Selects sacCer3 as the reference genome
+           ##If reference doesn't exist within package directory, create one
+           if (dir.exists(paste0(find.package("ExpVar"), "/sacCer3"))) {
+             refgen <- GmapGenome(organism,
+                                  directory = find.package("ExpVar"))
+           } else {
+             print("Reference genome not found. Creating reference. This might take a while...")
+             refgen <- GmapGenome(organism,
+                                  directory = find.package("ExpVar"),
+                                  create = TRUE)
+           }
+         },
+         "9"={
+           ##Caenorhabditis elagans
+           organism <- BSgenome.Celegans.UCSC.ce11
+         
+           ##Selects ce11 as the reference genome
+           ##If reference doesn't exist within package directory, create one
+           if (dir.exists(paste0(find.package("ExpVar"), "/ce11"))) {
+             refgen <- GmapGenome(organism,
+                                  directory = find.package("ExpVar"))
+           } else {
+             print("Reference genome not found. Creating reference. This might take a while...")
+             refgen <- GmapGenome(organism,
+                                  directory = find.package("ExpVar"),
+                                  create = TRUE)
+           }
+         }
+)
+      
   print("Obtaining GSNAP parameters...")
   snapParam <- GsnapParam(refgen, unique_only = TRUE,
                           molecule = molecule, nthreads = threads)
@@ -103,7 +222,8 @@ fastqProcession <- function(file = list_files_with_exts(dir = dir,
       read2 <- paste0(foldernames[2*x], 
                       '_quality_checked_R2.fastq.gz')
       print("Aligning reads...")
-      output <- gsnap(read1, read2, params = snapParam)
+      output <- gsnap(read1, read2, params = snapParam,
+                      output = paste0(getwd(), foldernames[x]))
       print("Creating bam file...")
       bamfl <- as(output, "BamFile")
       append(bams, bamfl)
@@ -148,7 +268,8 @@ fastqProcession <- function(file = list_files_with_exts(dir = dir,
       read <- paste0(foldernames[x], 
                      '_quality_checked_R1.fastq')
       print("Aligning reads...")
-      output <- gsnap(read, input_b = NULL, params = snapParam)
+      output <- gsnap(read, input_b = NULL, params = snapParam,
+                      output = paste0(getwd(), foldernames[x]))
       print("Creating bam file...")
       bamfl <- as(output, "BamFile") 
       appened(bams, bamfl)
@@ -158,3 +279,4 @@ fastqProcession <- function(file = list_files_with_exts(dir = dir,
   setwd(wd)
   return(bams)
 }
+           

@@ -11,134 +11,1014 @@
 #' 
 #' @param dir The parent directory of the sample groups. 
 #' @param groups Folder names of the sample groups. The default is all folders in dir.
-#' @param TxDb A TxDb object upon which regions of the genome are counted.
-#' @param orgDb An orgDb object for annotating the CSV with gene symbols and Ensembl IDs.
 #' @param outputdir Output directory of CSV file.
 #' @param threads Number of cores to use.
 #' @param paired Indicates whether the samples are from paired-end reads.
 #' @return A data frame list containing all of the differential expression comparison.
 #' @export
 geneExpression <- function(dir = getwd(),
-                           groups,
-                           TxDb,
-                           orgDb,
+                           groups = NULL,
                            outputdir = getwd(),
                            threads = 4L,
                            paired = FALSE) {
-  wd <- getwd()
-  bpp = MulticoreParam(threads)
-  geneExons <- exonsBy(TxDb, by = "gene")
-  if (isTRUE(groups)) {
-    groups <- paste0(dir, "/", groups)
-    folders <- normalizePath(groups)
-  } else {
-    folders <- list.dirs(path = dir, full.names = TRUE, recursive = FALSE)
-  }
-  totaldir <- 1:length(folders)
-  bamFilesToCount <- c()
-  groupNames <- c()
-  samples <- c()
+  cat(paste0("These are the species currently supported by ExpVar: \n",
+             "[1] Homo sapiens (hg19) \n",
+             "[2] Homo sapiens (hg38) \n", 
+             "[3] Mus musculus \n",
+             "[4] Arabidopsis thaliana \n",
+             "[5] Drosophila melanogaster \n",
+             "[6] Danio rerio \n",
+             "[7] Rattus norvegicus \n",
+             "[8] Saccharomyces cerevisiae \n",
+             "[9] Caenorhabditis elegans \n"))
+  species <- readline("Type the number of the species that you would like to use as a reference: ")
   
-  for (x in totaldir) {
-    sampledir <- list.dirs(path = folders[c(x)], full.names = TRUE)
-    sampledir <- sampledir[-1]
-    totsample <- 1:length(sampledir)
+  switch(species,
+         "1"={
+           ## Homo sapiens hg19
+           organism <- BSgenome.Hsapiens.UCSC.hg19
+           
+           wd <- getwd()
+           bpp = MulticoreParam(threads)
+           geneExons <- exonsBy(TxDb.Hsapiens.UCSC.hg19.knownGene, by = "gene")
+           if (is.null(groups)) {
+             folders <- list.dirs(path = dir, full.names = TRUE, recursive = FALSE)
+           } else {
+             groups <- paste0(dir, "/", groups)
+             folders <- normalizePath(groups)
+           }
+           totaldir <- 1:length(folders)
+           bamFilesToCount <- c()
+           groupNames <- c()
+           samples <- c()
+           
+           for (x in totaldir) {
+             sampledir <- list.dirs(path = folders[c(x)], full.names = TRUE)
+             sampledir <- sampledir[-1]
+             totsample <- 1:length(sampledir)
+             
+             for (i in totsample) {
+               print(basename(dirname(sampledir[c(i)])))
+               sampletype <- basename(dirname(sampledir[c(i)]))
+               groupNames <- append(groupNames, sampletype)
+               print(tail(groupNames, n = 1L))
+               bam <- list_files_with_exts(dir = sampledir[c(i)], exts = "bam")
+               bamFilesToCount <- append(bamFilesToCount, bam)
+               names <- basename(dirname(bam))
+               samples <- append(samples, names)
+             }
+             
+           }
+           ##This creates a list of bam files to do gene counting with
+           ##The folder where the bam files are found (ie sample folder) will inform the 
+           ##name of the sample
+           ##Samples are grouped according to the condition (named by the condition
+           ##folders)
+           
+           ##A DESeq object is created from the gene counts
+           names(bamFilesToCount) <- samples
+           myBams <- BamFileList(bamFilesToCount, yieldSize = 10000, asMates = paired)
+           geneCounts <- summarizeOverlaps(geneExons, myBams, ignore.strand = TRUE,
+                                           BPPARAM = bpp, singleEnd = isFALSE(paired))
+           metaData <- data.frame(Group = groupNames, 
+                                  row.names = colnames(geneCounts))
+           countMatrix <- assay(geneCounts)
+           countGRanges <- rowRanges(geneCounts)
+           ddse <- DESeqDataSetFromMatrix(countMatrix, colData = metaData, 
+                                          design = ~Group, rowRanges = countGRanges)
+           dds <- DESeq(ddse)
+           
+           normCounts <- counts(dds, normalized = TRUE)
+           dispersion <- plotDispEsts(dds)
+           ##Dispersion can be plotted with plotDispEsts(dds)
+           
+           ##Regardless of how many conditions there are, we can compare different
+           ##conditions to each other as long as there are replicate samples
+           groups <- unique(groupNames)
+           groupmatrix <- combn(groups, 2)
+           comparison <- length(groupmatrix)/2
+           num_comparison <- 1:comparison
+           compare <- c()
+           lfc_compare <- c()
+           DFcompare <- c()
+           
+           for (x in num_comparison) {
+             myRes <- results(dds, contrast = c("Group", 
+                                                groupmatrix[c(2*x)], 
+                                                groupmatrix[c(2*x-1)]))
+             myRes <- myRes[order(myRes$pvalue), ]
+             compare <- append(compare, myRes)
+             
+             myResAsDF <- as.data.frame(myRes)
+             myResAsDF$newPadj <- p.adjust(myResAsDF$pvalue)
+             myResAsDF <- myResAsDF[!is.na(myResAsDF$padj), ]
+             myResAsDF <- myResAsDF[order(myResAsDF$pvalue), ]
+             annotatedRes <- myResAsDF
+             
+
+               eToSym <- AnnotationDbi::select(org.Hs.eg.db,
+                                               keys = rownames(myResAsDF),
+                                               keytype = "ENTREZID",
+                                               columns= c("SYMBOL", "ENSEMBL"))
+               annotatedRes <- merge(eToSym,myResAsDF,
+                                     by.x=1,
+                                     by.y=0,
+                                     all.x=FALSE,
+                                     all.y=TRUE)
+             
+             annotatedRes <- annotatedRes[order(annotatedRes$pvalue),]
+             DFcompare <- append(DFcompare, annotatedRes)
+             
+             myRes_lfc <- lfcShrink(dds, coef = paste0("Group_",
+                                                       groupmatrix[c(2*x)],
+                                                       "_vs_",
+                                                       groupmatrix[c(2*x-1)]))
+             lfc_compare <- append(lfc_compare, myRes_lfc)
+             
+             setwd(outputdir)
+             write.csv(annotatedRes, paste0("Group_",
+                                            groupmatrix[c(2*x)],
+                                            "_vs_",
+                                            groupmatrix[c(2*x-1)],
+                                            ".csv"))
+             
+           }
+           },
+         "2"={
+           ## Homo sapiens hg38
+           organism <- BSgenome.Hsapiens.UCSC.hg38
+           
+           wd <- getwd()
+           bpp = MulticoreParam(threads)
+           geneExons <- exonsBy(TxDb.Hsapiens.UCSC.hg38.knownGene, by = "gene")
+           if (is.null(groups)) {
+             folders <- list.dirs(path = dir, full.names = TRUE, recursive = FALSE)
+           } else {
+             groups <- paste0(dir, "/", groups)
+             folders <- normalizePath(groups)
+           }
+           totaldir <- 1:length(folders)
+           bamFilesToCount <- c()
+           groupNames <- c()
+           samples <- c()
+           
+           for (x in totaldir) {
+             sampledir <- list.dirs(path = folders[c(x)], full.names = TRUE)
+             sampledir <- sampledir[-1]
+             totsample <- 1:length(sampledir)
+             
+             for (i in totsample) {
+               print(basename(dirname(sampledir[c(i)])))
+               sampletype <- basename(dirname(sampledir[c(i)]))
+               groupNames <- append(groupNames, sampletype)
+               print(tail(groupNames, n = 1L))
+               bam <- list_files_with_exts(dir = sampledir[c(i)], exts = "bam")
+               bamFilesToCount <- append(bamFilesToCount, bam)
+               names <- basename(dirname(bam))
+               samples <- append(samples, names)
+             }
+             
+           }
+           ##This creates a list of bam files to do gene counting with
+           ##The folder where the bam files are found (ie sample folder) will inform the 
+           ##name of the sample
+           ##Samples are grouped according to the condition (named by the condition
+           ##folders)
+           
+           ##A DESeq object is created from the gene counts
+           names(bamFilesToCount) <- samples
+           myBams <- BamFileList(bamFilesToCount, yieldSize = 10000, asMates = paired)
+           geneCounts <- summarizeOverlaps(geneExons, myBams, ignore.strand = TRUE,
+                                           BPPARAM = bpp, singleEnd = isFALSE(paired))
+           metaData <- data.frame(Group = groupNames, 
+                                  row.names = colnames(geneCounts))
+           countMatrix <- assay(geneCounts)
+           countGRanges <- rowRanges(geneCounts)
+           ddse <- DESeqDataSetFromMatrix(countMatrix, colData = metaData, 
+                                          design = ~Group, rowRanges = countGRanges)
+           dds <- DESeq(ddse)
+           
+           normCounts <- counts(dds, normalized = TRUE)
+           dispersion <- plotDispEsts(dds)
+           ##Dispersion can be plotted with plotDispEsts(dds)
+           
+           ##Regardless of how many conditions there are, we can compare different
+           ##conditions to each other as long as there are replicate samples
+           groups <- unique(groupNames)
+           groupmatrix <- combn(groups, 2)
+           comparison <- length(groupmatrix)/2
+           num_comparison <- 1:comparison
+           compare <- c()
+           lfc_compare <- c()
+           DFcompare <- c()
+           
+           for (x in num_comparison) {
+             myRes <- results(dds, contrast = c("Group", 
+                                                groupmatrix[c(2*x)], 
+                                                groupmatrix[c(2*x-1)]))
+             myRes <- myRes[order(myRes$pvalue), ]
+             compare <- append(compare, myRes)
+             
+             myResAsDF <- as.data.frame(myRes)
+             myResAsDF$newPadj <- p.adjust(myResAsDF$pvalue)
+             myResAsDF <- myResAsDF[!is.na(myResAsDF$padj), ]
+             myResAsDF <- myResAsDF[order(myResAsDF$pvalue), ]
+             annotatedRes <- myResAsDF
+             
+
+               eToSym <- AnnotationDbi::select(org.Hs.eg.db,
+                                               keys = rownames(myResAsDF),
+                                               keytype = "ENTREZID",
+                                               columns= c("SYMBOL", "ENSEMBL"))
+               annotatedRes <- merge(eToSym,myResAsDF,
+                                     by.x=1,
+                                     by.y=0,
+                                     all.x=FALSE,
+                                     all.y=TRUE)
+             
+             annotatedRes <- annotatedRes[order(annotatedRes$pvalue),]
+             DFcompare <- append(DFcompare, annotatedRes)
+             
+             myRes_lfc <- lfcShrink(dds, coef = paste0("Group_",
+                                                       groupmatrix[c(2*x)],
+                                                       "_vs_",
+                                                       groupmatrix[c(2*x-1)]))
+             lfc_compare <- append(lfc_compare, myRes_lfc)
+             
+             setwd(outputdir)
+             write.csv(annotatedRes, paste0("Group_",
+                                            groupmatrix[c(2*x)],
+                                            "_vs_",
+                                            groupmatrix[c(2*x-1)],
+                                            ".csv"))
+             
+           }
+         },
+         "3"={
+           ##Mus musculus mm10
+           organism <- BSgenome.Mmusculus.UCSC.mm10
+           
+           wd <- getwd()
+           bpp = MulticoreParam(threads)
+           geneExons <- exonsBy(TxDb.Mmusculus.UCSC.mm10.knownGene, by = "gene")
+           if (is.null(groups)) {
+             folders <- list.dirs(path = dir, full.names = TRUE, recursive = FALSE)
+           } else {
+             groups <- paste0(dir, "/", groups)
+             folders <- normalizePath(groups)
+           }
+           totaldir <- 1:length(folders)
+           bamFilesToCount <- c()
+           groupNames <- c()
+           samples <- c()
+           
+           for (x in totaldir) {
+             sampledir <- list.dirs(path = folders[c(x)], full.names = TRUE)
+             sampledir <- sampledir[-1]
+             totsample <- 1:length(sampledir)
+             
+             for (i in totsample) {
+               print(basename(dirname(sampledir[c(i)])))
+               sampletype <- basename(dirname(sampledir[c(i)]))
+               groupNames <- append(groupNames, sampletype)
+               print(tail(groupNames, n = 1L))
+               bam <- list_files_with_exts(dir = sampledir[c(i)], exts = "bam")
+               bamFilesToCount <- append(bamFilesToCount, bam)
+               names <- basename(dirname(bam))
+               samples <- append(samples, names)
+             }
+             
+           }
+           ##This creates a list of bam files to do gene counting with
+           ##The folder where the bam files are found (ie sample folder) will inform the 
+           ##name of the sample
+           ##Samples are grouped according to the condition (named by the condition
+           ##folders)
+           
+           ##A DESeq object is created from the gene counts
+           names(bamFilesToCount) <- samples
+           myBams <- BamFileList(bamFilesToCount, yieldSize = 10000, asMates = paired)
+           geneCounts <- summarizeOverlaps(geneExons, myBams, ignore.strand = TRUE,
+                                           BPPARAM = bpp, singleEnd = isFALSE(paired))
+           metaData <- data.frame(Group = groupNames, 
+                                  row.names = colnames(geneCounts))
+           countMatrix <- assay(geneCounts)
+           countGRanges <- rowRanges(geneCounts)
+           ddse <- DESeqDataSetFromMatrix(countMatrix, colData = metaData, 
+                                          design = ~Group, rowRanges = countGRanges)
+           dds <- DESeq(ddse)
+           
+           normCounts <- counts(dds, normalized = TRUE)
+           dispersion <- plotDispEsts(dds)
+           ##Dispersion can be plotted with plotDispEsts(dds)
+           
+           ##Regardless of how many conditions there are, we can compare different
+           ##conditions to each other as long as there are replicate samples
+           groups <- unique(groupNames)
+           groupmatrix <- combn(groups, 2)
+           comparison <- length(groupmatrix)/2
+           num_comparison <- 1:comparison
+           compare <- c()
+           lfc_compare <- c()
+           DFcompare <- c()
+           
+           for (x in num_comparison) {
+             myRes <- results(dds, contrast = c("Group", 
+                                                groupmatrix[c(2*x)], 
+                                                groupmatrix[c(2*x-1)]))
+             myRes <- myRes[order(myRes$pvalue), ]
+             compare <- append(compare, myRes)
+             
+             myResAsDF <- as.data.frame(myRes)
+             myResAsDF$newPadj <- p.adjust(myResAsDF$pvalue)
+             myResAsDF <- myResAsDF[!is.na(myResAsDF$padj), ]
+             myResAsDF <- myResAsDF[order(myResAsDF$pvalue), ]
+             annotatedRes <- myResAsDF
+             
+
+               eToSym <- AnnotationDbi::select(org.Mm.eg.db,
+                                               keys = rownames(myResAsDF),
+                                               keytype = "ENTREZID",
+                                               columns= c("SYMBOL", "ENSEMBL"))
+               annotatedRes <- merge(eToSym,myResAsDF,
+                                     by.x=1,
+                                     by.y=0,
+                                     all.x=FALSE,
+                                     all.y=TRUE)
+         
+             annotatedRes <- annotatedRes[order(annotatedRes$pvalue),]
+             DFcompare <- append(DFcompare, annotatedRes)
+             
+             myRes_lfc <- lfcShrink(dds, coef = paste0("Group_",
+                                                       groupmatrix[c(2*x)],
+                                                       "_vs_",
+                                                       groupmatrix[c(2*x-1)]))
+             lfc_compare <- append(lfc_compare, myRes_lfc)
+             
+             setwd(outputdir)
+             write.csv(annotatedRes, paste0("Group_",
+                                            groupmatrix[c(2*x)],
+                                            "_vs_",
+                                            groupmatrix[c(2*x-1)],
+                                            ".csv"))
+             
+           }
+         },
+         "4"={
+           ##Arabidopsis thaliana TAIR9
+           organism <- BSgenome.Athaliana.TAIR.TAIR9
+           
+           wd <- getwd()
+           bpp = MulticoreParam(threads)
+           geneExons <- exonsBy(TxDb.Athaliana.BioMart.plantsmart28, by = "gene")
+           if (is.null(groups)) {
+             folders <- list.dirs(path = dir, full.names = TRUE, recursive = FALSE)
+           } else {
+             groups <- paste0(dir, "/", groups)
+             folders <- normalizePath(groups)
+           }
+           totaldir <- 1:length(folders)
+           bamFilesToCount <- c()
+           groupNames <- c()
+           samples <- c()
+           
+           for (x in totaldir) {
+             sampledir <- list.dirs(path = folders[c(x)], full.names = TRUE)
+             sampledir <- sampledir[-1]
+             totsample <- 1:length(sampledir)
+             
+             for (i in totsample) {
+               print(basename(dirname(sampledir[c(i)])))
+               sampletype <- basename(dirname(sampledir[c(i)]))
+               groupNames <- append(groupNames, sampletype)
+               print(tail(groupNames, n = 1L))
+               bam <- list_files_with_exts(dir = sampledir[c(i)], exts = "bam")
+               bamFilesToCount <- append(bamFilesToCount, bam)
+               names <- basename(dirname(bam))
+               samples <- append(samples, names)
+             }
+             
+           }
+           ##This creates a list of bam files to do gene counting with
+           ##The folder where the bam files are found (ie sample folder) will inform the 
+           ##name of the sample
+           ##Samples are grouped according to the condition (named by the condition
+           ##folders)
+           
+           ##A DESeq object is created from the gene counts
+           names(bamFilesToCount) <- samples
+           myBams <- BamFileList(bamFilesToCount, yieldSize = 10000, asMates = paired)
+           geneCounts <- summarizeOverlaps(geneExons, myBams, ignore.strand = TRUE,
+                                           BPPARAM = bpp, singleEnd = isFALSE(paired))
+           metaData <- data.frame(Group = groupNames, 
+                                  row.names = colnames(geneCounts))
+           countMatrix <- assay(geneCounts)
+           countGRanges <- rowRanges(geneCounts)
+           ddse <- DESeqDataSetFromMatrix(countMatrix, colData = metaData, 
+                                          design = ~Group, rowRanges = countGRanges)
+           dds <- DESeq(ddse)
+           
+           normCounts <- counts(dds, normalized = TRUE)
+           dispersion <- plotDispEsts(dds)
+           ##Dispersion can be plotted with plotDispEsts(dds)
+           
+           ##Regardless of how many conditions there are, we can compare different
+           ##conditions to each other as long as there are replicate samples
+           groups <- unique(groupNames)
+           groupmatrix <- combn(groups, 2)
+           comparison <- length(groupmatrix)/2
+           num_comparison <- 1:comparison
+           compare <- c()
+           lfc_compare <- c()
+           DFcompare <- c()
+           
+           for (x in num_comparison) {
+             myRes <- results(dds, contrast = c("Group", 
+                                                groupmatrix[c(2*x)], 
+                                                groupmatrix[c(2*x-1)]))
+             myRes <- myRes[order(myRes$pvalue), ]
+             compare <- append(compare, myRes)
+             
+             myResAsDF <- as.data.frame(myRes)
+             myResAsDF$newPadj <- p.adjust(myResAsDF$pvalue)
+             myResAsDF <- myResAsDF[!is.na(myResAsDF$padj), ]
+             myResAsDF <- myResAsDF[order(myResAsDF$pvalue), ]
+             annotatedRes <- myResAsDF
+             
+             eToSym <- AnnotationDbi::select(org.At.tair.db,
+                                             keys = rownames(myResAsDF),
+                                             keytype = "ENTREZID",
+                                             columns= c("SYMBOL", "ENSEMBL"))
+             annotatedRes <- merge(eToSym,myResAsDF,
+                                   by.x=1,
+                                   by.y=0,
+                                   all.x=FALSE,
+                                   all.y=TRUE)
+             
+             annotatedRes <- annotatedRes[order(annotatedRes$pvalue),]
+             DFcompare <- append(DFcompare, annotatedRes)
+             
+             myRes_lfc <- lfcShrink(dds, coef = paste0("Group_",
+                                                       groupmatrix[c(2*x)],
+                                                       "_vs_",
+                                                       groupmatrix[c(2*x-1)]))
+             lfc_compare <- append(lfc_compare, myRes_lfc)
+             
+             setwd(outputdir)
+             write.csv(annotatedRes, paste0("Group_",
+                                            groupmatrix[c(2*x)],
+                                            "_vs_",
+                                            groupmatrix[c(2*x-1)],
+                                            ".csv"))
+             
+           }
+         },
+         "5"={
+           ##Drosophilia melanogaster dm6
+           organism <- BSgenome.Dmelanogaster.UCSC.dm6
+           
+           wd <- getwd()
+           bpp = MulticoreParam(threads)
+           geneExons <- exonsBy(TxDb.Dmelanogaster.UCSC.dm6.ensGene, by = "gene")
+           if (is.null(groups)) {
+             folders <- list.dirs(path = dir, full.names = TRUE, recursive = FALSE)
+           } else {
+             groups <- paste0(dir, "/", groups)
+             folders <- normalizePath(groups)
+           }
+           totaldir <- 1:length(folders)
+           bamFilesToCount <- c()
+           groupNames <- c()
+           samples <- c()
+           
+           for (x in totaldir) {
+             sampledir <- list.dirs(path = folders[c(x)], full.names = TRUE)
+             sampledir <- sampledir[-1]
+             totsample <- 1:length(sampledir)
+             
+             for (i in totsample) {
+               print(basename(dirname(sampledir[c(i)])))
+               sampletype <- basename(dirname(sampledir[c(i)]))
+               groupNames <- append(groupNames, sampletype)
+               print(tail(groupNames, n = 1L))
+               bam <- list_files_with_exts(dir = sampledir[c(i)], exts = "bam")
+               bamFilesToCount <- append(bamFilesToCount, bam)
+               names <- basename(dirname(bam))
+               samples <- append(samples, names)
+             }
+             
+           }
+           ##This creates a list of bam files to do gene counting with
+           ##The folder where the bam files are found (ie sample folder) will inform the 
+           ##name of the sample
+           ##Samples are grouped according to the condition (named by the condition
+           ##folders)
+           
+           ##A DESeq object is created from the gene counts
+           names(bamFilesToCount) <- samples
+           myBams <- BamFileList(bamFilesToCount, yieldSize = 10000, asMates = paired)
+           geneCounts <- summarizeOverlaps(geneExons, myBams, ignore.strand = TRUE,
+                                           BPPARAM = bpp, singleEnd = isFALSE(paired))
+           metaData <- data.frame(Group = groupNames, 
+                                  row.names = colnames(geneCounts))
+           countMatrix <- assay(geneCounts)
+           countGRanges <- rowRanges(geneCounts)
+           ddse <- DESeqDataSetFromMatrix(countMatrix, colData = metaData, 
+                                          design = ~Group, rowRanges = countGRanges)
+           dds <- DESeq(ddse)
+           
+           normCounts <- counts(dds, normalized = TRUE)
+           dispersion <- plotDispEsts(dds)
+           ##Dispersion can be plotted with plotDispEsts(dds)
+           
+           ##Regardless of how many conditions there are, we can compare different
+           ##conditions to each other as long as there are replicate samples
+           groups <- unique(groupNames)
+           groupmatrix <- combn(groups, 2)
+           comparison <- length(groupmatrix)/2
+           num_comparison <- 1:comparison
+           compare <- c()
+           lfc_compare <- c()
+           DFcompare <- c()
+           
+           for (x in num_comparison) {
+             myRes <- results(dds, contrast = c("Group", 
+                                                groupmatrix[c(2*x)], 
+                                                groupmatrix[c(2*x-1)]))
+             myRes <- myRes[order(myRes$pvalue), ]
+             compare <- append(compare, myRes)
+             
+             myResAsDF <- as.data.frame(myRes)
+             myResAsDF$newPadj <- p.adjust(myResAsDF$pvalue)
+             myResAsDF <- myResAsDF[!is.na(myResAsDF$padj), ]
+             myResAsDF <- myResAsDF[order(myResAsDF$pvalue), ]
+             annotatedRes <- myResAsDF
     
-    for (i in totsample) {
-      print(basename(dirname(sampledir[c(i)])))
-      sampletype <- basename(dirname(sampledir[c(i)]))
-      groupNames <- append(groupNames, sampletype)
-      print(tail(groupNames, n = 1L))
-      bam <- list_files_with_exts(dir = sampledir[c(i)], exts = "bam")
-      bamFilesToCount <- append(bamFilesToCount, bam)
-      names <- basename(dirname(bam))
-      samples <- append(samples, names)
-    }
-    
-  }
-  ##This creates a list of bam files to do gene counting with
-  ##The folder where the bam files are found (ie sample folder) will inform the 
-  ##name of the sample
-  ##Samples are grouped according to the condition (named by the condition
-  ##folders)
-  
-  ##A DESeq object is created from the gene counts
-  ##If bam files aren't indexed, they are sorted and indexed first
-    for (x in bamFilesToCount) {
-    if (isTRUE(file.exists(paste0(x, ".bai")))) {
-      setwd(dirname(x))
-      sortBam(x, x)
-      indexBam(x)
-    }
-  }
-  setwd(wd)
-  names(bamFilesToCount) <- samples
-  myBams <- BamFileList(bamFilesToCount, yieldSize = 10000, asMates = paired)
-  geneCounts <- summarizeOverlaps(geneExons, myBams, ignore.strand = TRUE,
-                                  BPPARAM = bpp, singleEnd = isFALSE(paired))
-  metaData <- data.frame(Group = groupNames, 
-                         row.names = colnames(geneCounts))
-  countMatrix <- assay(geneCounts)
-  countGRanges <- rowRanges(geneCounts)
-  ddse <- DESeqDataSetFromMatrix(countMatrix, colData = metaData, 
-                                 design = ~Group, rowRanges = countGRanges)
-  dds <- DESeq(ddse)
-  
-  normCounts <- counts(dds, normalized = TRUE)
-  dispersion <- plotDispEsts(dds)
-  ##Dispersion can be plotted with plotDispEsts(dds)
-  
-  ##Regardless of how many conditions there are, we can compare different
-  ##conditions to each other as long as there are replicate samples
-  groups <- unique(groupNames)
-  groupmatrix <- combn(groups, 2)
-  comparison <- length(groupmatrix)/2
-  num_comparison <- 1:comparison
-  compare <- c()
-  lfc_compare <- c()
-  DFcompare <- c()
-  
-  for (x in num_comparison) {
-    myRes <- results(dds, contrast = c("Group", 
-                                       groupmatrix[c(2*x)], 
-                                       groupmatrix[c(2*x-1)]))
-    myRes <- myRes[order(myRes$pvalue), ]
-    compare <- append(compare, myRes)
-    
-    myResAsDF <- as.data.frame(myRes)
-    myResAsDF$newPadj <- p.adjust(myResAsDF$pvalue)
-    myResAsDF <- myResAsDF[!is.na(myResAsDF$padj), ]
-    myResAsDF <- myResAsDF[order(myResAsDF$pvalue), ]
-    annotatedRes <- myResAsDF
-    
-    if (isTRUE(orgDb)) {
-      eToSym <- AnnotationDbi::select(orgDb,
-                                      keys = rownames(myResAsDF),
-                                      keytype = "ENTREZID",
-                                      columns= c("SYMBOL", "ENSEMBL"))
-      annotatedRes <- merge(eToSym,myResAsDF,
-                            by.x=1,
-                            by.y=0,
-                            all.x=FALSE,
-                            all.y=TRUE)
-    }
-    annotatedRes <- annotatedRes[order(annotatedRes$pvalue),]
-    DFcompare <- append(DFcompare, annotatedRes)
-    
-    myRes_lfc <- lfcShrink(dds, coef = paste0("Group_",
-                                              groupmatrix[c(2*x)],
-                                              "_vs_",
-                                              groupmatrix[c(2*x-1)]))
-    lfc_compare <- append(lfc_compare, myRes_lfc)
-    
-    setwd(outputdir)
-    write.csv(annotatedRes, paste0("Group_",
-                                   groupmatrix[c(2*x)],
-                                   "_vs_",
-                                   groupmatrix[c(2*x-1)],
-                                   ".csv"))
-    
-  }
+               eToSym <- AnnotationDbi::select(org.Dm.eg.db,
+                                               keys = rownames(myResAsDF),
+                                               keytype = "ENTREZID",
+                                               columns= c("SYMBOL", "ENSEMBL"))
+               annotatedRes <- merge(eToSym,myResAsDF,
+                                     by.x=1,
+                                     by.y=0,
+                                     all.x=FALSE,
+                                     all.y=TRUE)
+
+             annotatedRes <- annotatedRes[order(annotatedRes$pvalue),]
+             DFcompare <- append(DFcompare, annotatedRes)
+             
+             myRes_lfc <- lfcShrink(dds, coef = paste0("Group_",
+                                                       groupmatrix[c(2*x)],
+                                                       "_vs_",
+                                                       groupmatrix[c(2*x-1)]))
+             lfc_compare <- append(lfc_compare, myRes_lfc)
+             
+             setwd(outputdir)
+             write.csv(annotatedRes, paste0("Group_",
+                                            groupmatrix[c(2*x)],
+                                            "_vs_",
+                                            groupmatrix[c(2*x-1)],
+                                            ".csv"))
+             
+           }
+         },
+         "6"={
+           ##Danio rerio danRer11
+           organism <- BSgenome.Drerio.UCSC.danRer11
+           
+           wd <- getwd()
+           bpp = MulticoreParam(threads)
+           geneExons <- exonsBy(TxDb.Drerio.UCSC.danRer11.refGene, by = "gene")
+           if (is.null(groups)) {
+             folders <- list.dirs(path = dir, full.names = TRUE, recursive = FALSE)
+           } else {
+             groups <- paste0(dir, "/", groups)
+             folders <- normalizePath(groups)
+           }
+           totaldir <- 1:length(folders)
+           bamFilesToCount <- c()
+           groupNames <- c()
+           samples <- c()
+           
+           for (x in totaldir) {
+             sampledir <- list.dirs(path = folders[c(x)], full.names = TRUE)
+             sampledir <- sampledir[-1]
+             totsample <- 1:length(sampledir)
+             
+             for (i in totsample) {
+               print(basename(dirname(sampledir[c(i)])))
+               sampletype <- basename(dirname(sampledir[c(i)]))
+               groupNames <- append(groupNames, sampletype)
+               print(tail(groupNames, n = 1L))
+               bam <- list_files_with_exts(dir = sampledir[c(i)], exts = "bam")
+               bamFilesToCount <- append(bamFilesToCount, bam)
+               names <- basename(dirname(bam))
+               samples <- append(samples, names)
+             }
+             
+           }
+           ##This creates a list of bam files to do gene counting with
+           ##The folder where the bam files are found (ie sample folder) will inform the 
+           ##name of the sample
+           ##Samples are grouped according to the condition (named by the condition
+           ##folders)
+           
+           ##A DESeq object is created from the gene counts
+           names(bamFilesToCount) <- samples
+           myBams <- BamFileList(bamFilesToCount, yieldSize = 10000, asMates = paired)
+           geneCounts <- summarizeOverlaps(geneExons, myBams, ignore.strand = TRUE,
+                                           BPPARAM = bpp, singleEnd = isFALSE(paired))
+           metaData <- data.frame(Group = groupNames, 
+                                  row.names = colnames(geneCounts))
+           countMatrix <- assay(geneCounts)
+           countGRanges <- rowRanges(geneCounts)
+           ddse <- DESeqDataSetFromMatrix(countMatrix, colData = metaData, 
+                                          design = ~Group, rowRanges = countGRanges)
+           dds <- DESeq(ddse)
+           
+           normCounts <- counts(dds, normalized = TRUE)
+           dispersion <- plotDispEsts(dds)
+           ##Dispersion can be plotted with plotDispEsts(dds)
+           
+           ##Regardless of how many conditions there are, we can compare different
+           ##conditions to each other as long as there are replicate samples
+           groups <- unique(groupNames)
+           groupmatrix <- combn(groups, 2)
+           comparison <- length(groupmatrix)/2
+           num_comparison <- 1:comparison
+           compare <- c()
+           lfc_compare <- c()
+           DFcompare <- c()
+           
+           for (x in num_comparison) {
+             myRes <- results(dds, contrast = c("Group", 
+                                                groupmatrix[c(2*x)], 
+                                                groupmatrix[c(2*x-1)]))
+             myRes <- myRes[order(myRes$pvalue), ]
+             compare <- append(compare, myRes)
+             
+             myResAsDF <- as.data.frame(myRes)
+             myResAsDF$newPadj <- p.adjust(myResAsDF$pvalue)
+             myResAsDF <- myResAsDF[!is.na(myResAsDF$padj), ]
+             myResAsDF <- myResAsDF[order(myResAsDF$pvalue), ]
+             annotatedRes <- myResAsDF
+             
+             eToSym <- AnnotationDbi::select(org.Dr.eg.db,
+                                             keys = rownames(myResAsDF),
+                                             keytype = "ENTREZID",
+                                             columns= c("SYMBOL", "ENSEMBL"))
+             annotatedRes <- merge(eToSym,myResAsDF,
+                                   by.x=1,
+                                   by.y=0,
+                                   all.x=FALSE,
+                                   all.y=TRUE)
+             
+             annotatedRes <- annotatedRes[order(annotatedRes$pvalue),]
+             DFcompare <- append(DFcompare, annotatedRes)
+             
+             myRes_lfc <- lfcShrink(dds, coef = paste0("Group_",
+                                                       groupmatrix[c(2*x)],
+                                                       "_vs_",
+                                                       groupmatrix[c(2*x-1)]))
+             lfc_compare <- append(lfc_compare, myRes_lfc)
+             
+             setwd(outputdir)
+             write.csv(annotatedRes, paste0("Group_",
+                                            groupmatrix[c(2*x)],
+                                            "_vs_",
+                                            groupmatrix[c(2*x-1)],
+                                            ".csv"))
+             
+           }
+         },
+         "7"={
+           ##Rattus norvegicus rn5
+           organism <- BSgenome.Rnorvegicus.UCSC.rn5
+           
+           wd <- getwd()
+           bpp = MulticoreParam(threads)
+           geneExons <- exonsBy(TxDb.Dnorvegicus.UCSC.rn5.refGene, by = "gene")
+           if (is.null(groups)) {
+             folders <- list.dirs(path = dir, full.names = TRUE, recursive = FALSE)
+           } else {
+             groups <- paste0(dir, "/", groups)
+             folders <- normalizePath(groups)
+           }
+           totaldir <- 1:length(folders)
+           bamFilesToCount <- c()
+           groupNames <- c()
+           samples <- c()
+           
+           for (x in totaldir) {
+             sampledir <- list.dirs(path = folders[c(x)], full.names = TRUE)
+             sampledir <- sampledir[-1]
+             totsample <- 1:length(sampledir)
+             
+             for (i in totsample) {
+               print(basename(dirname(sampledir[c(i)])))
+               sampletype <- basename(dirname(sampledir[c(i)]))
+               groupNames <- append(groupNames, sampletype)
+               print(tail(groupNames, n = 1L))
+               bam <- list_files_with_exts(dir = sampledir[c(i)], exts = "bam")
+               bamFilesToCount <- append(bamFilesToCount, bam)
+               names <- basename(dirname(bam))
+               samples <- append(samples, names)
+             }
+             
+           }
+           ##This creates a list of bam files to do gene counting with
+           ##The folder where the bam files are found (ie sample folder) will inform the 
+           ##name of the sample
+           ##Samples are grouped according to the condition (named by the condition
+           ##folders)
+           
+           ##A DESeq object is created from the gene counts
+           names(bamFilesToCount) <- samples
+           myBams <- BamFileList(bamFilesToCount, yieldSize = 10000, asMates = paired)
+           geneCounts <- summarizeOverlaps(geneExons, myBams, ignore.strand = TRUE,
+                                           BPPARAM = bpp, singleEnd = isFALSE(paired))
+           metaData <- data.frame(Group = groupNames, 
+                                  row.names = colnames(geneCounts))
+           countMatrix <- assay(geneCounts)
+           countGRanges <- rowRanges(geneCounts)
+           ddse <- DESeqDataSetFromMatrix(countMatrix, colData = metaData, 
+                                          design = ~Group, rowRanges = countGRanges)
+           dds <- DESeq(ddse)
+           
+           normCounts <- counts(dds, normalized = TRUE)
+           dispersion <- plotDispEsts(dds)
+           ##Dispersion can be plotted with plotDispEsts(dds)
+           
+           ##Regardless of how many conditions there are, we can compare different
+           ##conditions to each other as long as there are replicate samples
+           groups <- unique(groupNames)
+           groupmatrix <- combn(groups, 2)
+           comparison <- length(groupmatrix)/2
+           num_comparison <- 1:comparison
+           compare <- c()
+           lfc_compare <- c()
+           DFcompare <- c()
+           
+           for (x in num_comparison) {
+             myRes <- results(dds, contrast = c("Group", 
+                                                groupmatrix[c(2*x)], 
+                                                groupmatrix[c(2*x-1)]))
+             myRes <- myRes[order(myRes$pvalue), ]
+             compare <- append(compare, myRes)
+             
+             myResAsDF <- as.data.frame(myRes)
+             myResAsDF$newPadj <- p.adjust(myResAsDF$pvalue)
+             myResAsDF <- myResAsDF[!is.na(myResAsDF$padj), ]
+             myResAsDF <- myResAsDF[order(myResAsDF$pvalue), ]
+             annotatedRes <- myResAsDF
+             
+             eToSym <- AnnotationDbi::select(org.Rn.eg.db,
+                                             keys = rownames(myResAsDF),
+                                             keytype = "ENTREZID",
+                                             columns= c("SYMBOL", "ENSEMBL"))
+             annotatedRes <- merge(eToSym,myResAsDF,
+                                   by.x=1,
+                                   by.y=0,
+                                   all.x=FALSE,
+                                   all.y=TRUE)
+             
+             annotatedRes <- annotatedRes[order(annotatedRes$pvalue),]
+             DFcompare <- append(DFcompare, annotatedRes)
+             
+             myRes_lfc <- lfcShrink(dds, coef = paste0("Group_",
+                                                       groupmatrix[c(2*x)],
+                                                       "_vs_",
+                                                       groupmatrix[c(2*x-1)]))
+             lfc_compare <- append(lfc_compare, myRes_lfc)
+             
+             setwd(outputdir)
+             write.csv(annotatedRes, paste0("Group_",
+                                            groupmatrix[c(2*x)],
+                                            "_vs_",
+                                            groupmatrix[c(2*x-1)],
+                                            ".csv"))
+             
+           }
+         },
+         "8"={
+           ##Saccharomyces cerevisiae sacCer3
+           organism <- BSgenome.Scerevisiae.UCSC.sacCer3
+           
+           wd <- getwd()
+           bpp = MulticoreParam(threads)
+           geneExons <- exonsBy(TxDb.Scerevisiae.UCSC.sacCer3.sgdGene, by = "gene")
+           if (is.null(groups)) {
+             folders <- list.dirs(path = dir, full.names = TRUE, recursive = FALSE)
+           } else {
+             groups <- paste0(dir, "/", groups)
+             folders <- normalizePath(groups)
+           }
+           totaldir <- 1:length(folders)
+           bamFilesToCount <- c()
+           groupNames <- c()
+           samples <- c()
+           
+           for (x in totaldir) {
+             sampledir <- list.dirs(path = folders[c(x)], full.names = TRUE)
+             sampledir <- sampledir[-1]
+             totsample <- 1:length(sampledir)
+             
+             for (i in totsample) {
+               print(basename(dirname(sampledir[c(i)])))
+               sampletype <- basename(dirname(sampledir[c(i)]))
+               groupNames <- append(groupNames, sampletype)
+               print(tail(groupNames, n = 1L))
+               bam <- list_files_with_exts(dir = sampledir[c(i)], exts = "bam")
+               bamFilesToCount <- append(bamFilesToCount, bam)
+               names <- basename(dirname(bam))
+               samples <- append(samples, names)
+             }
+             
+           }
+           ##This creates a list of bam files to do gene counting with
+           ##The folder where the bam files are found (ie sample folder) will inform the 
+           ##name of the sample
+           ##Samples are grouped according to the condition (named by the condition
+           ##folders)
+           
+           ##A DESeq object is created from the gene counts
+           names(bamFilesToCount) <- samples
+           myBams <- BamFileList(bamFilesToCount, yieldSize = 10000, asMates = paired)
+           geneCounts <- summarizeOverlaps(geneExons, myBams, ignore.strand = TRUE,
+                                           BPPARAM = bpp, singleEnd = isFALSE(paired))
+           metaData <- data.frame(Group = groupNames, 
+                                  row.names = colnames(geneCounts))
+           countMatrix <- assay(geneCounts)
+           countGRanges <- rowRanges(geneCounts)
+           ddse <- DESeqDataSetFromMatrix(countMatrix, colData = metaData, 
+                                          design = ~Group, rowRanges = countGRanges)
+           dds <- DESeq(ddse)
+           
+           normCounts <- counts(dds, normalized = TRUE)
+           dispersion <- plotDispEsts(dds)
+           ##Dispersion can be plotted with plotDispEsts(dds)
+           
+           ##Regardless of how many conditions there are, we can compare different
+           ##conditions to each other as long as there are replicate samples
+           groups <- unique(groupNames)
+           groupmatrix <- combn(groups, 2)
+           comparison <- length(groupmatrix)/2
+           num_comparison <- 1:comparison
+           compare <- c()
+           lfc_compare <- c()
+           DFcompare <- c()
+           
+           for (x in num_comparison) {
+             myRes <- results(dds, contrast = c("Group", 
+                                                groupmatrix[c(2*x)], 
+                                                groupmatrix[c(2*x-1)]))
+             myRes <- myRes[order(myRes$pvalue), ]
+             compare <- append(compare, myRes)
+             
+             myResAsDF <- as.data.frame(myRes)
+             myResAsDF$newPadj <- p.adjust(myResAsDF$pvalue)
+             myResAsDF <- myResAsDF[!is.na(myResAsDF$padj), ]
+             myResAsDF <- myResAsDF[order(myResAsDF$pvalue), ]
+             annotatedRes <- myResAsDF
+             
+             eToSym <- AnnotationDbi::select(org.Sc.sgd.db,
+                                             keys = rownames(myResAsDF),
+                                             keytype = "ENTREZID",
+                                             columns= c("SYMBOL", "ENSEMBL"))
+             annotatedRes <- merge(eToSym,myResAsDF,
+                                   by.x=1,
+                                   by.y=0,
+                                   all.x=FALSE,
+                                   all.y=TRUE)
+             
+             annotatedRes <- annotatedRes[order(annotatedRes$pvalue),]
+             DFcompare <- append(DFcompare, annotatedRes)
+             
+             myRes_lfc <- lfcShrink(dds, coef = paste0("Group_",
+                                                       groupmatrix[c(2*x)],
+                                                       "_vs_",
+                                                       groupmatrix[c(2*x-1)]))
+             lfc_compare <- append(lfc_compare, myRes_lfc)
+             
+             setwd(outputdir)
+             write.csv(annotatedRes, paste0("Group_",
+                                            groupmatrix[c(2*x)],
+                                            "_vs_",
+                                            groupmatrix[c(2*x-1)],
+                                            ".csv"))
+             
+           }
+         },
+         "9"={
+           ##Caenorhabditis elagans
+           organism <- BSgenome.Celegans.UCSC.ce11
+           
+           wd <- getwd()
+           bpp = MulticoreParam(threads)
+           geneExons <- exonsBy(TxDb.Delegans.UCSC.ce11.refGene, by = "gene")
+           if (is.null(groups)) {
+             folders <- list.dirs(path = dir, full.names = TRUE, recursive = FALSE)
+           } else {
+             groups <- paste0(dir, "/", groups)
+             folders <- normalizePath(groups)
+           }
+           totaldir <- 1:length(folders)
+           bamFilesToCount <- c()
+           groupNames <- c()
+           samples <- c()
+           
+           for (x in totaldir) {
+             sampledir <- list.dirs(path = folders[c(x)], full.names = TRUE)
+             sampledir <- sampledir[-1]
+             totsample <- 1:length(sampledir)
+             
+             for (i in totsample) {
+               print(basename(dirname(sampledir[c(i)])))
+               sampletype <- basename(dirname(sampledir[c(i)]))
+               groupNames <- append(groupNames, sampletype)
+               print(tail(groupNames, n = 1L))
+               bam <- list_files_with_exts(dir = sampledir[c(i)], exts = "bam")
+               bamFilesToCount <- append(bamFilesToCount, bam)
+               names <- basename(dirname(bam))
+               samples <- append(samples, names)
+             }
+             
+           }
+           ##This creates a list of bam files to do gene counting with
+           ##The folder where the bam files are found (ie sample folder) will inform the 
+           ##name of the sample
+           ##Samples are grouped according to the condition (named by the condition
+           ##folders)
+           
+           ##A DESeq object is created from the gene counts
+           names(bamFilesToCount) <- samples
+           myBams <- BamFileList(bamFilesToCount, yieldSize = 10000, asMates = paired)
+           geneCounts <- summarizeOverlaps(geneExons, myBams, ignore.strand = TRUE,
+                                           BPPARAM = bpp, singleEnd = isFALSE(paired))
+           metaData <- data.frame(Group = groupNames, 
+                                  row.names = colnames(geneCounts))
+           countMatrix <- assay(geneCounts)
+           countGRanges <- rowRanges(geneCounts)
+           ddse <- DESeqDataSetFromMatrix(countMatrix, colData = metaData, 
+                                          design = ~Group, rowRanges = countGRanges)
+           dds <- DESeq(ddse)
+           
+           normCounts <- counts(dds, normalized = TRUE)
+           dispersion <- plotDispEsts(dds)
+           ##Dispersion can be plotted with plotDispEsts(dds)
+           
+           ##Regardless of how many conditions there are, we can compare different
+           ##conditions to each other as long as there are replicate samples
+           groups <- unique(groupNames)
+           groupmatrix <- combn(groups, 2)
+           comparison <- length(groupmatrix)/2
+           num_comparison <- 1:comparison
+           compare <- c()
+           lfc_compare <- c()
+           DFcompare <- c()
+           
+           for (x in num_comparison) {
+             myRes <- results(dds, contrast = c("Group", 
+                                                groupmatrix[c(2*x)], 
+                                                groupmatrix[c(2*x-1)]))
+             myRes <- myRes[order(myRes$pvalue), ]
+             compare <- append(compare, myRes)
+             
+             myResAsDF <- as.data.frame(myRes)
+             myResAsDF$newPadj <- p.adjust(myResAsDF$pvalue)
+             myResAsDF <- myResAsDF[!is.na(myResAsDF$padj), ]
+             myResAsDF <- myResAsDF[order(myResAsDF$pvalue), ]
+             annotatedRes <- myResAsDF
+             
+             eToSym <- AnnotationDbi::select(org.Ce.eg.db,
+                                             keys = rownames(myResAsDF),
+                                             keytype = "ENTREZID",
+                                             columns= c("SYMBOL", "ENSEMBL"))
+             annotatedRes <- merge(eToSym,myResAsDF,
+                                   by.x=1,
+                                   by.y=0,
+                                   all.x=FALSE,
+                                   all.y=TRUE)
+             
+             annotatedRes <- annotatedRes[order(annotatedRes$pvalue),]
+             DFcompare <- append(DFcompare, annotatedRes)
+             
+             myRes_lfc <- lfcShrink(dds, coef = paste0("Group_",
+                                                       groupmatrix[c(2*x)],
+                                                       "_vs_",
+                                                       groupmatrix[c(2*x-1)]))
+             lfc_compare <- append(lfc_compare, myRes_lfc)
+             
+             setwd(outputdir)
+             write.csv(annotatedRes, paste0("Group_",
+                                            groupmatrix[c(2*x)],
+                                            "_vs_",
+                                            groupmatrix[c(2*x-1)],
+                                            ".csv"))
+             
+           }
+         }
+  )
   setwd(wd)
   return(DFcompare)
 }
