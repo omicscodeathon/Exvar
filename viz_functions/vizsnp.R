@@ -212,6 +212,5 @@ server <- function(input, output) {
 # Run the application
 shinyApp(ui = ui, server = server)
 }
-#
-##write.vcf(comined_patient, file="test.vcf")
+
 
