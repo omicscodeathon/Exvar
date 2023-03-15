@@ -29,7 +29,7 @@ callsnp <- function(bam,
   library(Rsamtools)
   library(VariantTools)
   library(GenomicRanges)
-  library(GenomeInfoDb)]
+  library(GenomeInfoDb)
   library(VariantAnnotation)
   library(BiocParallel)
 
