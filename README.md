@@ -17,7 +17,7 @@ The package functions:
 ![image](https://user-images.githubusercontent.com/73958439/216056956-3e7a2d7c-e126-4564-b638-70201b75275c.png)
 
 
-Documentation:
+Documentation: omicscodeathon/Exvar/Exvar.pdf
 
 Examples of each function output: https://github.com/omicscodeathon/Exvar/tree/main/Supplementary_materials
 
