@@ -58,43 +58,37 @@ requirement <- function(specie){
     if (!require("BSgenome.Mmusculus.UCSC.mm10")) BiocManager::install("BSgenome.Mmusculus.UCSC.mm10")
     if (!require("org.Mm.eg.db")) BiocManager::install("org.Mm.eg.db")
     if (!require("TxDb.Mmusculus.UCSC.mm10.knownGene")) BiocManager::install("TxDb.Mmusculus.UCSC.mm10.knownGene")
-    if (!require("")) install.packages("") ## missing
-    if (!require("")) install.packages("") ## missing
+
     
   } else if (species == "Arabidopsis Thaliana"){
     if (!require("BSgenome.Athaliana.TAIR.TAIR9")) BiocManager::install("BSgenome.Athaliana.TAIR.TAIR9")
     if (!require("org.At.tair.db")) BiocManager::install("org.At.tair.db")
     if (!require("TxDb.Athaliana.BioMart.plantsmart28")) BiocManager::install("TxDb.Athaliana.BioMart.plantsmart28")
-    if (!require("")) install.packages("") ## missing
-    if (!require("")) install.packages("") ## missing
+
     
   }  else if (species == "Drosophila Melanogaster"){
     if (!require("BSgenome.Dmelanogaster.UCSC.dm6")) BiocManager::install("BSgenome.Dmelanogaster.UCSC.dm6")
     if (!require("org.Dm.eg.db")) BiocManager::install("org.Dm.eg.db")
     if (!require("TxDb.Dmelanogaster.UCSC.dm6.ensGene")) BiocManager::install("TxDb.Dmelanogaster.UCSC.dm6.ensGene")
-    if (!require("")) install.packages("") ## missing
-    if (!require("")) install.packages("") ## missing
+
     
   } else if (species == "Danio rerio"){
     if (!require("BSgenome.Drerio.UCSC.danRer11")) BiocManager::install("BSgenome.Drerio.UCSC.danRer11")
     if (!require("org.Dr.eg.db")) BiocManager::install("org.Dr.eg.db")
     if (!require("TxDb.Drerio.UCSC.danRer11.refGene")) BiocManager::install("TxDb.Drerio.UCSC.danRer11.refGene")
-    if (!require("")) install.packages("") ## missing
-    if (!require("")) install.packages("") ## missing
+
     
   } else if (species == "Rattus_norvegicus"){
     if (!require("BSgenome.Rnorvegicus.UCSC.rn5")) BiocManager::install("BSgenome.Rnorvegicus.UCSC.rn5")
     if (!require("org.Rn.eg.db")) BiocManager::install("org.Rn.eg.db")
     if (!require("TxDb.Rnorvegicus.UCSC.rn5.refGene"))BiocManager::install("TxDb.Rnorvegicus.UCSC.rn5.refGene")
-    if (!require("")) install.packages("") ## missing
-    if (!require("")) install.packages("") ## missing
+
     
   } else if (species == "Saccharomyces Cerevisiae"){
     if (!require("BSgenome.Scerevisiae.UCSC.sacCer3")) BiocManager::install("BSgenome.Scerevisiae.UCSC.sacCer3")
     if (!require("org.Sc.sgd.db")) BiocManager::install("org.Sc.sgd.db")
     if (!require("TxDb.Scerevisiae.UCSC.sacCer3.sgdGene")) BiocManager::install("TxDb.Scerevisiae.UCSC.sacCer3.sgdGene")
-    if (!require("")) install.packages("") ## missing
-    if (!require("")) install.packages("") ## missing
+
     
   } else {
     print("Non-Valid specie!")
