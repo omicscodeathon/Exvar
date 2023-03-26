@@ -21,6 +21,24 @@ Documentation: https://github.com/omicscodeathon/Exvar/blob/main/Exvar.pdf
 
 Examples of each function output: https://github.com/omicscodeathon/Exvar/tree/main/Supplementary_materials
 
+## Species
+
+It could be used to analyze data from seven species including:
+* Homo Sapiens
+
+* Mus Musculus
+
+* Arabidopsis Thaliana
+
+* Drosophila Melanogaster
+
+* Danio rerio
+
+* Rattus norvegicus
+
+* and Saccharomyces Cerevisiae.
+
+
 ## Installation
 
 The package could be installed as follows:
