@@ -272,7 +272,7 @@ processfastq <- function(file = list_files_with_exts(dir = dir,
                       output = paste0(getwd(), foldernames[x]))
       print("Creating bam file...")
       bamfl <- as(output, "BamFile") 
-      appened(bams, bamfl)
+      append(bams, bamfl)
       gc()
     }
   }
