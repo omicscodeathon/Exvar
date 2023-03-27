@@ -470,6 +470,7 @@ callsnp <- function(bam,
                mcols(snp) <- NULL
                print("Formatting variant information as VCF...")
                  
+              if (length(snp) > 0)  {
                  print("Writing to VCF file...")
                  setwd(tempfolder)
                  print(getwd())
@@ -477,6 +478,10 @@ callsnp <- function(bam,
                  a <- writeVcf(vcf, paste0(file_path_sans_ext(basename(bam)), ".vcf"), 
                                index = FALSE)
                  gc()
+               } else {
+                 print(paste0("No variants found in ", (basename(bam))))
+               }
+                 
                  setwd(wd)
                } 
              
@@ -577,15 +582,20 @@ callsnp <- function(bam,
                mcols(snp) <- NULL
                print("Formatting variant information as VCF...")
                
-               print("Writing to VCF file...")
-               setwd(tempfolder)
-               print(getwd())
-               print(paste0(file_path_sans_ext(basename(bam)), ".vcf"))
-               a <- writeVcf(vcf, paste0(file_path_sans_ext(basename(bam)), ".vcf"), 
-                             index = FALSE)
-               gc()
-               setwd(wd)
-             } 
+           if (length(snp) > 0)  {
+                 print("Writing to VCF file...")
+                 setwd(tempfolder)
+                 print(getwd())
+                 print(paste0(file_path_sans_ext(basename(bam)), ".vcf"))
+                 a <- writeVcf(vcf, paste0(file_path_sans_ext(basename(bam)), ".vcf"), 
+                               index = FALSE)
+                 gc()
+               } else {
+                 print(paste0("No variants found in ", (basename(bam))))
+               }
+                 
+                 setwd(wd)
+               } 
              
              print("Merging VCF files...")
              vcflist <- list_files_with_exts(tempfolder, "vcf")
@@ -684,15 +694,20 @@ callsnp <- function(bam,
                mcols(snp) <- NULL
                print("Formatting variant information as VCF...")
                
-               print("Writing to VCF file...")
-               setwd(tempfolder)
-               print(getwd())
-               print(paste0(file_path_sans_ext(basename(bam)), ".vcf"))
-               a <- writeVcf(vcf, paste0(file_path_sans_ext(basename(bam)), ".vcf"), 
-                             index = FALSE)
-               gc()
-               setwd(wd)
-             } 
+                  if (length(snp) > 0)  {
+                 print("Writing to VCF file...")
+                 setwd(tempfolder)
+                 print(getwd())
+                 print(paste0(file_path_sans_ext(basename(bam)), ".vcf"))
+                 a <- writeVcf(vcf, paste0(file_path_sans_ext(basename(bam)), ".vcf"), 
+                               index = FALSE)
+                 gc()
+               } else {
+                 print(paste0("No variants found in ", (basename(bam))))
+               }
+                 
+                 setwd(wd)
+               } 
              
              print("Merging VCF files...")
              vcflist <- list_files_with_exts(tempfolder, "vcf")
@@ -791,15 +806,20 @@ callsnp <- function(bam,
                mcols(snp) <- NULL
                print("Formatting variant information as VCF...")
                
-               print("Writing to VCF file...")
-               setwd(tempfolder)
-               print(getwd())
-               print(paste0(file_path_sans_ext(basename(bam)), ".vcf"))
-               a <- writeVcf(vcf, paste0(file_path_sans_ext(basename(bam)), ".vcf"), 
-                             index = FALSE)
-               gc()
-               setwd(wd)
-             } 
+             if (length(snp) > 0)  {
+                 print("Writing to VCF file...")
+                 setwd(tempfolder)
+                 print(getwd())
+                 print(paste0(file_path_sans_ext(basename(bam)), ".vcf"))
+                 a <- writeVcf(vcf, paste0(file_path_sans_ext(basename(bam)), ".vcf"), 
+                               index = FALSE)
+                 gc()
+               } else {
+                 print(paste0("No variants found in ", (basename(bam))))
+               }
+                 
+                 setwd(wd)
+               } 
              
              print("Merging VCF files...")
              vcflist <- list_files_with_exts(tempfolder, "vcf")
@@ -898,15 +918,20 @@ callsnp <- function(bam,
                mcols(snp) <- NULL
                print("Formatting variant information as VCF...")
                
-               print("Writing to VCF file...")
-               setwd(tempfolder)
-               print(getwd())
-               print(paste0(file_path_sans_ext(basename(bam)), ".vcf"))
-               a <- writeVcf(vcf, paste0(file_path_sans_ext(basename(bam)), ".vcf"), 
-                             index = FALSE)
-               gc()
-               setwd(wd)
-             } 
+            if (length(snp) > 0)  {
+                 print("Writing to VCF file...")
+                 setwd(tempfolder)
+                 print(getwd())
+                 print(paste0(file_path_sans_ext(basename(bam)), ".vcf"))
+                 a <- writeVcf(vcf, paste0(file_path_sans_ext(basename(bam)), ".vcf"), 
+                               index = FALSE)
+                 gc()
+               } else {
+                 print(paste0("No variants found in ", (basename(bam))))
+               }
+                 
+                 setwd(wd)
+               } 
              
              print("Merging VCF files...")
              vcflist <- list_files_with_exts(tempfolder, "vcf")
@@ -1005,15 +1030,20 @@ callsnp <- function(bam,
                mcols(snp) <- NULL
                print("Formatting variant information as VCF...")
                
-               print("Writing to VCF file...")
-               setwd(tempfolder)
-               print(getwd())
-               print(paste0(file_path_sans_ext(basename(bam)), ".vcf"))
-               a <- writeVcf(vcf, paste0(file_path_sans_ext(basename(bam)), ".vcf"), 
-                             index = FALSE)
-               gc()
-               setwd(wd)
-             } 
+                if (length(snp) > 0)  {
+                 print("Writing to VCF file...")
+                 setwd(tempfolder)
+                 print(getwd())
+                 print(paste0(file_path_sans_ext(basename(bam)), ".vcf"))
+                 a <- writeVcf(vcf, paste0(file_path_sans_ext(basename(bam)), ".vcf"), 
+                               index = FALSE)
+                 gc()
+               } else {
+                 print(paste0("No variants found in ", (basename(bam))))
+               }
+                 
+                 setwd(wd)
+               } 
              
              print("Merging VCF files...")
              vcflist <- list_files_with_exts(tempfolder, "vcf")
@@ -1112,15 +1142,20 @@ callsnp <- function(bam,
                mcols(snp) <- NULL
                print("Formatting variant information as VCF...")
                
-               print("Writing to VCF file...")
-               setwd(tempfolder)
-               print(getwd())
-               print(paste0(file_path_sans_ext(basename(bam)), ".vcf"))
-               a <- writeVcf(vcf, paste0(file_path_sans_ext(basename(bam)), ".vcf"), 
-                             index = FALSE)
-               gc()
-               setwd(wd)
-             } 
+               if (length(snp) > 0)  {
+                 print("Writing to VCF file...")
+                 setwd(tempfolder)
+                 print(getwd())
+                 print(paste0(file_path_sans_ext(basename(bam)), ".vcf"))
+                 a <- writeVcf(vcf, paste0(file_path_sans_ext(basename(bam)), ".vcf"), 
+                               index = FALSE)
+                 gc()
+               } else {
+                 print(paste0("No variants found in ", (basename(bam))))
+               }
+                 
+                 setwd(wd)
+               } 
              
              print("Merging VCF files...")
              vcflist <- list_files_with_exts(tempfolder, "vcf")
