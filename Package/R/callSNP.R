@@ -471,6 +471,7 @@ callsnp <- function(bam,
                print("Formatting variant information as VCF...")
                  
               if (length(snp) > 0)  {
+                vcf <- asVCF(snp)
                  print("Writing to VCF file...")
                  setwd(tempfolder)
                  print(getwd())
@@ -583,6 +584,7 @@ callsnp <- function(bam,
                print("Formatting variant information as VCF...")
                
            if (length(snp) > 0)  {
+             vcf <- asVCF(snp)
                  print("Writing to VCF file...")
                  setwd(tempfolder)
                  print(getwd())
@@ -695,6 +697,7 @@ callsnp <- function(bam,
                print("Formatting variant information as VCF...")
                
                   if (length(snp) > 0)  {
+                    vcf <- asVCF(snp)
                  print("Writing to VCF file...")
                  setwd(tempfolder)
                  print(getwd())
@@ -807,6 +810,7 @@ callsnp <- function(bam,
                print("Formatting variant information as VCF...")
                
              if (length(snp) > 0)  {
+               vcf <- asVCF(snp)
                  print("Writing to VCF file...")
                  setwd(tempfolder)
                  print(getwd())
@@ -919,6 +923,7 @@ callsnp <- function(bam,
                print("Formatting variant information as VCF...")
                
             if (length(snp) > 0)  {
+              vcf <- asVCF(snp)
                  print("Writing to VCF file...")
                  setwd(tempfolder)
                  print(getwd())
@@ -1031,6 +1036,7 @@ callsnp <- function(bam,
                print("Formatting variant information as VCF...")
                
                 if (length(snp) > 0)  {
+                  vcf <- asVCF(snp)
                  print("Writing to VCF file...")
                  setwd(tempfolder)
                  print(getwd())
@@ -1143,6 +1149,7 @@ callsnp <- function(bam,
                print("Formatting variant information as VCF...")
                
                if (length(snp) > 0)  {
+                 vcf <- asVCF(snp)
                  print("Writing to VCF file...")
                  setwd(tempfolder)
                  print(getwd())
