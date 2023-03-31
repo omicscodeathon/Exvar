@@ -1,101 +1,113 @@
 #' vizcnv
 #'
 #' @param cnvdata Path to the CNVs data file
-#' @param species Species name from the following list: "Homo Sapiens", "Mus Musculus","Arabidopsis Thaliana" ,
-#' "Drosophila Melanogaster", "Danio rerio", "Rattus norvegicus", or "Saccharomyces Cerevisiae" .
 #' @export
 #'
 
 vizcnv<- function( cnvdata, species) {
-  # species
-  if (species == "Homo Sapiens"){
-    library(BSgenome.Hsapiens.UCSC.hg38)
-    genome_species <- "hg38"
-  } else if (species == "Mus Musculus"){
-    library(BSgenome.Mmusculus.UCSC.mm10)
-    genome_species <- "mm10"
-    
-  } else if (species == "Arabidopsis Thaliana"){
-    library(BSgenome.Athaliana.TAIR.TAIR9)
-    genome_species <- "TAIR9"
-    
-  } else if (species == "Caenorhabditis Elegans"){
-    library(BSgenome.Celegans.UCSC.ce11)
-    genome_species <- "ce2"
-    
-  } else if (species == "Drosophila Melanogaster"){
-    library(BSgenome.Dmelanogaster.UCSC.dm6)
-    genome_species <- "dm3"
-    
-  } else if (species == "Danio rerio"){
-    library(BSgenome.Drerio.UCSC.danRer11)
-    genome_species <- "danRer10"
-    
-  } else if (species == "Rattus_norvegicus"){
-    library(BSgenome.Rnorvegicus.UCSC.rn5)
-    genome_species <- "rn5"
-    
-  } else if (species == "Saccharomyces Cerevisiae"){
-    library(BSgenome.Scerevisiae.UCSC.sacCer3)
-    genome_species <- "sacCer3"
-    
-  } #else {
-  # print("Non-valid species!")
-  #}
-  
-  # load requirements
-  library(shinyWidgets)
-  library(shiny)
-  library(readr)
-  library(shinythemes)
-  library(CNVRanger)
-  library(Gviz)
-  library(AnnotationHub)
-  library(regioneR)
-  library(shinycssloaders)
-  library(dplyr)
+# specie
+cat(paste0("These are the species currently supported by ExpVar: \n",
+           "[1] Homo sapiens 38 \n",
+           "[2] Mus musculus \n",
+           "[3] Arabidopsis thaliana \n",
+           "[4] Drosophila melanogaster \n",
+           "[5] Danio rerio \n",
+           "[6] Rattus norvegicus \n",
+           "[7] Saccharomyces cerevisiae \n"))
+species <- readline("Type the number of the species that you would like to use as a reference: ")
+#  load requirements
+library(shiny)
+library(shinyWidgets)
+library(shinythemes)
+library(shinycssloaders)
+library(readr)
+library(CNVRanger)
+library(Gviz)
+library(AnnotationHub)
+library(regioneR)
+library(dplyr)
+# species specific requirements
+switch(species,
+       "1"={
+         library(BSgenome.Hsapiens.UCSC.hg38)
+         genome_species <- "hg38"
+         sp <- "Homo sapiens"
+       },
+       "2"={
+         library(BSgenome.Mmusculus.UCSC.mm10)
+         genome_species <- "mm10"
+         sp <- "Mus musculus"
+       },
+       "3"={
+         library(BSgenome.Athaliana.TAIR.TAIR9)
+         genome_species <- "TAIR9"
+         sp <- "Arabidopsis thaliana"
+       },
+       "4"={
+         library(BSgenome.Dmelanogaster.UCSC.dm6)
+         genome_species <- "dm3"
+         sp <-"Drosophila melanogaster"
+       },
+       "5"={
+         library(BSgenome.Drerio.UCSC.danRer11)
+         genome_species <- "danRer10"
+         sp <- "Danio rerio"
+       },
+       "6"={ # rat
+         library(BSgenome.Rnorvegicus.UCSC.rn5)
+         genome_species <- "rn5"
+         sp <- "Rattus norvegicus"
+       },
+       "7"={
+         library(BSgenome.Scerevisiae.UCSC.sacCer3)
+         genome_species <- "sacCer3"
+         sp <-"Saccharomyces cerevisiae"
+       }
+)
+  # demo
+  cnvdata
   #read data
   calls <- read.csv(cnvdata, as.is=TRUE)
   #run app
   
-  ui <- bootstrapPage(
-    
-    navbarPage(theme = shinytheme("flatly"), collapsible = TRUE,
-               HTML('<a style="text-decoration:none;cursor:default;color:#FFFFFF;" class="active" href="#">CNVviz</a>'), id="nav",
-               windowTitle = "CNVviz",
+  ui <- navbarPage(
+    theme = shinytheme("flatly"),
+    HTML('<a style="text-decoration:none;
+               cursor:default;
+                    color:white;
+                    " class="active" href="#">Visualize CNV data</a>'),
+    windowTitle ="vizcnv",
                tabPanel("Recurrent region",
                         
                         sidebarLayout(
                           sidebarPanel(
                             pickerInput("chrI", span(shiny::tags$i(h6("Define the chromosome")), style="color:#045a8d"),
-                                        if (species == "Homo Sapiens"){
+                                        if (species == "1"){
                                           choices = c("chr1", "chr2","chr3","chr4","chr5","chr6","chr7","chr8","chr9","chr10",
                                                       "chr11", "chr12","chr13","chr14","chr15","chr16","chr17","chr18",
                                                       "chr19", "chr20", "chr21", "chr22", "chr23", "chrY", "chrX")
-                                        } else if (species == "Mus Musculus"){
+                                        } else if (species == "2"){
                                           choices = c("chr1", "chr2","chr3","chr4","chr5","chr6","chr7","chr8","chr9","chr10",
                                                       "chr11", "chr12","chr13","chr14","chr15","chr16","chr17","chr18",
                                                       "chr19", "chrY", "chrX")
-                                        } else if (species == "Arabidopsis Thaliana"){
+                                        } else if (species == "3"){
                                           choices = c("chr1", "chr2","chr3","chr4","chr5")
                                         }
-                                        else if (species == "Drosophila Melanogaster"){
+                                        else if (species == "4"){
                                           choices = c("chr1", "chr2","chr3","chr4", "chrY", "chrX")
                                           
-                                        } else if (species == "Danio rerio"){
+                                        } else if (species == "5"){
                                           choices = c("chr1", "chr2","chr3","chr4","chr5","chr6","chr7","chr8","chr9","chr10",
                                                       "chr11", "chr12","chr13","chr14","chr15","chr16","chr17","chr18",
                                                       "chr19", "chr23", "chr24", "chr25")
-                                        } else if (species == "Rattus_norvegicus"){
+                                        } else if (species == "6"){
                                           choices = c("chr1", "chr2","chr3","chr4","chr5","chr6","chr7","chr8","chr9","chr10",
                                                       "chr11", "chr12","chr13","chr14","chr15","chr16","chr17","chr18",
                                                       "chr19", "chr20", "chrY", "chrX")
-                                        } else if (species == "Saccharomyces Cerevisiae"){
+                                        } else if (species == "7"){
                                           choices = c("chr1", "chr2","chr3","chr4","chr5","chr6","chr7","chr8","chr9","chr10",
                                                       "chr11", "chr12","chr13","chr14","chr15","chr16")
-                                        } else {
-                                          print("warning")
-                                        },
+                                        } ,
                                         selected = c("chr1"),
                                         multiple = FALSE),
                             br(),
@@ -118,32 +130,30 @@ vizcnv<- function( cnvdata, species) {
                           sidebarPanel(
                             pickerInput("chrII", span(shiny::tags$i(h6("Define the chromosome")), style="color:#045a8d"),
                                         
-                                        if (species == "Homo Sapiens"){
+                                        if (species == "1"){
                                           choices = c("1", "2","3","4","5","6","7","8","9","10",
                                                       "11", "12","13","14","15","16","17","18",
                                                       "19", "20", "21", "22", "23", "Y", "X")
-                                        } else if (species == "Mus Musculus"){
+                                        } else if (species == "2"){
                                           choices = c("1", "2","3","4","5","6","7","8","9","10",
                                                       "11", "12","13","14","15","16","17","18",
                                                       "19", "Y", "X")
-                                        } else if (species == "Arabidopsis Thaliana"){
+                                        } else if (species == "3"){
                                           choices = c("1", "2","3","4","5")
                                         }
-                                        else if (species == "Drosophila Melanogaster"){
+                                        else if (species == "4"){
                                           choices = c("1", "2","3","4", "Y", "X")
-                                        } else if (species == "Danio rerio"){
+                                        } else if (species == "5"){
                                           choices = c("1", "2","3","4","5","6","7","8","9","10",
                                                       "11", "12","13","14","15","16","17","18",
                                                       "19", "23", "24", "25")
-                                        } else if (species == "Rattus_norvegicus"){
+                                        } else if (species == "6"){
                                           choices = c("1", "2","3","4","5","6","7","8","9","10",
                                                       "11", "12","13","14","15","16","17","18",
                                                       "19", "20", "Y", "X")
-                                        } else if (species == "Saccharomyces Cerevisiae"){
+                                        } else if (species == "7"){
                                           choices = c("1", "2","3","4","5","6","7","8","9","10",
                                                       "11", "12","13","14","15","16")
-                                        } else {
-                                          print("warning")
                                         },
                                         selected = c("1"),
                                         multiple = FALSE),
@@ -166,28 +176,28 @@ vizcnv<- function( cnvdata, species) {
                           sidebarPanel(
                             pickerInput("chrIII", span(shiny::tags$i(h6("Define the chromosome")), style="color:#045a8d"),
                                         
-                                        if (species == "Homo Sapiens"){
+                                        if (species == "1"){
                                           choices = c("1", "2","3","4","5","6","7","8","9","10",
                                                       "11", "12","13","14","15","16","17","18",
                                                       "19", "20", "21", "22", "23", "Y", "X")
-                                        } else if (species == "Mus Musculus"){
+                                        } else if (species == "2"){
                                           choices = c("1", "2","3","4","5","6","7","8","9","10",
                                                       "11", "12","13","14","15","16","17","18",
                                                       "19", "Y", "X")
-                                        } else if (species == "Arabidopsis Thaliana"){
+                                        } else if (species == "3"){
                                           choices = c("1", "2","3","4","5")
                                         }
-                                        else if (species == "Drosophila Melanogaster"){
+                                        else if (species == "4"){
                                           choices = c("1", "2","3","4", "Y", "X")
-                                        } else if (species == "Danio rerio"){
+                                        } else if (species == "5"){
                                           choices = c("1", "2","3","4","5","6","7","8","9","10",
                                                       "11", "12","13","14","15","16","17","18",
                                                       "19", "23", "24", "25")
-                                        } else if (species == "Rattus_norvegicus"){
+                                        } else if (species == "6"){
                                           choices = c("1", "2","3","4","5","6","7","8","9","10",
                                                       "11", "12","13","14","15","16","17","18",
                                                       "19", "20", "Y", "X")
-                                        } else if (species == "Saccharomyces Cerevisiae"){
+                                        } else if (species == "7"){
                                           choices = c("1", "2","3","4","5","6","7","8","9","10",
                                                       "11", "12","13","14","15","16")
                                         } else {
@@ -202,12 +212,10 @@ vizcnv<- function( cnvdata, species) {
                                         multiple = FALSE),
                             br(),
                             downloadButton("downloadpplot", "Download the plot")
-                            
-                            
                           ),
                           mainPanel( shinycssloaders::withSpinner( plotOutput("permutation_plot")))
                         ))
-    ))
+    )
   
   server <- function(input, output) {
     
@@ -233,22 +241,22 @@ vizcnv<- function( cnvdata, species) {
     
     #Overlap analysis of CNVs with functional genomic regions
     ah <- AnnotationHub::AnnotationHub()
-    ahDb <- AnnotationHub::query(ah, pattern = c(species, "EnsDb"))
-    if (species == "Homo Sapiens"){
-      ahEdb <- ahDb[["AH98047"]]
-    } else if (species == "Mus Musculus"){
-      ahEdb <- ahDb[[""]]
-    } else if (species == "Arabidopsis Thaliana"){
-      ahEdb <- ahDb[[""]]
-    }
-    else if (species == "Drosophila Melanogaster"){
-      ahEdb <- ahDb[[""]]
-    } else if (species == "Danio rerio"){
-      ahEdb <- ahDb[[""]]
-    } else if (species == "Rattus_norvegicus"){
-      ahEdb <- ahDb[[""]]
-    } else if (species == "Saccharomyces Cerevisiae"){
-      ahEdb <- ahDb[[""]]
+    ahDb <- AnnotationHub::query(ah, pattern = c(sp, "EnsDb"))
+    ahDb <- AnnotationHub::query(ah, pattern = c(sp))
+    if (species == "1"){
+      ahEdb <- ahDb[["AH104864"]]
+    } else if (species == "2"){
+      ahEdb <- ahDb[["AH104895"]]
+    } else if (species == "3"){
+      ahEdb <- ahDb[[""]]## no data
+    } else if (species == "4"){
+      ahEdb <- ahDb[["AH104833"]]
+    } else if (species == "5"){
+      ahEdb <- ahDb[["AH104837"]]
+    } else if (species == "6"){
+      ahEdb <- ahDb[["AH104966"]]
+    } else if (species == "7"){
+      ahEdb <- ahDb[["AH104972"]]
     }
     bt.genes <- ensembldb::genes(ahEdb)
     GenomeInfoDb::seqlevelsStyle(bt.genes) <- "UCSC"
@@ -334,4 +342,5 @@ vizcnv<- function( cnvdata, species) {
   
   # Run the application
   shinyApp(ui = ui, server = server)
+
 }
