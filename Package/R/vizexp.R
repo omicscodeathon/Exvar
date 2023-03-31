@@ -60,10 +60,6 @@ vizexp <- function( genecount, metadata, species) {
            specie1 <-"org.Sc.sgd.db"
          }
   )
-  #  demo data
-  genecount <-"Countdata.csv"
-  metadata <- "metadata.xlsx"
-  
   ## read input files + process files      
   # Note the genecount file must contain only one column of the genes symbol named "genes"
   # Remove duplicates based on gene column
