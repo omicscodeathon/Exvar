@@ -46,7 +46,7 @@ requirement <- function(specie){
   #species specific
   if (species == "Homo Sapiens"){
     if (!require("BSgenome.Hsapiens.UCSC.hg19")) BiocManager::install("BSgenome.Hsapiens.UCSC.hg19")
-    if (!require("BSgenome.Hsapiens.UCSC.hg19")) BiocManager::install("BSgenome.Hsapiens.UCSC.hg38")
+    if (!require("BSgenome.Hsapiens.UCSC.hg38")) BiocManager::install("BSgenome.Hsapiens.UCSC.hg38")
     if (!require("org.Hs.eg.db")) BiocManager::install("org.Hs.eg.db")
     if (!require("TxDb.Hsapiens.UCSC.hg19.knownGene")) BiocManager::install("TxDb.Hsapiens.UCSC.hg19.knownGene")
     if (!require("SNPlocs.Hsapiens.dbSNP144.GRCh37")) BiocManager::install("SNPlocs.Hsapiens.dbSNP144.GRCh37")
