@@ -39,6 +39,7 @@ geneExpression <- function(dir = getwd(),
   library(DESeq2)
   library(AnnotationDbi)
   library(GenomicAlignments)
+  library(SummarizedExperiment)
   
   switch(species,
          "1"={
