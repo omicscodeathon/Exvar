@@ -199,7 +199,7 @@ callsnp <- function(bam,
              print(paste0(gsub(".vcf", "", basename(vcfpath[1])), " OKAY"))
              for (item in vcfpath[-1]) {
                b <- VariantAnnotation::readVcf(item)
-               match <- BioGenerics::rbind(match, b)
+               match <- BiocGenerics::rbind(match, b)
                print(paste0(gsub(".vcf", "", basename(item)), " OKAY"))
              }
              rsIDs <- rownames(match)
@@ -380,7 +380,7 @@ callsnp <- function(bam,
              print(paste0(gsub(".vcf", "", basename(vcfpath[1])), " OKAY"))
              for (item in vcfpath[-1]) {
                b <- VariantAnnotation::readVcf(item)
-               match <- BioGenerics::rbind(match, b)
+               match <- BiocGenerics::rbind(match, b)
                print(paste0(gsub(".vcf", "", basename(item)), " OKAY"))
              }
              rsIDs <- rownames(match)
@@ -493,7 +493,7 @@ callsnp <- function(bam,
              print(paste0(gsub(".vcf", "", basename(vcfpath[1])), " OKAY"))
              for (item in vcfpath[-1]) {
                b <- VariantAnnotation::readVcf(item)
-               match <- BioGenerics::rbind(match, b)
+               match <- BiocGenerics::rbind(match, b)
                print(paste0(gsub(".vcf", "", basename(item)), " OKAY"))
              }
              rsIDs <- rownames(match)
@@ -606,7 +606,7 @@ callsnp <- function(bam,
              print(paste0(gsub(".vcf", "", basename(vcfpath[1])), " OKAY"))
              for (item in vcfpath[-1]) {
                b <- VariantAnnotation::readVcf(item)
-               match <- BioGenerics::rbind(match, b)
+               match <- BiocGenerics::rbind(match, b)
                print(paste0(gsub(".vcf", "", basename(item)), " OKAY"))
              }
              rsIDs <- rownames(match)
@@ -719,7 +719,7 @@ callsnp <- function(bam,
              print(paste0(gsub(".vcf", "", basename(vcfpath[1])), " OKAY"))
              for (item in vcfpath[-1]) {
                b <- VariantAnnotation::readVcf(item)
-               match <- BioGenerics::rbind(match, b)
+               match <- BiocGenerics::rbind(match, b)
                print(paste0(gsub(".vcf", "", basename(item)), " OKAY"))
              }
              rsIDs <- rownames(match)
@@ -832,7 +832,7 @@ callsnp <- function(bam,
              print(paste0(gsub(".vcf", "", basename(vcfpath[1])), " OKAY"))
              for (item in vcfpath[-1]) {
                b <- VariantAnnotation::readVcf(item)
-               match <- BioGenerics::rbind(match, b)
+               match <- BiocGenerics::rbind(match, b)
                print(paste0(gsub(".vcf", "", basename(item)), " OKAY"))
              }
              rsIDs <- rownames(match)
@@ -945,7 +945,7 @@ callsnp <- function(bam,
              print(paste0(gsub(".vcf", "", basename(vcfpath[1])), " OKAY"))
              for (item in vcfpath[-1]) {
                b <- VariantAnnotation::readVcf(item)
-               match <- BioGenerics::rbind(match, b)
+               match <- BiocGenerics::rbind(match, b)
                print(paste0(gsub(".vcf", "", basename(item)), " OKAY"))
              }
              rsIDs <- rownames(match)
@@ -1058,7 +1058,7 @@ callsnp <- function(bam,
              print(paste0(gsub(".vcf", "", basename(vcfpath[1])), " OKAY"))
              for (item in vcfpath[-1]) {
                b <- VariantAnnotation::readVcf(item)
-               match <- BioGenerics::rbind(match, b)
+               match <- BiocGenerics::rbind(match, b)
                print(paste0(gsub(".vcf", "", basename(item)), " OKAY"))
              }
              rsIDs <- rownames(match)
@@ -1171,7 +1171,7 @@ callsnp <- function(bam,
              print(paste0(gsub(".vcf", "", basename(vcfpath[1])), " OKAY"))
              for (item in vcfpath[-1]) {
                b <- VariantAnnotation::readVcf(item)
-               match <- BioGenerics::rbind(match, b)
+               match <- BiocGenerics::rbind(match, b)
                print(paste0(gsub(".vcf", "", basename(item)), " OKAY"))
              }
              rsIDs <- rownames(match)
