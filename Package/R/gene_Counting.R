@@ -34,9 +34,9 @@ counts <- function(dir = getwd(),
   library(BiocParallel)
   library(GenomicFeatures)
   library(Rsamtools)
-  library(DESeq2)
   library(AnnotationDbi)
   library(GenomicAlignments)
+  library(SummarizedExperiment)
   
   wd <- getwd()
   bpp = MulticoreParam(threads)
