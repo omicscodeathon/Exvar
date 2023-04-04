@@ -205,14 +205,16 @@ callsnp <- function(bam,
              rsIDs <- rownames(match)
              rownames(match) <- gsub("chr?(.*)", ".", rsIDs)
              writeVcf(match, paste0(outputdir, "/",
-                                    basename(file_path_sans_ext(i)), ".vcf"), 
+                                    basename(file_path_sans_ext(i)),
+                                    "_SNP", ".vcf"), 
                       index = TRUE)
              file.remove(list.files(normalizePath(tempfolder), full.names = TRUE))
-             print(paste0("Created ", file_path_sans_ext(basename(i)), ".vcf.bgz"))
+             print(paste0("Created ", file_path_sans_ext(basename(i)), "_SNP", ".vcf.bgz"))
              gc()
              setwd(wd)
              append(output, paste0(outputdir, "/", 
-                                   file_path_sans_ext(basename(i)), ".vcf.bgz"))
+                                   file_path_sans_ext(basename(i)),
+                                   "_SNP", ".vcf.bgz"))
            }
            file.remove(normalizePath(tempfolder))
          },
@@ -386,14 +388,16 @@ callsnp <- function(bam,
              rsIDs <- rownames(match)
              rownames(match) <- gsub("chr?(.*)", ".", rsIDs)
              writeVcf(match, paste0(outputdir, "/",
-                                    basename(file_path_sans_ext(i)), ".vcf"), 
+                                    basename(file_path_sans_ext(i)),
+                                    "_SNP", ".vcf"), 
                       index = TRUE)
              file.remove(list.files(normalizePath(tempfolder), full.names = TRUE))
-             print(paste0("Created ", file_path_sans_ext(basename(i)), ".vcf.bgz"))
+             print(paste0("Created ", file_path_sans_ext(basename(i)), "_SNP", ".vcf.bgz"))
              gc()
              setwd(wd)
              append(output, paste0(outputdir, "/", 
-                                   file_path_sans_ext(basename(i)), ".vcf.bgz"))
+                                   file_path_sans_ext(basename(i)),
+                                   "_SNP", ".vcf.bgz"))
            }
            file.remove(normalizePath(tempfolder))
          },
@@ -499,14 +503,16 @@ callsnp <- function(bam,
              rsIDs <- rownames(match)
              rownames(match) <- gsub("chr?(.*)", ".", rsIDs)
              writeVcf(match, paste0(outputdir, "/",
-                                    basename(file_path_sans_ext(i)), ".vcf"), 
+                                    basename(file_path_sans_ext(i)),
+                                    "_SNP", ".vcf"), 
                       index = TRUE)
              file.remove(list.files(normalizePath(tempfolder), full.names = TRUE))
-             print(paste0("Created ", file_path_sans_ext(basename(i)), ".vcf.bgz"))
+             print(paste0("Created ", file_path_sans_ext(basename(i)), "_SNP", ".vcf.bgz"))
              gc()
              setwd(wd)
              append(output, paste0(outputdir, "/", 
-                                   file_path_sans_ext(basename(i)), ".vcf.bgz"))
+                                   file_path_sans_ext(basename(i)),
+                                   "_SNP", ".vcf.bgz"))
            }
            file.remove(normalizePath(tempfolder))
            },
@@ -612,14 +618,16 @@ callsnp <- function(bam,
              rsIDs <- rownames(match)
              rownames(match) <- gsub("chr?(.*)", ".", rsIDs)
              writeVcf(match, paste0(outputdir, "/",
-                                    basename(file_path_sans_ext(i)), ".vcf"), 
+                                    basename(file_path_sans_ext(i)),
+                                    "_SNP", ".vcf"), 
                       index = TRUE)
              file.remove(list.files(normalizePath(tempfolder), full.names = TRUE))
-             print(paste0("Created ", file_path_sans_ext(basename(i)), ".vcf.bgz"))
+             print(paste0("Created ", file_path_sans_ext(basename(i)), "_SNP", ".vcf.bgz"))
              gc()
              setwd(wd)
              append(output, paste0(outputdir, "/", 
-                                   file_path_sans_ext(basename(i)), ".vcf.bgz"))
+                                   file_path_sans_ext(basename(i)),
+                                   "_SNP", ".vcf.bgz"))
            }
            file.remove(normalizePath(tempfolder))
            },
@@ -725,14 +733,16 @@ callsnp <- function(bam,
              rsIDs <- rownames(match)
              rownames(match) <- gsub("chr?(.*)", ".", rsIDs)
              writeVcf(match, paste0(outputdir, "/",
-                                    basename(file_path_sans_ext(i)), ".vcf"), 
+                                    basename(file_path_sans_ext(i)),
+                                    "_SNP", ".vcf"), 
                       index = TRUE)
              file.remove(list.files(normalizePath(tempfolder), full.names = TRUE))
-             print(paste0("Created ", file_path_sans_ext(basename(i)), ".vcf.bgz"))
+             print(paste0("Created ", file_path_sans_ext(basename(i)), "_SNP", ".vcf.bgz"))
              gc()
              setwd(wd)
              append(output, paste0(outputdir, "/", 
-                                   file_path_sans_ext(basename(i)), ".vcf.bgz"))
+                                   file_path_sans_ext(basename(i)),
+                                   "_SNP", ".vcf.bgz"))
            }
            file.remove(normalizePath(tempfolder))
            },
@@ -838,14 +848,16 @@ callsnp <- function(bam,
              rsIDs <- rownames(match)
              rownames(match) <- gsub("chr?(.*)", ".", rsIDs)
              writeVcf(match, paste0(outputdir, "/",
-                                    basename(file_path_sans_ext(i)), ".vcf"), 
+                                    basename(file_path_sans_ext(i)),
+                                    "_SNP", ".vcf"), 
                       index = TRUE)
              file.remove(list.files(normalizePath(tempfolder), full.names = TRUE))
-             print(paste0("Created ", file_path_sans_ext(basename(i)), ".vcf.bgz"))
+             print(paste0("Created ", file_path_sans_ext(basename(i)), "_SNP", ".vcf.bgz"))
              gc()
              setwd(wd)
              append(output, paste0(outputdir, "/", 
-                                   file_path_sans_ext(basename(i)), ".vcf.bgz"))
+                                   file_path_sans_ext(basename(i)),
+                                   "_SNP", ".vcf.bgz"))
            }
            file.remove(normalizePath(tempfolder))
            },
@@ -951,14 +963,16 @@ callsnp <- function(bam,
              rsIDs <- rownames(match)
              rownames(match) <- gsub("chr?(.*)", ".", rsIDs)
              writeVcf(match, paste0(outputdir, "/",
-                                    basename(file_path_sans_ext(i)), ".vcf"), 
+                                    basename(file_path_sans_ext(i)),
+                                    "_SNP", ".vcf"), 
                       index = TRUE)
              file.remove(list.files(normalizePath(tempfolder), full.names = TRUE))
-             print(paste0("Created ", file_path_sans_ext(basename(i)), ".vcf.bgz"))
+             print(paste0("Created ", file_path_sans_ext(basename(i)), "_SNP", ".vcf.bgz"))
              gc()
              setwd(wd)
              append(output, paste0(outputdir, "/", 
-                                   file_path_sans_ext(basename(i)), ".vcf.bgz"))
+                                   file_path_sans_ext(basename(i)),
+                                   "_SNP", ".vcf.bgz"))
            }
            file.remove(normalizePath(tempfolder))
            },
@@ -1064,14 +1078,16 @@ callsnp <- function(bam,
              rsIDs <- rownames(match)
              rownames(match) <- gsub("chr?(.*)", ".", rsIDs)
              writeVcf(match, paste0(outputdir, "/",
-                                    basename(file_path_sans_ext(i)), ".vcf"), 
+                                    basename(file_path_sans_ext(i)),
+                                    "_SNP", ".vcf"), 
                       index = TRUE)
              file.remove(list.files(normalizePath(tempfolder), full.names = TRUE))
-             print(paste0("Created ", file_path_sans_ext(basename(i)), ".vcf.bgz"))
+             print(paste0("Created ", file_path_sans_ext(basename(i)), "_SNP", ".vcf.bgz"))
              gc()
              setwd(wd)
              append(output, paste0(outputdir, "/", 
-                                   file_path_sans_ext(basename(i)), ".vcf.bgz"))
+                                   file_path_sans_ext(basename(i)),
+                                   "_SNP", ".vcf.bgz"))
            }
            file.remove(normalizePath(tempfolder))
            },
@@ -1177,14 +1193,16 @@ callsnp <- function(bam,
              rsIDs <- rownames(match)
              rownames(match) <- gsub("chr?(.*)", ".", rsIDs)
              writeVcf(match, paste0(outputdir, "/",
-                                    basename(file_path_sans_ext(i)), ".vcf"), 
+                                    basename(file_path_sans_ext(i)),
+                                    "_SNP", ".vcf"), 
                       index = TRUE)
              file.remove(list.files(normalizePath(tempfolder), full.names = TRUE))
-             print(paste0("Created ", file_path_sans_ext(basename(i)), ".vcf.bgz"))
+             print(paste0("Created ", file_path_sans_ext(basename(i)), "_SNP", ".vcf.bgz"))
              gc()
              setwd(wd)
              append(output, paste0(outputdir, "/", 
-                                   file_path_sans_ext(basename(i)), ".vcf.bgz"))
+                                   file_path_sans_ext(basename(i)),
+                                   "_SNP", ".vcf.bgz"))
            }
            file.remove(normalizePath(tempfolder))
          }
