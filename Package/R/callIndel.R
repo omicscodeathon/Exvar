@@ -492,16 +492,21 @@ callindels <- function(bam,
                sampleNames(snp) <- file_path_sans_ext(basename(i))
                mcols(snp) <- NULL
                print("Formatting variant information as VCF...")
-               
-               print("Writing to VCF file...")
-               setwd(tempfolder)
-               print(getwd())
-               print(paste0(file_path_sans_ext(basename(bam)), ".vcf"))
-               a <- writeVcf(vcf, paste0(file_path_sans_ext(basename(bam)), ".vcf"), 
-                             index = FALSE)
-               gc()
-               setwd(wd)
-             } 
+              if (length(snp) > 0)  {
+                vcf <- asVCF(snp)
+                 print("Writing to VCF file...")
+                 setwd(tempfolder)
+                 print(getwd())
+                 print(paste0(file_path_sans_ext(basename(bam)), ".vcf"))
+                 a <- writeVcf(vcf, paste0(file_path_sans_ext(basename(bam)), ".vcf"), 
+                               index = FALSE)
+                 gc()
+               } else {
+                 print(paste0("No variants found in ", (basename(bam))))
+               }
+                 
+                 setwd(wd)
+               } 
              
              print("Merging VCF files...")
              vcflist <- list_files_with_exts(tempfolder, "vcf")
@@ -510,7 +515,7 @@ callindels <- function(bam,
              print(paste0(gsub(".vcf", "", basename(vcfpath[1])), " OKAY"))
              for (item in vcfpath[-1]) {
                b <- VariantAnnotation::readVcf(item)
-               match <- BioGenerics::rbind(match, b)
+               match <- BiocGenerics::rbind(match, b)
                print(paste0(gsub(".vcf", "", basename(item)), " OKAY"))
              }
              rsIDs <- rownames(match)
@@ -599,16 +604,21 @@ callindels <- function(bam,
                sampleNames(snp) <- file_path_sans_ext(basename(i))
                mcols(snp) <- NULL
                print("Formatting variant information as VCF...")
-               
-               print("Writing to VCF file...")
-               setwd(tempfolder)
-               print(getwd())
-               print(paste0(file_path_sans_ext(basename(bam)), ".vcf"))
-               a <- writeVcf(vcf, paste0(file_path_sans_ext(basename(bam)), ".vcf"), 
-                             index = FALSE)
-               gc()
-               setwd(wd)
-             } 
+              if (length(snp) > 0)  {
+                vcf <- asVCF(snp)
+                 print("Writing to VCF file...")
+                 setwd(tempfolder)
+                 print(getwd())
+                 print(paste0(file_path_sans_ext(basename(bam)), ".vcf"))
+                 a <- writeVcf(vcf, paste0(file_path_sans_ext(basename(bam)), ".vcf"), 
+                               index = FALSE)
+                 gc()
+               } else {
+                 print(paste0("No variants found in ", (basename(bam))))
+               }
+                 
+                 setwd(wd)
+               } 
              
              print("Merging VCF files...")
              vcflist <- list_files_with_exts(tempfolder, "vcf")
@@ -617,7 +627,7 @@ callindels <- function(bam,
              print(paste0(gsub(".vcf", "", basename(vcfpath[1])), " OKAY"))
              for (item in vcfpath[-1]) {
                b <- VariantAnnotation::readVcf(item)
-               match <- BioGenerics::rbind(match, b)
+               match <- BiocGenerics::rbind(match, b)
                print(paste0(gsub(".vcf", "", basename(item)), " OKAY"))
              }
              rsIDs <- rownames(match)
@@ -706,16 +716,21 @@ callindels <- function(bam,
                sampleNames(snp) <- file_path_sans_ext(basename(i))
                mcols(snp) <- NULL
                print("Formatting variant information as VCF...")
-               
-               print("Writing to VCF file...")
-               setwd(tempfolder)
-               print(getwd())
-               print(paste0(file_path_sans_ext(basename(bam)), ".vcf"))
-               a <- writeVcf(vcf, paste0(file_path_sans_ext(basename(bam)), ".vcf"), 
-                             index = FALSE)
-               gc()
-               setwd(wd)
-             } 
+             if (length(snp) > 0)  {
+                vcf <- asVCF(snp)
+                 print("Writing to VCF file...")
+                 setwd(tempfolder)
+                 print(getwd())
+                 print(paste0(file_path_sans_ext(basename(bam)), ".vcf"))
+                 a <- writeVcf(vcf, paste0(file_path_sans_ext(basename(bam)), ".vcf"), 
+                               index = FALSE)
+                 gc()
+               } else {
+                 print(paste0("No variants found in ", (basename(bam))))
+               }
+                 
+                 setwd(wd)
+               } 
              
              print("Merging VCF files...")
              vcflist <- list_files_with_exts(tempfolder, "vcf")
@@ -724,7 +739,7 @@ callindels <- function(bam,
              print(paste0(gsub(".vcf", "", basename(vcfpath[1])), " OKAY"))
              for (item in vcfpath[-1]) {
                b <- VariantAnnotation::readVcf(item)
-               match <- BioGenerics::rbind(match, b)
+               match <- BiocGenerics::rbind(match, b)
                print(paste0(gsub(".vcf", "", basename(item)), " OKAY"))
              }
              rsIDs <- rownames(match)
@@ -813,16 +828,21 @@ callindels <- function(bam,
                sampleNames(snp) <- file_path_sans_ext(basename(i))
                mcols(snp) <- NULL
                print("Formatting variant information as VCF...")
-               
-               print("Writing to VCF file...")
-               setwd(tempfolder)
-               print(getwd())
-               print(paste0(file_path_sans_ext(basename(bam)), ".vcf"))
-               a <- writeVcf(vcf, paste0(file_path_sans_ext(basename(bam)), ".vcf"), 
-                             index = FALSE)
-               gc()
-               setwd(wd)
-             }
+               if (length(snp) > 0)  {
+                vcf <- asVCF(snp)
+                 print("Writing to VCF file...")
+                 setwd(tempfolder)
+                 print(getwd())
+                 print(paste0(file_path_sans_ext(basename(bam)), ".vcf"))
+                 a <- writeVcf(vcf, paste0(file_path_sans_ext(basename(bam)), ".vcf"), 
+                               index = FALSE)
+                 gc()
+               } else {
+                 print(paste0("No variants found in ", (basename(bam))))
+               }
+                 
+                 setwd(wd)
+               } 
              
              print("Merging VCF files...")
              vcflist <- list_files_with_exts(tempfolder, "vcf")
@@ -831,7 +851,7 @@ callindels <- function(bam,
              print(paste0(gsub(".vcf", "", basename(vcfpath[1])), " OKAY"))
              for (item in vcfpath[-1]) {
                b <- VariantAnnotation::readVcf(item)
-               match <- BioGenerics::rbind(match, b)
+               match <- BiocGenerics::rbind(match, b)
                print(paste0(gsub(".vcf", "", basename(item)), " OKAY"))
              }
              rsIDs <- rownames(match)
@@ -920,16 +940,21 @@ callindels <- function(bam,
                sampleNames(snp) <- file_path_sans_ext(basename(i))
                mcols(snp) <- NULL
                print("Formatting variant information as VCF...")
-               
-               print("Writing to VCF file...")
-               setwd(tempfolder)
-               print(getwd())
-               print(paste0(file_path_sans_ext(basename(bam)), ".vcf"))
-               a <- writeVcf(vcf, paste0(file_path_sans_ext(basename(bam)), ".vcf"), 
-                             index = FALSE)
-               gc()
-               setwd(wd)
-             } 
+               if (length(snp) > 0)  {
+                vcf <- asVCF(snp)
+                 print("Writing to VCF file...")
+                 setwd(tempfolder)
+                 print(getwd())
+                 print(paste0(file_path_sans_ext(basename(bam)), ".vcf"))
+                 a <- writeVcf(vcf, paste0(file_path_sans_ext(basename(bam)), ".vcf"), 
+                               index = FALSE)
+                 gc()
+               } else {
+                 print(paste0("No variants found in ", (basename(bam))))
+               }
+                 
+                 setwd(wd)
+               } 
              
              print("Merging VCF files...")
              vcflist <- list_files_with_exts(tempfolder, "vcf")
@@ -938,7 +963,7 @@ callindels <- function(bam,
              print(paste0(gsub(".vcf", "", basename(vcfpath[1])), " OKAY"))
              for (item in vcfpath[-1]) {
                b <- VariantAnnotation::readVcf(item)
-               match <- BioGenerics::rbind(match, b)
+               match <- BiocGenerics::rbind(match, b)
                print(paste0(gsub(".vcf", "", basename(item)), " OKAY"))
              }
              rsIDs <- rownames(match)
@@ -1027,16 +1052,21 @@ callindels <- function(bam,
                sampleNames(snp) <- file_path_sans_ext(basename(i))
                mcols(snp) <- NULL
                print("Formatting variant information as VCF...")
-               
-               print("Writing to VCF file...")
-               setwd(tempfolder)
-               print(getwd())
-               print(paste0(file_path_sans_ext(basename(bam)), ".vcf"))
-               a <- writeVcf(vcf, paste0(file_path_sans_ext(basename(bam)), ".vcf"), 
-                             index = FALSE)
-               gc()
-               setwd(wd)
-             } 
+               if (length(snp) > 0)  {
+                vcf <- asVCF(snp)
+                 print("Writing to VCF file...")
+                 setwd(tempfolder)
+                 print(getwd())
+                 print(paste0(file_path_sans_ext(basename(bam)), ".vcf"))
+                 a <- writeVcf(vcf, paste0(file_path_sans_ext(basename(bam)), ".vcf"), 
+                               index = FALSE)
+                 gc()
+               } else {
+                 print(paste0("No variants found in ", (basename(bam))))
+               }
+                 
+                 setwd(wd)
+               } 
              
              print("Merging VCF files...")
              vcflist <- list_files_with_exts(tempfolder, "vcf")
@@ -1045,7 +1075,7 @@ callindels <- function(bam,
              print(paste0(gsub(".vcf", "", basename(vcfpath[1])), " OKAY"))
              for (item in vcfpath[-1]) {
                b <- VariantAnnotation::readVcf(item)
-               match <- BioGenerics::rbind(match, b)
+               match <- BiocGenerics::rbind(match, b)
                print(paste0(gsub(".vcf", "", basename(item)), " OKAY"))
              }
              rsIDs <- rownames(match)
@@ -1134,16 +1164,21 @@ callindels <- function(bam,
                sampleNames(snp) <- file_path_sans_ext(basename(i))
                mcols(snp) <- NULL
                print("Formatting variant information as VCF...")
-               
-               print("Writing to VCF file...")
-               setwd(tempfolder)
-               print(getwd())
-               print(paste0(file_path_sans_ext(basename(bam)), ".vcf"))
-               a <- writeVcf(vcf, paste0(file_path_sans_ext(basename(bam)), ".vcf"), 
-                             index = FALSE)
-               gc()
-               setwd(wd)
-             } 
+               if (length(snp) > 0)  {
+                vcf <- asVCF(snp)
+                 print("Writing to VCF file...")
+                 setwd(tempfolder)
+                 print(getwd())
+                 print(paste0(file_path_sans_ext(basename(bam)), ".vcf"))
+                 a <- writeVcf(vcf, paste0(file_path_sans_ext(basename(bam)), ".vcf"), 
+                               index = FALSE)
+                 gc()
+               } else {
+                 print(paste0("No variants found in ", (basename(bam))))
+               }
+                 
+                 setwd(wd)
+               } 
              
              print("Merging VCF files...")
              vcflist <- list_files_with_exts(tempfolder, "vcf")
@@ -1152,7 +1187,7 @@ callindels <- function(bam,
              print(paste0(gsub(".vcf", "", basename(vcfpath[1])), " OKAY"))
              for (item in vcfpath[-1]) {
                b <- VariantAnnotation::readVcf(item)
-               match <- BioGenerics::rbind(match, b)
+               match <- BiocGenerics::rbind(match, b)
                print(paste0(gsub(".vcf", "", basename(item)), " OKAY"))
              }
              rsIDs <- rownames(match)
