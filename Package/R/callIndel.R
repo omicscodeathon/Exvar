@@ -31,6 +31,7 @@ callindels <- function(bam,
   library(GenomeInfoDb)
   library(VariantAnnotation)
   library(BiocParallel)
+  library(BiocGenerics)
 
   ##Sets the reference genome that corresponds to the species chosen by the user
   switch(species,
