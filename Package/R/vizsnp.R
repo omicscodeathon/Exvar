@@ -5,26 +5,24 @@
 #'
 vizsnp <- function( dir) {
   #load requirement
-  
   library(shiny)
+  library(shinydashboard)
+  library(shinythemes)
   library(ggplot2)
   library(data.table)
   library(fs)
-  library(shinythemes)
   library(dplyr)
   library(purrr)
-  library(shinydashboard)
   library(DT)
+  
   ###function input : dir
   setwd(dir)
-  #file_paths_control
+  #read files
   file_paths_control <- fs::dir_ls("control")
-  #file_paths_patient
   file_paths_patient <- fs::dir_ls("patient")
+  
   ###prepare data
-  
   #part I : controls
-  
   #loop
   file_contenets_control <- list()
   file_contenets_control <-file_paths_control %>%
@@ -36,26 +34,28 @@ vizsnp <- function( dir) {
   file_contenets_control%>% map(as_tibble) %>%
     list2env(envir = .GlobalEnv)
   # To join all files together into one data frame7
-  comined_control <-file_contenets_control %>% map(as_tibble) %>%
+  comined_control <- file_contenets_control %>% map(as_tibble) %>%
     reduce(full_join)
   # delete NAs
   # result : keep commun between all samples
   comined_control <- na.omit(comined_control)
-  ## identify snps
+  ## identify SNPs
   # Transition (Ti)
   ti <- c("A>G","G>A","C>T","T>C")
   # Transveersion (Tv)
   tv <- c("A>T","A>C","G>T","G>C","C>A","C>G","T>A","T>G")
   #
-  comined_control$nuSub <- paste0(comined_control$REF,">",comined_control$ALT)
-  comined_control$TiTv[comined_control$nuSub %in% ti] <- "Ti"
-  comined_control$TiTv[comined_control$nuSub %in% tv] <- "Tv"
-  #
-  comined_control <-dplyr::rename(comined_control,"snp_controls"="nuSub")
-  comined_control <-dplyr::rename(comined_control,"TiTv_controls"="TiTv")
+  comined_control <- comined_control %>%
+    mutate(nuSub = paste0(REF, ">", ALT),
+           TiTv = case_when(
+             nuSub %in% ti ~ "Ti",
+             nuSub %in% tv ~ "Tv",
+             TRUE ~ NA_character_
+           )) %>%
+    rename(snp_controls = nuSub, TiTv_controls = TiTv)
+
   ### Part II : patients
   #path
-  
   file_contenets_patient <- list()
   file_contenets_patient <-file_paths_patient %>%
     map(function(path){
@@ -72,42 +72,47 @@ vizsnp <- function( dir) {
   # result : keep commun between all samples
   comined_patient <- na.omit(comined_patient)
   ## identify snps
-  comined_patient$nuSub <- paste0(comined_patient$REF,">",comined_patient$ALT)
-  comined_patient$TiTv[comined_patient$nuSub %in% ti] <- "Ti"
-  comined_patient$TiTv[comined_patient$nuSub %in% tv] <- "Tv"
-  #
-  comined_patient<-dplyr::rename(comined_patient,"snp_patient"="nuSub")
-  comined_patient<-dplyr::rename(comined_patient,"TiTv_patient"="TiTv")
-  
+  comined_patient <- comined_patient %>%
+    mutate(nuSub = paste0(REF, ">", ALT),
+           TiTv = case_when(
+             nuSub %in% ti ~ "Ti",
+             nuSub %in% tv ~ "Tv",
+             TRUE ~ NA_character_
+           )) %>%
+    rename(snp_patient = nuSub, TiTv_patient = TiTv)
+
   # Part III: compare groups
-  compare_group <- merge(comined_patient, comined_control, by = c("#CHROM", "POS"),all = TRUE)
-  compare_group[is.na(compare_group)] <- "no"
-  compare_group$compare[compare_group$snp_controls !="no" &  compare_group$snp_patient =="no" ] <- "deletion"
-  compare_group$compare[compare_group$snp_controls =="no" &  compare_group$snp_patient !="no" ] <- "addition"
-  compare_group$compare[compare_group$snp_controls ==  compare_group$snp_patient ] <- "same"
-  compare_group$compare[compare_group$snp_controls !=  compare_group$snp_patient &  compare_group$snp_controls !="no" &compare_group$snp_patient !="no"] <- "different"
+
+  compare_group <- merge(comined_patient, comined_control, by = c("#CHROM", "POS"), all = TRUE) %>%
+    mutate(across(everything(), ~ifelse(is.na(.), "no", .))) %>%
+    mutate(compare = case_when(
+      snp_controls != "no" & snp_patient == "no" ~ "deletion",
+      snp_controls == "no" & snp_patient != "no" ~ "addition",
+      snp_controls == snp_patient ~ "same",
+      snp_controls != snp_patient & snp_controls != "no" & snp_patient != "no" ~ "different",
+      TRUE ~ NA_character_
+    ))
+  
+  # what to keep ?
   uncommun <- compare_group[compare_group$compare == "different",]
   commun <- compare_group[compare_group$compare == "same",]
+
   #
-  addition <- compare_group[compare_group$compare == "addition",]
-  addition <- addition[c("#CHROM","POS","REF.x","ALT.x","TiTv_patient")]
-  addition<-dplyr::rename(addition,"Chromosome"="#CHROM")
-  addition<-dplyr::rename(addition,"TiTv"="TiTv_patient")
-  addition<-dplyr::rename(addition,"SNP position"="POS")
-  addition<-dplyr::rename(addition,"REF"="REF.x")
-  addition<-dplyr::rename(addition,"ALT"="ALT.x")
-  deletion <- compare_group[compare_group$compare == "deletion",]
-  deletion <-deletion[c("#CHROM","POS","REF.y","ALT.y","TiTv_controls")]
-  deletion<-dplyr::rename(deletion,"Chromosome"="#CHROM")
-  deletion<-dplyr::rename(deletion,"TiTv"="TiTv_controls")
-  deletion<-dplyr::rename(deletion,"SNP position"="POS")
-  deletion<-dplyr::rename(deletion,"REF"="REF.y")
-  deletion<-dplyr::rename(deletion,"ALT"="ALT.y")
-  # dataframe to shown
-  uncommun_simple <- data.frame(uncommun$`#CHROM`, uncommun$POS, uncommun$ID.x,
-                                uncommun$REF.x, uncommun$ALT.x, uncommun$ALT.y)
-  #rename columns
-  names(uncommun_simple) <- c('CHROM','POS','ID','REF','ALT_patient', 'ALT_control')
+  addition <- compare_group %>%
+    filter(compare == "addition") %>%
+    select("#CHROM", POS, REF.x, ALT.x, TiTv_patient) %>%
+    rename(Chromosome = "#CHROM", `SNP position` = POS, REF = REF.x, ALT = ALT.x, TiTv = TiTv_patient)
+
+  #
+  deletion <- compare_group %>%
+    filter(compare == "deletion") %>%
+    select("#CHROM", POS, REF.y, ALT.y, TiTv_controls) %>%
+    rename(Chromosome = "#CHROM", `SNP position` = POS, REF = REF.y, ALT = ALT.y, TiTv = TiTv_controls)
+  
+  # final dataframe 
+  uncommun_simple <- uncommun %>%
+    select(`#CHROM`, POS, ID.x, REF.x, ALT.x, ALT.y) %>%
+    rename(CHROM = `#CHROM`, ID = ID.x, REF = REF.x, ALT_patient = ALT.x, ALT_control = ALT.y)
   #app
   ui <- fluidPage(
     navbarPage(theme = shinytheme("flatly"), collapsible = TRUE,
