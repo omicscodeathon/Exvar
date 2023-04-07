@@ -6,10 +6,10 @@
 
 requirement <- function(){
   # Detect operating system
+  
   switch(Sys.info()[['sysname']],
-         Windows= {sys <- "windows"},
-         Linux  = {sys <- "linux"},
-         Darwin = {sys <- "mac"}) # is Darwin correct ?
+         Linux  = {
+        
   # specie
   cat(paste0("These are the species currently supported by Exvar, choose the number corresponding to the target specie: \n",
              "[1] Homo sapiens \n",
@@ -21,8 +21,8 @@ requirement <- function(){
              "[7] Saccharomyces cerevisiae \n",
              "[8] Caenorhabditis elegans \n"))
   species <- readline("Type the number of the species that you would like to use as a reference: ")
-  # install packages depending on operating system
-  if (sys <-"linux"){
+
+
   #for all species
   if (!require("shiny")) install.packages("shiny")
   if (!require("shinydashboard")) install.packages("shinydashboard")
@@ -114,8 +114,13 @@ requirement <- function(){
 
          }
   ) 
-  } else {
-    # put packages independent of OS
-  }
+  ########
+         },
+  Windows= {
+    message("The package require a Linux system")
+  },
+  Darwin = {
+    message("The package require a Linux system")
+  }) # is Darwin correct ?
   
 }
