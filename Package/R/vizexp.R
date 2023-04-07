@@ -6,7 +6,7 @@
 #'
 vizexp <- function( genecount, metadata) {
   #request specie
-  cat(paste0("These are the species currently supported by ExpVar: \n",
+  cat(paste0("These are the species currently supported by Exvar: \n",
              "[1] Homo sapiens \n",
              "[2] Mus musculus \n",
              "[3] Arabidopsis thaliana \n",
