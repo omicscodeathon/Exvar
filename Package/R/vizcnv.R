@@ -4,7 +4,7 @@
 #' @export
 #'
 
-vizcnv<- function( cnvdata, species) {
+vizcnv<- function( cnvdata) {
 # specie
 cat(paste0("These are the species currently supported by ExpVar: \n",
            "[1] Homo sapiens 38 \n",
