@@ -30,6 +30,7 @@ processfastq <- function(file = list_files_with_exts(dir = dir,
              "[9] Caenorhabditis elegans \n"))
   species <- readline("Type the number of the species that you would like to use as a reference: ")
   
+  wd <- getwd()
   ##Sets the reference genome that corresponds to the species chosen by the user
   switch(species,
          "1"={
