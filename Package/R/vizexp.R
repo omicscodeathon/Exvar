@@ -4,7 +4,7 @@
 #' @param metadata Path to the  metadata file
 #' @export
 #'
-vizexp <- function( genecount, metadata, species) {
+vizexp <- function( genecount, metadata) {
   #request specie
   cat(paste0("These are the species currently supported by ExpVar: \n",
              "[1] Homo sapiens \n",
@@ -13,8 +13,9 @@ vizexp <- function( genecount, metadata, species) {
              "[4] Drosophila melanogaster \n",
              "[5] Danio rerio \n",
              "[6] Rattus norvegicus \n",
-             "[7] Saccharomyces cerevisiae \n"))
-  species <- readline("Type the number of the species that you would like to use as a reference: ")
+             "[7] Saccharomyces cerevisiae \n",
+             "[8] Caenorhabditis elegans \n"))
+  species <- readline("These are the species currently supported by Exvar, type the number corresponding to the target specie: ")
   #  load requirements
   library(shinydashboard) 
   library(shiny)
@@ -58,6 +59,10 @@ vizexp <- function( genecount, metadata, species) {
          "7"={
            library(org.Sc.sgd.db)
            specie1 <-"org.Sc.sgd.db"
+         },
+         "8"={
+           library(org.Ce.eg.db)
+           specie1 <-"org.Ce.eg.db"
          }
   )
   ## read input files + process files      
