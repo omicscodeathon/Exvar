@@ -48,9 +48,9 @@ callcnv <- function(controldir,
   }
   
   ##Labels the folder that contains the sample folders under the path parameter
-  control_samples <- list.dirs(path = controldir, pattern = control,
+  control_samples <- list.dirs(path = controldir,
                                full.names = TRUE, recursive = FALSE)
-  experiment_samples <- list.dirs(path = experimentdir, pattern = experiment, 
+  experiment_samples <- list.dirs(path = experimentdir, 
                                   full.names = TRUE, recursive = FALSE)
   
   ##Gets the BAM files from sample directories
