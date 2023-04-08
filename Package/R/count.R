@@ -14,7 +14,7 @@
 #' @export
 #' @return A data frame containing gene counts.
 
-counts <- function(dir = getwd(),
+count <- function(dir = getwd(),
                            groups = NULL,
                            outputdir = getwd(),
                            threads = 4L,
