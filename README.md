@@ -1,29 +1,42 @@
-# Exvar: A Gene Expression And Genetic Variants Data Analysis And Visualization R package
+# Exvar: A gene expression and genetic variation data analysis and visualization R package
 
-## Introduction
+## Motivation
 
-The rapid development of high-throughput sequencing technology represents great opportunities for researchers to investigate genomic variations and transcriptomic changes. Multiple sequencing data are publicly available on multiple databases. But unfortunately, the analysis techniques are complex and require multiple skills.
+RNA sequencing data manipulation workflows are complex and require various skills and tools. This creates the need for user-friendly and integrated genomic data analysis and visualization tools.
 
+We developed a novel R package using multiple R packages to perform gene expression analysis and genetic variant calling from RNA sequencing data. The package could be used to analyze eight species’ data. Multiple public datasets were analyzed using the developed package to validate the pipeline for all the supported species.
 
-## Solution = Exvar R package
+## About
 
 The Exvar R package performs gene expression and  genetic variats (SNPs, Indels, and CNVs) data analysis and  visualization.
 
 It is developed to facilitate and minimize the skills required for the genetic expression and variants calling. It includes 9 functions, providing an easy biologist-friendly workflow.
 
-The package functions:
+## Functions:
 
-![image](https://user-images.githubusercontent.com/73958439/216056825-f40b8737-aa2e-41ee-ba70-540204ba1b6f.png)
-![image](https://user-images.githubusercontent.com/73958439/216056956-3e7a2d7c-e126-4564-b638-70201b75275c.png)
+requirement() >> Install required packages
 
+processfastq() >>Preprocess fastq files
 
-Documentation: https://github.com/omicscodeathon/Exvar/blob/main/Exvar.pdf
+counts() >> gene Count analysis
 
-Examples of each function output: https://github.com/omicscodeathon/Exvar/tree/main/Supplementary_materials
+expression() >>Identify DEGs
 
-## Species
+callsnp() >> SNP calling
 
-It could be used to analyze data from seven species including:
+callcnv() >> CNV calling
+
+callindel() >> Indel calling
+
+vizexp() >> Analyze and visualize gene expression data
+
+vizsnp() >> Analyze and visualize SNP data
+
+vizcnv() >> Analyze and visualize CNV data
+
+## Supported Species
+
+It could be used to analyze data from eight species including:
 * Homo Sapiens
 
 * Mus Musculus
@@ -35,6 +48,8 @@ It could be used to analyze data from seven species including:
 * Danio rerio
 
 * Rattus norvegicus
+
+*Caenorhabditis elegans  
 
 * and Saccharomyces Cerevisiae.
 
@@ -49,17 +64,15 @@ devtools::install_github("omicscodeathon/Exvar/Package")
 
 Library(Exvar)
 
-## Workflow
+## Maintainer
 
- STEP1: Install the requirements using the requirement() function.
+- Hiba Ben Aribi [contact]
 
- STEP2: preprocess the fastq files using the processfastq() function.
+- Imraan Dixon [contact]
 
- STEP3 : perform the gene counting using the counts() function and visualize the output csv file using the vizexp() function.
+## Citation
 
- STEP4: Call variants using the callSNP(), callCNV(), and callIndel() functions and visualize the data using the vizsnp() and vizcnv() functions.
-
- STEP5: download the results.
+Hiba Ben Aribi, Imraan Dixon , Najla Abassi, and  Olaitan I. Awe. Exvar: An R Package for Gene Expression And Genetic Variation Data Analysis And Visualization. (2023) https://github.com/omicscodeathon/Exvar
 
 ## Contributors
 
