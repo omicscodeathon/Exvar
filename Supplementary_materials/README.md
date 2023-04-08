@@ -13,7 +13,6 @@ The expression is represented in the MA,volcano plots, and heatmaps.
 ### Ontology
 The ontology analysis is performed by the EXPviz app and the top 20 ontologies (BP, CC, MF) and  are represented in Barplot and dotplot.
 
-Figures are in EXPviz.pdf
 
 ## SNPs Calling
 The BAM files generated from the fastqProcession() function are used to call the SNPs with call_snp() function and the output is a VCF file containing the SNPs data. The output was visualized using the SNPviz() shiny app function.
