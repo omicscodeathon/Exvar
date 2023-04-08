@@ -1,6 +1,5 @@
 # Pipeline validation Workflow 
-To validate the pipelines and demonstrate the utility of the developed tool, we performed a case study investigating the Blood-Brain-barrier dysfunction mechanisms in the brain tumor patients.
-
+To validate the pipelines and demonstrate the utility of the developed tool, we performed a case study on the SRP074425 dataset.
 ### Expression data
 FASTQ files obtained from the SRA database were first preprocessed. Quality was controlled and then reads were aligned to the Homo sapiens genome, assembly hg19. 
 The gene count was determined using the gene_counting() function and the output count csv file was visualized using the EXPviz() shiny app function. First the count data was visualized before the normalization and after normalization. 
