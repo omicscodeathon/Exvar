@@ -30,7 +30,7 @@ processfastq <- function(file = list_files_with_exts(dir = dir,
              "[9] Caenorhabditis elegans \n"))
   species <- readline("Type the number of the species that you would like to use as a reference: ")
   
-  library(rfastp)
+  library(Rfastp)
   library(gmapR)
   
   wd <- getwd()
