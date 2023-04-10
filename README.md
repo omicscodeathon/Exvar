@@ -82,4 +82,4 @@ Hiba Ben Aribi, Imraan Dixon , Najla Abassi, and  Olaitan I. Awe. Exvar: An R Pa
 
 - Najla Abassi, Higher Institute of Biotechnology Sidi Thabet, Manouba University, Tunisia.
 
-- Olaitan I. Awe, African Society for Bioinformatics and Computational Biology, South Africa.
+- Olaitan I. Awe, African Society for Bioinformatics and Computational Biology, Cape Town, South Africa.
