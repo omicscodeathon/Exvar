@@ -12,7 +12,7 @@
 callsnp <- function(bam,
                     threads = 4L,
                     outputdir = getwd()) {
-  cat(paste0("These are the species currently supported by ExpVar: \n",
+  cat(paste0("These are the species currently supported by Exvar: \n",
              "[1] Homo sapiens (hg19) \n",
              "[2] Homo sapiens (hg38) \n", 
              "[3] Mus musculus \n",
@@ -43,13 +43,13 @@ callsnp <- function(bam,
            
            ##Selects hg19 as the reference genome
            ##If reference doesn't exist within package directory, create one
-           if (dir.exists(paste0(find.package("ExpVar"), "/hg19"))) {
+           if (dir.exists(paste0(find.package("Exvar"), "/hg19"))) {
              refgen <- GmapGenome(organism,
-                                  directory = find.package("ExpVar"))
+                                  directory = find.package("Exvar"))
            } else {
              print("Reference genome not found. Creating reference. This might take a while...")
              refgen <- GmapGenome(organism,
-                                  directory = find.package("ExpVar"),
+                                  directory = find.package("Exvar"),
                                   create = TRUE)
            }
            output <- c()
@@ -226,13 +226,13 @@ callsnp <- function(bam,
            
            ##Selects hg38 as the reference genome
            ##If reference doesn't exist within package directory, create one
-           if (dir.exists(paste0(find.package("ExpVar"), "/hg38"))) {
+           if (dir.exists(paste0(find.package("Exvar"), "/hg38"))) {
              refgen <- GmapGenome(organism,
-                                  directory = find.package("ExpVar"))
+                                  directory = find.package("Exvar"))
            } else {
              print("Reference genome not found. Creating reference. This might take a while...")
              refgen <- GmapGenome(organism,
-                                  directory = find.package("ExpVar"),
+                                  directory = find.package("Exvar"),
                                   create = TRUE)
            }
            output <- c()
@@ -408,13 +408,13 @@ callsnp <- function(bam,
            
            ##Selects mm10 as the reference genome
            ##If reference doesn't exist within package directory, create one
-           if (dir.exists(paste0(find.package("ExpVar"), "/mm10"))) {
+           if (dir.exists(paste0(find.package("Exvar"), "/mm10"))) {
              refgen <- GmapGenome(organism,
-                                  directory = find.package("ExpVar"))
+                                  directory = find.package("Exvar"))
            } else {
              print("Reference genome not found. Creating reference. This might take a while...")
              refgen <- GmapGenome(organism,
-                                  directory = find.package("ExpVar"),
+                                  directory = find.package("Exvar"),
                                   create = TRUE)
            }
            output <- c()
@@ -523,13 +523,13 @@ callsnp <- function(bam,
            
            ##Selects hg19 as the reference genome
            ##If reference doesn't exist within package directory, create one
-           if (dir.exists(paste0(find.package("ExpVar"), "/TAIR9"))) {
+           if (dir.exists(paste0(find.package("Exvar"), "/TAIR9"))) {
              refgen <- GmapGenome(organism,
-                                  directory = find.package("ExpVar"))
+                                  directory = find.package("Exvar"))
            } else {
              print("Reference genome not found. Creating reference. This might take a while...")
              refgen <- GmapGenome(organism,
-                                  directory = find.package("ExpVar"),
+                                  directory = find.package("Exvar"),
                                   create = TRUE)
            }
            output <- c()
@@ -638,13 +638,13 @@ callsnp <- function(bam,
            
            ##Selects dm6 as the reference genome
            ##If reference doesn't exist within package directory, create one
-           if (dir.exists(paste0(find.package("ExpVar"), "/dm6"))) {
+           if (dir.exists(paste0(find.package("Exvar"), "/dm6"))) {
              refgen <- GmapGenome(organism,
-                                  directory = find.package("ExpVar"))
+                                  directory = find.package("Exvar"))
            } else {
              print("Reference genome not found. Creating reference. This might take a while...")
              refgen <- GmapGenome(organism,
-                                  directory = find.package("ExpVar"),
+                                  directory = find.package("Exvar"),
                                   create = TRUE)
            }
            output <- c()
@@ -753,13 +753,13 @@ callsnp <- function(bam,
            
            ##Selects danRer11 as the reference genome
            ##If reference doesn't exist within package directory, create one
-           if (dir.exists(paste0(find.package("ExpVar"), "/danRer11"))) {
+           if (dir.exists(paste0(find.package("Exvar"), "/danRer11"))) {
              refgen <- GmapGenome(organism,
-                                  directory = find.package("ExpVar"))
+                                  directory = find.package("Exvar"))
            } else {
              print("Reference genome not found. Creating reference. This might take a while...")
              refgen <- GmapGenome(organism,
-                                  directory = find.package("ExpVar"),
+                                  directory = find.package("Exvar"),
                                   create = TRUE)
            }
            output <- c()
@@ -868,13 +868,13 @@ callsnp <- function(bam,
            
            ##Selects danRer11 as the reference genome
            ##If reference doesn't exist within package directory, create one
-           if (dir.exists(paste0(find.package("ExpVar"), "/rn5"))) {
+           if (dir.exists(paste0(find.package("Exvar"), "/rn5"))) {
              refgen <- GmapGenome(organism,
-                                  directory = find.package("ExpVar"))
+                                  directory = find.package("Exvar"))
            } else {
              print("Reference genome not found. Creating reference. This might take a while...")
              refgen <- GmapGenome(organism,
-                                  directory = find.package("ExpVar"),
+                                  directory = find.package("Exvar"),
                                   create = TRUE)
            }
            output <- c()
@@ -983,13 +983,13 @@ callsnp <- function(bam,
            
            ##Selects sacCer3 as the reference genome
            ##If reference doesn't exist within package directory, create one
-           if (dir.exists(paste0(find.package("ExpVar"), "/sacCer3"))) {
+           if (dir.exists(paste0(find.package("Exvar"), "/sacCer3"))) {
              refgen <- GmapGenome(organism,
-                                  directory = find.package("ExpVar"))
+                                  directory = find.package("Exvar"))
            } else {
              print("Reference genome not found. Creating reference. This might take a while...")
              refgen <- GmapGenome(organism,
-                                  directory = find.package("ExpVar"),
+                                  directory = find.package("Exvar"),
                                   create = TRUE)
            }
            
@@ -1098,13 +1098,13 @@ callsnp <- function(bam,
            
            ##Selects ce11 as the reference genome
            ##If reference doesn't exist within package directory, create one
-           if (dir.exists(paste0(find.package("ExpVar"), "/ce11"))) {
+           if (dir.exists(paste0(find.package("Exvar"), "/ce11"))) {
              refgen <- GmapGenome(organism,
-                                  directory = find.package("ExpVar"))
+                                  directory = find.package("Exvar"))
            } else {
              print("Reference genome not found. Creating reference. This might take a while...")
              refgen <- GmapGenome(organism,
-                                  directory = find.package("ExpVar"),
+                                  directory = find.package("Exvar"),
                                   create = TRUE)
            }
            output <- c()
