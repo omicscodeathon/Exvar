@@ -52,9 +52,9 @@ requirement <- function(){
   if (!require("stringr")) install.packages("stringr")
   if (!require("VariantAnnotation"))  BiocManager::install("VariantAnnotation")
   if (!require("CNVRanger")) BiocManager::install("CNVRanger")
-  if (!require("Gviz")) BiocManager::instal("Gviz")
-  if (!require("AnnotationHub")) BiocManager::instal("AnnotationHub")
-  if (!require("regioneR")) BiocManager::instal("regioneR")
+  if (!require("Gviz")) BiocManager::install("Gviz")
+  if (!require("AnnotationHub")) BiocManager::install("AnnotationHub")
+  if (!require("regioneR")) BiocManager::install("regioneR")
   if (!require("ggnewscale")) install.packages("ggnewscale")
   if (!require("tibble")) install.packages("tibble")
   #species specific
