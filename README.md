@@ -1,74 +1,85 @@
 # Exvar: A gene expression and genetic variation data analysis and visualization R package
 
+## Table of Contents
+1. [Motivation](#Motivation)
+2. [About Exavar](#About Exavar)
+3. [Supported Species](#Supported Species)
+4. [Installation](#Installation) 
+5. [Functions](#Functions)
+
 ## Motivation
 
 RNA sequencing data manipulation workflows are complex and require various skills and tools. This creates the need for user-friendly and integrated genomic data analysis and visualization tools.
 
 We developed a novel R package using multiple R packages to perform gene expression analysis and genetic variant calling from RNA sequencing data. The package could be used to analyze eight species’ data. Multiple public datasets were analyzed using the developed package to validate the pipeline for all the supported species.
 
-## About
+## About Exavar
 
 The Exvar R package performs gene expression and  genetic variats (SNPs, Indels, and CNVs) data analysis and  visualization.
 
 It is developed to facilitate and minimize the skills required for the genetic expression and variants calling. It includes 9 functions, providing an easy biologist-friendly workflow.
 
-## Functions:
-
-requirement() >> Install required packages
-
-processfastq() >>Preprocess fastq files
-
-counts() >> gene Count analysis
-
-expression() >>Identify DEGs
-
-callsnp() >> SNP calling
-
-callcnv() >> CNV calling
-
-callindel() >> Indel calling
-
-vizexp() >> Analyze and visualize gene expression data
-
-vizsnp() >> Analyze and visualize SNP data
-
-vizcnv() >> Analyze and visualize CNV data
-
 ## Supported Species
 
 It could be used to analyze data from eight species including:
-* Homo Sapiens
+    * Homo Sapiens
 
-* Mus Musculus
+    * Mus Musculus
 
-* Arabidopsis Thaliana
+    * Arabidopsis Thaliana
 
-* Drosophila Melanogaster
+    * Drosophila Melanogaster
 
-* Danio rerio
+    * Danio rerio
 
-* Rattus norvegicus
+    * Rattus norvegicus
 
-* Caenorhabditis elegans  
+    * Caenorhabditis elegans  
 
-* and Saccharomyces Cerevisiae.
-
+    * and Saccharomyces Cerevisiae.
 
 ## Installation
 
 The package could be installed as follows:
 
-install.packages("devtools")
+    install.packages("devtools")
+   
+    Library(devtools)
 
-devtools::install_github("omicscodeathon/Exvar/Package")
+    devtools::install_github("omicscodeathon/Exvar/Package")
 
-Library(Exvar)
+    Library(Exvar)
 
-## Maintainer
+## Functions
 
-- Hiba Ben Aribi [contact]
+    - requirement() >> Install required packages
 
-- Imraan Dixon [contact]
+    - processfastq() >>Preprocess fastq files
+
+    - counts() >> gene Count analysis
+
+    - expression() >>Identify DEGs
+
+    - callsnp() >> SNP calling
+
+    - callcnv() >> CNV calling
+
+    - callindel() >> Indel calling
+
+    - vizexp() >> Analyze and visualize gene expression data
+
+    - vizsnp() >> Analyze and visualize SNP data
+
+    - vizcnv() >> Analyze and visualize CNV data
+
+
+## License
+
+Artistic license 2.0
+
+## Contact
+
+For issues reporting, please send an email to : hiba.bioinf@gmail.com
 
 ## Citation
 
