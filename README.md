@@ -27,6 +27,7 @@ It is developed to facilitate and minimize the skills required for the genetic e
 ## Supported Species
 
 It could be used to analyze data from eight species including:
+
     * Homo Sapiens
 
     * Mus Musculus
