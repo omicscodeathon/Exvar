@@ -2,10 +2,15 @@
 
 ## Table of Contents
 1. [Motivation](#Motivation)
-2. [About Exavar](#About Exavar)
-3. [Supported Species](#Supported Species)
+2. [About Exavar](#About-Exavar)
+3. [Supported Species](#Supported-Species)
 4. [Installation](#Installation) 
 5. [Functions](#Functions)
+6. [License](#License)
+7. [Contact](#Contact)
+8. [Citation](#Citation)
+9. [Contributors](#Contributors)
+
 
 ## Motivation
 
@@ -73,7 +78,7 @@ The package could be installed as follows:
     - vizcnv() >> Analyze and visualize CNV data
 
 
-## License
+## License  
 
 Artistic license 2.0
 
@@ -87,10 +92,10 @@ Hiba Ben Aribi, Imraan Dixon , Najla Abassi, and  Olaitan I. Awe. Exvar: An R Pa
 
 ## Contributors
 
-- Hiba Ben Aribi, Faculty of Sciences of Tunis, University of Tunis El Manar, Tunis, Tunisia.
+   - Hiba Ben Aribi, Faculty of Sciences of Tunis, University of Tunis El Manar, Tunis, Tunisia.
 
-- Imraan Dixon, Faculty of Health Sciences, University of Cape Town, Cape Town, South Africa.
+   - Imraan Dixon, Faculty of Health Sciences, University of Cape Town, Cape Town, South Africa.
 
-- Najla Abassi, Higher Institute of Biotechnology Sidi Thabet, Manouba University, Tunisia.
+   - Najla Abassi, Higher Institute of Biotechnology Sidi Thabet, Manouba University, Tunisia.
 
-- Olaitan I. Awe, African Society for Bioinformatics and Computational Biology, Cape Town, South Africa.
+   - Olaitan I. Awe, African Society for Bioinformatics and Computational Biology, Cape Town, South Africa.
