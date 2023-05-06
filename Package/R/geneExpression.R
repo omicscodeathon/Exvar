@@ -137,7 +137,9 @@ geneExpression <- function(dir = getwd(),
                                      all.x=FALSE,
                                      all.y=TRUE)
              
-             annotatedRes <- annotatedRes[order(annotatedRes$pvalue),]
+             annotatedRes <- annotatedRes[order(annotatedRes$SYMBOL, annotatedRes$padj),]
+             annotatedRes <- annotatedRes[!duplicated(annotatedRes$SYMBOL),]
+             annotatedRes <- annotatedRes[order(annotatedRes$padj),]
              DFcompare <- append(DFcompare, annotatedRes)
              
              myRes_lfc <- lfcShrink(dds, coef = paste0("Group_",
@@ -250,7 +252,9 @@ geneExpression <- function(dir = getwd(),
                                      all.x=FALSE,
                                      all.y=TRUE)
              
-             annotatedRes <- annotatedRes[order(annotatedRes$pvalue),]
+             annotatedRes <- annotatedRes[order(annotatedRes$SYMBOL, annotatedRes$padj),]
+             annotatedRes <- annotatedRes[!duplicated(annotatedRes$SYMBOL),]
+             annotatedRes <- annotatedRes[order(annotatedRes$padj),]
              DFcompare <- append(DFcompare, annotatedRes)
              
              myRes_lfc <- lfcShrink(dds, coef = paste0("Group_",
@@ -363,7 +367,9 @@ geneExpression <- function(dir = getwd(),
                                      all.x=FALSE,
                                      all.y=TRUE)
          
-             annotatedRes <- annotatedRes[order(annotatedRes$pvalue),]
+             annotatedRes <- annotatedRes[order(annotatedRes$SYMBOL, annotatedRes$padj),]
+             annotatedRes <- annotatedRes[!duplicated(annotatedRes$SYMBOL),]
+             annotatedRes <- annotatedRes[order(annotatedRes$padj),]
              DFcompare <- append(DFcompare, annotatedRes)
              
              myRes_lfc <- lfcShrink(dds, coef = paste0("Group_",
@@ -475,7 +481,9 @@ geneExpression <- function(dir = getwd(),
                                    all.x=FALSE,
                                    all.y=TRUE)
              
-             annotatedRes <- annotatedRes[order(annotatedRes$pvalue),]
+             annotatedRes <- annotatedRes[order(annotatedRes$SYMBOL, annotatedRes$padj),]
+             annotatedRes <- annotatedRes[!duplicated(annotatedRes$SYMBOL),]
+             annotatedRes <- annotatedRes[order(annotatedRes$padj),]
              DFcompare <- append(DFcompare, annotatedRes)
              
              myRes_lfc <- lfcShrink(dds, coef = paste0("Group_",
@@ -587,7 +595,9 @@ geneExpression <- function(dir = getwd(),
                                      all.x=FALSE,
                                      all.y=TRUE)
 
-             annotatedRes <- annotatedRes[order(annotatedRes$pvalue),]
+             annotatedRes <- annotatedRes[order(annotatedRes$SYMBOL, annotatedRes$padj),]
+             annotatedRes <- annotatedRes[!duplicated(annotatedRes$SYMBOL),]
+             annotatedRes <- annotatedRes[order(annotatedRes$padj),]
              DFcompare <- append(DFcompare, annotatedRes)
              
              myRes_lfc <- lfcShrink(dds, coef = paste0("Group_",
@@ -699,7 +709,9 @@ geneExpression <- function(dir = getwd(),
                                    all.x=FALSE,
                                    all.y=TRUE)
              
-             annotatedRes <- annotatedRes[order(annotatedRes$pvalue),]
+             annotatedRes <- annotatedRes[order(annotatedRes$SYMBOL, annotatedRes$padj),]
+             annotatedRes <- annotatedRes[!duplicated(annotatedRes$SYMBOL),]
+             annotatedRes <- annotatedRes[order(annotatedRes$padj),]
              DFcompare <- append(DFcompare, annotatedRes)
              
              myRes_lfc <- lfcShrink(dds, coef = paste0("Group_",
@@ -811,7 +823,9 @@ geneExpression <- function(dir = getwd(),
                                    all.x=FALSE,
                                    all.y=TRUE)
              
-             annotatedRes <- annotatedRes[order(annotatedRes$pvalue),]
+             annotatedRes <- annotatedRes[order(annotatedRes$SYMBOL, annotatedRes$padj),]
+             annotatedRes <- annotatedRes[!duplicated(annotatedRes$SYMBOL),]
+             annotatedRes <- annotatedRes[order(annotatedRes$padj),]
              DFcompare <- append(DFcompare, annotatedRes)
              
              myRes_lfc <- lfcShrink(dds, coef = paste0("Group_",
@@ -923,7 +937,9 @@ geneExpression <- function(dir = getwd(),
                                    all.x=FALSE,
                                    all.y=TRUE)
              
-             annotatedRes <- annotatedRes[order(annotatedRes$pvalue),]
+             annotatedRes <- annotatedRes[order(annotatedRes$SYMBOL, annotatedRes$padj),]
+             annotatedRes <- annotatedRes[!duplicated(annotatedRes$SYMBOL),]
+             annotatedRes <- annotatedRes[order(annotatedRes$padj),]
              DFcompare <- append(DFcompare, annotatedRes)
              
              myRes_lfc <- lfcShrink(dds, coef = paste0("Group_",
@@ -1035,7 +1051,9 @@ geneExpression <- function(dir = getwd(),
                                    all.x=FALSE,
                                    all.y=TRUE)
              
-             annotatedRes <- annotatedRes[order(annotatedRes$pvalue),]
+             annotatedRes <- annotatedRes[order(annotatedRes$SYMBOL, annotatedRes$padj),]
+             annotatedRes <- annotatedRes[!duplicated(annotatedRes$SYMBOL),]
+             annotatedRes <- annotatedRes[order(annotatedRes$padj),]
              DFcompare <- append(DFcompare, annotatedRes)
              
              myRes_lfc <- lfcShrink(dds, coef = paste0("Group_",
