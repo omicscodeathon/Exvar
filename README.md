@@ -2,9 +2,9 @@
 
 ## Table of Contents
 1. [Motivation](#Motivation)
-2. [About Exavar](#About-Exavar)
+2. [About Exvar](#About-Exvar)
 3. [Supported Species](#Supported-Species)
-4. [Installation](#Installation) 
+4. [Installation](#Installation)
 5. [Functions](#Functions)
 6. [License](#License)
 7. [Contact](#Contact)
@@ -18,7 +18,7 @@ RNA sequencing data manipulation workflows are complex and require various skill
 
 We developed a novel R package using multiple R packages to perform gene expression analysis and genetic variant calling from RNA sequencing data. The package could be used to analyze eight species’ data. Multiple public datasets were analyzed using the developed package to validate the pipeline for all the supported species.
 
-## About Exavar
+## About Exvar
 
 The Exvar R package performs gene expression and  genetic variats (SNPs, Indels, and CNVs) data analysis and  visualization.
 
@@ -49,7 +49,7 @@ It could be used to analyze data from eight species including:
 The package could be installed as follows:
 
     install.packages("devtools")
-   
+
     Library(devtools)
 
     devtools::install_github("omicscodeathon/Exvar/Package")
