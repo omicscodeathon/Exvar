@@ -1264,11 +1264,7 @@ callsnp <- function(bam,
                
                
                vcflist <- c()
-               
-               writeVcf(vcf, paste0(tempfolder, "/",
-                                    basename(file_path_sans_ext(i)),
-                                    "_SNP", ".vcf"),
-                        index = TRUE)
+            
                vcf <- readVcf(paste0(tempfolder, "/",
                                      basename(file_path_sans_ext(i)),
                                      "_SNP", ".vcf"))
