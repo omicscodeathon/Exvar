@@ -35,7 +35,7 @@ callsnp <- function(bam,
   library(VariantAnnotation)
   library(BiocParallel)
   
-  if(mode = "y") {
+  if(mode == "y") {
     ##Sets the reference genome that corresponds to the species chosen by the user
     switch(species,
            "1"={
@@ -1210,7 +1210,7 @@ callsnp <- function(bam,
              file.remove(normalizePath(tempfolder))
            }
     )
-  } elseif(mode = "n") {
+  } elseif(mode == "n") {
     ##Sets the reference genome that corresponds to the species chosen by the user
     switch(species,
            "1"={
