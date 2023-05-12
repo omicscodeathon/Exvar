@@ -1243,6 +1243,7 @@ callsnp <- function(bam,
                tempfolder <- paste0(dirname(i), "/temp")
                dir.create(tempfolder)
                vcflist <- c()
+               bamfl <- BamFile(i)
                bpp <- BiocParallel::MulticoreParam(threads)
                chromosomes <- seqlevels(refgen)
                tally.Param <- TallyVariantsParam(refgen, high_base_quality = 23L)
