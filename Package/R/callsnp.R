@@ -1210,7 +1210,7 @@ callsnp <- function(bam,
              file.remove(normalizePath(tempfolder))
            }
     )
-  } elseif(mode == "n") {
+  } else if(mode == "n") {
     ##Sets the reference genome that corresponds to the species chosen by the user
     switch(species,
            "1"={
