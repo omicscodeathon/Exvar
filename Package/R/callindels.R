@@ -22,6 +22,8 @@ callindels <- function(bam,
              "[8] Saccharomyces cerevisiae \n",
              "[9] Caenorhabditis elegans \n"))
   species <- readline("Type the number of the species that you would like to use as a reference: ")
+  cat("Enable single-chromosome splitting? \nNote: enabling splitting reduces the RAM requirements, but may take longer.")
+  mode <- readline("Type [y/n] for [yes/no]: ")
   wd <- getwd()
   
   library(gmapR)
