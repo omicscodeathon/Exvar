@@ -1228,7 +1228,720 @@ callindels <- function(bam,
          }
   ) 
     } else if(mode == "n") {
-    
+      ##Sets the reference genome that corresponds to the species chosen by the user
+    switch(species,
+           "1"={
+             ##Homo sapiens hg19
+             library(BSgenome.Hsapiens.UCSC.hg19)
+             library(SNPlocs.Hsapiens.dbSNP144.GRCh37)
+             organism <- BSgenome.Hsapiens.UCSC.hg19
+             
+             ##Selects hg19 as the reference genome
+             ##If reference doesn't exist within package directory, create one
+             if (dir.exists(paste0(find.package("Exvar"), "/hg19"))) {
+               refgen <- GmapGenome(organism,
+                                    directory = find.package("Exvar"))
+             } else {
+               print("Reference genome not found. Creating reference. This might take a while...")
+               refgen <- GmapGenome(organism,
+                                    directory = find.package("Exvar"),
+                                    create = TRUE)
+             }
+             
+             output <- c()
+             for(i in bam) {
+               print(paste0("Analysing ", basename(i)))
+               if (isFALSE(file.exists(paste0(i, ".bai")))) {
+                 print("Indexing bam...")
+                 setwd(dirname(i))
+                 sortBam(i, file_path_sans_ext(i))
+                 indexBam(i)
+               } 
+               tempfolder <- paste0(dirname(i), "/temp")
+               dir.create(tempfolder)
+               vcflist <- c()
+               bpp <- BiocParallel::MulticoreParam(threads)
+               chromosomes <- seqlevels(refgen)
+               bamfl <- BamFile(i)
+               tally.Param <- TallyVariantsParam(refgen, high_base_quality = 23L, indels = TRUE)
+               print("Tallying BAM file...")
+               tallies <- tallyVariants(bamfl, tally.Param, BPPARAM = bpp)
+               gc()
+               calling.filters <- VariantCallingFilters()
+               post.filters <- VariantPostFilters()
+               print("Calling variants...")
+               snp <- callVariants(tallies, calling.filters, post.filters)
+               sampleNames(snp) <- file_path_sans_ext(dirname(i))
+               mcols(snp) <- NULL
+               print("Formatting variant information as VCF...")
+               vcf <- asVCF(snp)
+               writeVcf(vcf, paste0(tempfolder, "/",
+                                    basename(file_path_sans_ext(i)),
+                                    "_INDEL", ".vcf"))
+               
+               
+               vcflist <- c()
+               
+               writeVcf(vcf, paste0(tempfolder, "/",
+                                    basename(file_path_sans_ext(i)),
+                                    "_INDEL", ".vcf"),
+                        index = TRUE)
+               vcf <- readVcf(paste0(tempfolder, "/",
+                                     basename(file_path_sans_ext(i)),
+                                     "_INDEL", ".vcf"))
+               
+               ##Due to constraints in memory, rsIDs are obtained on a chromosome by chromosome
+               ##basis
+               ##The resulting data frame is sorted as per the vcf and the rsIDs are injected
+               ##into the vcf before writing it as a file again
+               print("Loading dbSNP information...")
+               all_snps <- XtraSNPlocs.Hsapiens.dbSNP144.GRCh37
+               vcfID <- data.frame()
+               mainChromosomes <- paste0("chr", seqlevels(all_snps))
+               
+               print("Finding rsIDs...")
+               for (x in mainChromosomes) {
+                 vcf_chrom <- vcf[grepl(names(vcf),
+                                        pattern = paste0(x, ":"))]
+                 rd_chr <- rowRanges(vcf_chrom)
+                 tar_chr <- as.vector(seqnames(rd_chr)@values)
+                 tar_chr <- gsub("chr", "", tar_chr)
+                 my_snps <- snpsBySeqname(all_snps, c(tar_chr))
+                 snp_ID <- data.frame(posIDX = paste0("chr",
+                                                      seqnames(my_snps), 
+                                                      ":", 
+                                                      pos(my_snps)), 
+                                      rsID = my_snps$RefSNP_id, 
+                                      stringsAsFactors = FALSE)
+                     matV1 <- data.frame(Variant = names(rd_chr), stringsAsFactors = FALSE)
+                     matV1$chromosome <- gsub("(.*):(.*)_(.*)/(.*)", "\\1", matV1$Variant)
+                     matV1$start <- gsub("(.*):(.*)_(.*)/(.*)", "\\2", matV1$Variant)
+                     matV1$end <- gsub("(.*):(.*)_(.*)/(.*)", "\\2", matV1$Variant)
+                     matV1$ref_allele <- gsub("(.*):(.*)_(.*)/(.*)", "\\3", matV1$Variant)
+                     matV1$alt_allele <- gsub("(.*):(.*)_(.*)/(.*)", "\\4", matV1$Variant)
+                     matV1$posIDX <- gsub("(.*)_(.*)", "\\1", matV1$Variant)
+                     matV1$start <- as.integer(matV1$start)
+                     length <- 1:length(matV1$start)
+                     for (i in length) {
+                       matV1$end[i] <- 
+                         matV1$start[i] + (nchar(matV1$ref_allele[i]) - nchar(matV1$alt_allele[i]))
+                     }
+                     matV1$end[matV1$end < matV1$start] <- matV1$start[matV1$end < matV1$start] - 1
+                     matV1$posIDX <- gsub("(.*)_(.*)", "\\1", paste0(matV1$chromosome, 
+                                                                     ":", 
+                                                                     matV1$start,
+                                                                     "-",
+                                                                     matV1$end))
+                     matS <- merge(matV1,
+                                   snp_ID[!duplicated(snp_ID[, "posIDX"]),],
+                                   all.x=TRUE,
+                                   by="posIDX")
+                 matS <- dplyr::select(matS,-posIDX)
+                 vcfID <- merge(vcfID, matS, all.x = TRUE, all.y = TRUE)
+                 vcfID <- merge(vcfID, matS, all.x = TRUE, all.y = TRUE)
+               }  
+               
+               print("Injecting rsIDs into VCF...")
+               vcfID$chr <-  as.integer(gsub("chr", "", vcfID$chromosome))
+               vcfID$chr[vcfID$chromosome == "chrX"] <- 23L
+               vcfID$chr[vcfID$chromosome == "chrY"] <- 24L
+               vcfID$chr[vcfID$chromosome == "chrM"] <- 25L
+               vcfID$chr[vcfID$chromosome == "chrMT"] <- 26L
+               dd <- vcfID[order(vcfID$chr, as.integer(vcfID$start)),]
+               dd$rsID[is.na(dd$rsID)] <- "."
+               rsID <- dd$rsID[dd$chromosome != "chrMT"]
+               if (length(vcfID$chr[vcfID$chromosome == "chrMT"]) > 0) {
+                 M <- rep(".", length(names(vcf[seqnames(vcf) == "chrM",])))
+                 rsID <- append(rsID, M)
+                 MT <- dd$rsID[dd$chromosome == "chrMT"]
+                 rsID <- append(rsID, MT)
+               }
+               fill <- rep(".", length(names(vcf)) - length(rsID))
+               rsID <- append(rsID, fill)
+               names(vcf) <- rsID
+               
+               print("Writing to VCF file...")
+               setwd(outputdir)
+               writeVcf(vcf, paste0(outputdir, "/",
+                                    basename(file_path_sans_ext(i)),
+                                    "_INDEL", ".vcf"), 
+                        index = TRUE)
+               file.remove(list.files(normalizePath(tempfolder), full.names = TRUE))
+               print(paste0("Created ", file_path_sans_ext(basename(i)), "_INDEL", ".vcf.bgz"))
+               file.remove(normalizePath(tempfolder))
+               gc()
+               setwd(wd)
+               append(output, paste0(outputdir, "/", 
+                                     file_path_sans_ext(basename(i)),
+                                     "_INDEL", ".vcf.bgz"))
+               
+             }
+             
+           },
+           "2"={
+             ##Homo sapiens hg38
+             library(BSgenome.Hsapiens.UCSC.hg38)
+             library(SNPlocs.Hsapiens.dbSNP151.GRCh38)
+             organism <- BSgenome.Hsapiens.UCSC.hg38
+             
+             ##Selects hg38 as the reference genome
+             ##If reference doesn't exist within package directory, create one
+             if (dir.exists(paste0(find.package("Exvar"), "/hg38"))) {
+               refgen <- GmapGenome(organism,
+                                    directory = find.package("Exvar"))
+             } else {
+               print("Reference genome not found. Creating reference. This might take a while...")
+               refgen <- GmapGenome(organism,
+                                    directory = find.package("Exvar"),
+                                    create = TRUE)
+             }
+             output <- c()
+             for(i in bam) {
+               print(paste0("Analysing ", basename(i)))
+               if (isFALSE(file.exists(paste0(i, ".bai")))) {
+                 print("Indexing bam...")
+                 setwd(dirname(i))
+                 sortBam(i, file_path_sans_ext(i))
+                 indexBam(i)
+               } 
+               tempfolder <- paste0(dirname(i), "/temp")
+               dir.create(tempfolder)
+               vcflist <- c()
+               bpp <- BiocParallel::MulticoreParam(threads)
+               chromosomes <- seqlevels(refgen)
+               bamfl <- BamFile(i)
+               tally.Param <- TallyVariantsParam(refgen, high_base_quality = 23L, indels = TRUE)
+               print("Tallying BAM file...")
+               tallies <- tallyVariants(bamfl, tally.Param, BPPARAM = bpp)
+               gc()
+               calling.filters <- VariantCallingFilters()
+               post.filters <- VariantPostFilters()
+               print("Calling variants...")
+               snp <- callVariants(tallies, calling.filters, post.filters)
+               sampleNames(snp) <- file_path_sans_ext(dirname(i))
+               mcols(snp) <- NULL
+               print("Formatting variant information as VCF...")
+               vcf <- asVCF(snp)
+               writeVcf(vcf, paste0(tempfolder, "/",
+                                    basename(file_path_sans_ext(i)),
+                                    "_INDEL", ".vcf"))
+               
+               
+               vcflist <- c()
+               
+               writeVcf(vcf, paste0(tempfolder, "/",
+                                    basename(file_path_sans_ext(i)),
+                                    "_INDEL", ".vcf"),
+                        index = TRUE)
+               vcf <- readVcf(paste0(tempfolder, "/",
+                                     basename(file_path_sans_ext(i)),
+                                     "_INDEL", ".vcf"))
+               
+               ##Due to constraints in memory, rsIDs are obtained on a chromosome by chromosome
+               ##basis
+               ##The resulting data frame is sorted as per the vcf and the rsIDs are injected
+               ##into the vcf before writing it as a file again
+               print("Loading dbSNP information...")
+               all_snps <- XtraSNPlocs.Hsapiens.dbSNP144.GRCh38
+               vcfID <- data.frame()
+               mainChromosomes <- paste0("chr", seqlevels(all_snps))
+               
+               print("Finding rsIDs...")
+               for (x in mainChromosomes) {
+                 vcf_chrom <- vcf[grepl(names(vcf),
+                                        pattern = paste0(x, ":"))]
+                 rd_chr <- rowRanges(vcf_chrom)
+                 tar_chr <- as.vector(seqnames(rd_chr)@values)
+                 tar_chr <- gsub("chr", "", tar_chr)
+                 my_snps <- snpsBySeqname(all_snps, c(tar_chr))
+                 snp_ID <- data.frame(posIDX = paste0("chr",
+                                                      seqnames(my_snps), 
+                                                      ":", 
+                                                      pos(my_snps)), 
+                                      rsID = my_snps$RefSNP_id, 
+                                      stringsAsFactors = FALSE)
+                     matV1 <- data.frame(Variant = names(rd_chr), stringsAsFactors = FALSE)
+                     matV1$chromosome <- gsub("(.*):(.*)_(.*)/(.*)", "\\1", matV1$Variant)
+                     matV1$start <- gsub("(.*):(.*)_(.*)/(.*)", "\\2", matV1$Variant)
+                     matV1$end <- gsub("(.*):(.*)_(.*)/(.*)", "\\2", matV1$Variant)
+                     matV1$ref_allele <- gsub("(.*):(.*)_(.*)/(.*)", "\\3", matV1$Variant)
+                     matV1$alt_allele <- gsub("(.*):(.*)_(.*)/(.*)", "\\4", matV1$Variant)
+                     matV1$posIDX <- gsub("(.*)_(.*)", "\\1", matV1$Variant)
+                     matV1$start <- as.integer(matV1$start)
+                     length <- 1:length(matV1$start)
+                     for (i in length) {
+                       matV1$end[i] <- 
+                         matV1$start[i] + (nchar(matV1$ref_allele[i]) - nchar(matV1$alt_allele[i]))
+                     }
+                     matV1$end[matV1$end < matV1$start] <- matV1$start[matV1$end < matV1$start] - 1
+                     matV1$posIDX <- gsub("(.*)_(.*)", "\\1", paste0(matV1$chromosome, 
+                                                                     ":", 
+                                                                     matV1$start,
+                                                                     "-",
+                                                                     matV1$end))
+                     matS <- merge(matV1,
+                                   snp_ID[!duplicated(snp_ID[, "posIDX"]),],
+                                   all.x=TRUE,
+                                   by="posIDX")
+                 matS <- dplyr::select(matS,-posIDX)
+                 vcfID <- merge(vcfID, matS, all.x = TRUE, all.y = TRUE)
+                 vcfID <- merge(vcfID, matS, all.x = TRUE, all.y = TRUE)
+               }  
+               
+               print("Injecting rsIDs into VCF...")
+               vcfID$chr <-  as.integer(gsub("chr", "", vcfID$chromosome))
+               vcfID$chr[vcfID$chromosome == "chrX"] <- 23L
+               vcfID$chr[vcfID$chromosome == "chrY"] <- 24L
+               vcfID$chr[vcfID$chromosome == "chrM"] <- 25L
+               vcfID$chr[vcfID$chromosome == "chrMT"] <- 26L
+               dd <- vcfID[order(vcfID$chr, as.integer(vcfID$start)),]
+               dd$rsID[is.na(dd$rsID)] <- "."
+               rsID <- dd$rsID[dd$chromosome != "chrMT"]
+               if (length(vcfID$chr[vcfID$chromosome == "chrMT"]) > 0) {
+                 M <- rep(".", length(names(vcf[seqnames(vcf) == "chrM",])))
+                 rsID <- append(rsID, M)
+                 MT <- dd$rsID[dd$chromosome == "chrMT"]
+                 rsID <- append(rsID, MT)
+               }
+               fill <- rep(".", length(names(vcf)) - length(rsID))
+               rsID <- append(rsID, fill)
+               names(vcf) <- rsID
+               
+               print("Writing to VCF file...")
+               setwd(outputdir)
+               writeVcf(vcf, paste0(outputdir, "/",
+                                    basename(file_path_sans_ext(i)),
+                                    "_INDEL", ".vcf"), 
+                        index = TRUE)
+               file.remove(list.files(normalizePath(tempfolder), full.names = TRUE))
+               print(paste0("Created ", file_path_sans_ext(basename(i)), "_INDEL", ".vcf.bgz"))
+               file.remove(normalizePath(tempfolder))
+               gc()
+               setwd(wd)
+               append(output, paste0(outputdir, "/", 
+                                     file_path_sans_ext(basename(i)),
+                                     "_INDEL", ".vcf.bgz"))
+               
+             }
+           },
+           "3"={
+             ##Mus musculus mm10
+             library(BSgenome.Mmusculus.UCSC.mm10)
+             organism <- BSgenome.Mmusculus.UCSC.mm10
+             
+             ##Selects mm10 as the reference genome
+             ##If reference doesn't exist within package directory, create one
+             if (dir.exists(paste0(find.package("Exvar"), "/mm10"))) {
+               refgen <- GmapGenome(organism,
+                                    directory = find.package("Exvar"))
+             } else {
+               print("Reference genome not found. Creating reference. This might take a while...")
+               refgen <- GmapGenome(organism,
+                                    directory = find.package("Exvar"),
+                                    create = TRUE)
+             }
+             output <- c()
+             output <- c()
+             for(i in bam) {
+               print(paste0("Analysing ", basename(i)))
+               if (isFALSE(file.exists(paste0(i, ".bai")))) {
+                 print("Indexing bam...")
+                 setwd(dirname(i))
+                 sortBam(i, file_path_sans_ext(i))
+                 indexBam(i)
+               } 
+               tempfolder <- paste0(dirname(i), "/temp")
+               dir.create(tempfolder)
+               vcflist <- c()
+               bpp <- BiocParallel::MulticoreParam(threads)
+               chromosomes <- seqlevels(refgen)
+               bamfl <- BamFile(i)
+               tally.Param <- TallyVariantsParam(refgen, high_base_quality = 23L, indels = TRUE)
+               print("Tallying BAM file...")
+               tallies <- tallyVariants(bamfl, tally.Param, BPPARAM = bpp)
+               gc()
+               calling.filters <- VariantCallingFilters()
+               post.filters <- VariantPostFilters()
+               print("Calling variants...")
+               snp <- callVariants(tallies, calling.filters, post.filters)
+               sampleNames(snp) <- file_path_sans_ext(dirname(i))
+               mcols(snp) <- NULL
+               print("Formatting variant information as VCF...")
+               vcf <- asVCF(snp)
+               print("Writing to VCF file...")
+               setwd(outputdir)
+               writeVcf(vcf, paste0(outputdir, "/",
+                                    basename(file_path_sans_ext(i)),
+                                    "_INDEL", ".vcf"), 
+                        index = TRUE)
+               file.remove(list.files(normalizePath(tempfolder), full.names = TRUE))
+               print(paste0("Created ", file_path_sans_ext(basename(i)), "_INDEL", ".vcf.bgz"))
+               file.remove(normalizePath(tempfolder))
+               gc()
+               setwd(wd)
+               append(output, paste0(outputdir, "/", 
+                                     file_path_sans_ext(basename(i)),
+                                     "_INDEL", ".vcf.bgz"))
+             }
+           },
+           "4"={
+             ##Arabidopsis thaliana TAIR9
+             library(BSgenome.Athaliana.TAIR.TAIR9)
+             organism <- BSgenome.Athaliana.TAIR.TAIR9
+             
+             ##Selects hg19 as the reference genome
+             ##If reference doesn't exist within package directory, create one
+             if (dir.exists(paste0(find.package("Exvar"), "/TAIR9"))) {
+               refgen <- GmapGenome(organism,
+                                    directory = find.package("Exvar"))
+             } else {
+               print("Reference genome not found. Creating reference. This might take a while...")
+               refgen <- GmapGenome(organism,
+                                    directory = find.package("Exvar"),
+                                    create = TRUE)
+             }
+             output <- c()
+             output <- c()
+             for(i in bam) {
+               print(paste0("Analysing ", basename(i)))
+               if (isFALSE(file.exists(paste0(i, ".bai")))) {
+                 print("Indexing bam...")
+                 setwd(dirname(i))
+                 sortBam(i, file_path_sans_ext(i))
+                 indexBam(i)
+               } 
+               tempfolder <- paste0(dirname(i), "/temp")
+               dir.create(tempfolder)
+               vcflist <- c()
+               bpp <- BiocParallel::MulticoreParam(threads)
+               chromosomes <- seqlevels(refgen)
+               bamfl <- BamFile(i)
+               tally.Param <- TallyVariantsParam(refgen, high_base_quality = 23L, indels = TRUE)
+               print("Tallying BAM file...")
+               tallies <- tallyVariants(bamfl, tally.Param, BPPARAM = bpp)
+               gc()
+               calling.filters <- VariantCallingFilters()
+               post.filters <- VariantPostFilters()
+               print("Calling variants...")
+               snp <- callVariants(tallies, calling.filters, post.filters)
+               sampleNames(snp) <- file_path_sans_ext(dirname(i))
+               mcols(snp) <- NULL
+               print("Formatting variant information as VCF...")
+               vcf <- asVCF(snp)
+               print("Writing to VCF file...")
+               setwd(outputdir)
+               writeVcf(vcf, paste0(outputdir, "/",
+                                    basename(file_path_sans_ext(i)),
+                                    "_INDEL", ".vcf"), 
+                        index = TRUE)
+               file.remove(list.files(normalizePath(tempfolder), full.names = TRUE))
+               print(paste0("Created ", file_path_sans_ext(basename(i)), "_INDEL", ".vcf.bgz"))
+               file.remove(normalizePath(tempfolder))
+               gc()
+               setwd(wd)
+               append(output, paste0(outputdir, "/", 
+                                     file_path_sans_ext(basename(i)),
+                                     "_INDEL", ".vcf.bgz"))
+             }
+           },
+           "5"={
+             ##Drosophilia melanogaster dm6
+             library(BSgenome.Dmelanogaster.UCSC.dm6)
+             organism <- BSgenome.Dmelanogaster.UCSC.dm6
+             
+             ##Selects dm6 as the reference genome
+             ##If reference doesn't exist within package directory, create one
+             if (dir.exists(paste0(find.package("Exvar"), "/dm6"))) {
+               refgen <- GmapGenome(organism,
+                                    directory = find.package("Exvar"))
+             } else {
+               print("Reference genome not found. Creating reference. This might take a while...")
+               refgen <- GmapGenome(organism,
+                                    directory = find.package("Exvar"),
+                                    create = TRUE)
+             }
+             output <- c()
+             output <- c()
+             for(i in bam) {
+               print(paste0("Analysing ", basename(i)))
+               if (isFALSE(file.exists(paste0(i, ".bai")))) {
+                 print("Indexing bam...")
+                 setwd(dirname(i))
+                 sortBam(i, file_path_sans_ext(i))
+                 indexBam(i)
+               } 
+               tempfolder <- paste0(dirname(i), "/temp")
+               dir.create(tempfolder)
+               vcflist <- c()
+               bpp <- BiocParallel::MulticoreParam(threads)
+               chromosomes <- seqlevels(refgen)
+               bamfl <- BamFile(i)
+               tally.Param <- TallyVariantsParam(refgen, high_base_quality = 23L, indels = TRUE)
+               print("Tallying BAM file...")
+               tallies <- tallyVariants(bamfl, tally.Param, BPPARAM = bpp)
+               gc()
+               calling.filters <- VariantCallingFilters()
+               post.filters <- VariantPostFilters()
+               print("Calling variants...")
+               snp <- callVariants(tallies, calling.filters, post.filters)
+               sampleNames(snp) <- file_path_sans_ext(dirname(i))
+               mcols(snp) <- NULL
+               print("Formatting variant information as VCF...")
+               vcf <- asVCF(snp)
+               print("Writing to VCF file...")
+               setwd(outputdir)
+               writeVcf(vcf, paste0(outputdir, "/",
+                                    basename(file_path_sans_ext(i)),
+                                    "_INDEL", ".vcf"), 
+                        index = TRUE)
+               file.remove(list.files(normalizePath(tempfolder), full.names = TRUE))
+               print(paste0("Created ", file_path_sans_ext(basename(i)), "_INDEL", ".vcf.bgz"))
+               file.remove(normalizePath(tempfolder))
+               gc()
+               setwd(wd)
+               append(output, paste0(outputdir, "/", 
+                                     file_path_sans_ext(basename(i)),
+                                     "_INDEL", ".vcf.bgz"))
+             }
+           },
+           "6"={
+             ##Danio rerio danRer11
+             library(BSgenome.Drerio.UCSC.danRer11)
+             organism <- BSgenome.Drerio.UCSC.danRer11
+             
+             ##Selects danRer11 as the reference genome
+             ##If reference doesn't exist within package directory, create one
+             if (dir.exists(paste0(find.package("Exvar"), "/danRer11"))) {
+               refgen <- GmapGenome(organism,
+                                    directory = find.package("Exvar"))
+             } else {
+               print("Reference genome not found. Creating reference. This might take a while...")
+               refgen <- GmapGenome(organism,
+                                    directory = find.package("Exvar"),
+                                    create = TRUE)
+             }
+             output <- c()
+             for(i in bam) {
+               print(paste0("Analysing ", basename(i)))
+               if (isFALSE(file.exists(paste0(i, ".bai")))) {
+                 print("Indexing bam...")
+                 setwd(dirname(i))
+                 sortBam(i, file_path_sans_ext(i))
+                 indexBam(i)
+               } 
+               tempfolder <- paste0(dirname(i), "/temp")
+               dir.create(tempfolder)
+               vcflist <- c()
+               bpp <- BiocParallel::MulticoreParam(threads)
+               chromosomes <- seqlevels(refgen)
+               bamfl <- BamFile(i)
+               tally.Param <- TallyVariantsParam(refgen, high_base_quality = 23L, indels = TRUE)
+               print("Tallying BAM file...")
+               tallies <- tallyVariants(bamfl, tally.Param, BPPARAM = bpp)
+               gc()
+               calling.filters <- VariantCallingFilters()
+               post.filters <- VariantPostFilters()
+               print("Calling variants...")
+               snp <- callVariants(tallies, calling.filters, post.filters)
+               sampleNames(snp) <- file_path_sans_ext(dirname(i))
+               mcols(snp) <- NULL
+               print("Formatting variant information as VCF...")
+               vcf <- asVCF(snp)
+               print("Writing to VCF file...")
+               setwd(outputdir)
+               writeVcf(vcf, paste0(outputdir, "/",
+                                    basename(file_path_sans_ext(i)),
+                                    "_INDEL", ".vcf"), 
+                        index = TRUE)
+               file.remove(list.files(normalizePath(tempfolder), full.names = TRUE))
+               print(paste0("Created ", file_path_sans_ext(basename(i)), "_INDEL", ".vcf.bgz"))
+               file.remove(normalizePath(tempfolder))
+               gc()
+               setwd(wd)
+               append(output, paste0(outputdir, "/", 
+                                     file_path_sans_ext(basename(i)),
+                                     "_INDEL", ".vcf.bgz"))
+             }
+           },
+           "7"={
+             ##Rattus norvegicus rn5
+             library(BSgenome.Rnorvegicus.UCSC.rn5)
+             organism <- BSgenome.Rnorvegicus.UCSC.rn5
+             
+             ##Selects danRer11 as the reference genome
+             ##If reference doesn't exist within package directory, create one
+             if (dir.exists(paste0(find.package("Exvar"), "/rn5"))) {
+               refgen <- GmapGenome(organism,
+                                    directory = find.package("Exvar"))
+             } else {
+               print("Reference genome not found. Creating reference. This might take a while...")
+               refgen <- GmapGenome(organism,
+                                    directory = find.package("Exvar"),
+                                    create = TRUE)
+             }
+             output <- c()
+             for(i in bam) {
+               print(paste0("Analysing ", basename(i)))
+               if (isFALSE(file.exists(paste0(i, ".bai")))) {
+                 print("Indexing bam...")
+                 setwd(dirname(i))
+                 sortBam(i, file_path_sans_ext(i))
+                 indexBam(i)
+               } 
+               tempfolder <- paste0(dirname(i), "/temp")
+               dir.create(tempfolder)
+               vcflist <- c()
+               bpp <- BiocParallel::MulticoreParam(threads)
+               chromosomes <- seqlevels(refgen)
+               bamfl <- BamFile(i)
+               tally.Param <- TallyVariantsParam(refgen, high_base_quality = 23L, indels = TRUE)
+               print("Tallying BAM file...")
+               tallies <- tallyVariants(bamfl, tally.Param, BPPARAM = bpp)
+               gc()
+               calling.filters <- VariantCallingFilters()
+               post.filters <- VariantPostFilters()
+               print("Calling variants...")
+               snp <- callVariants(tallies, calling.filters, post.filters)
+               sampleNames(snp) <- file_path_sans_ext(dirname(i))
+               mcols(snp) <- NULL
+               print("Formatting variant information as VCF...")
+               vcf <- asVCF(snp)
+               print("Writing to VCF file...")
+               setwd(outputdir)
+               writeVcf(vcf, paste0(outputdir, "/",
+                                    basename(file_path_sans_ext(i)),
+                                    "_INDEL", ".vcf"), 
+                        index = TRUE)
+               file.remove(list.files(normalizePath(tempfolder), full.names = TRUE))
+               print(paste0("Created ", file_path_sans_ext(basename(i)), "_INDEL", ".vcf.bgz"))
+               file.remove(normalizePath(tempfolder))
+               gc()
+               setwd(wd)
+               append(output, paste0(outputdir, "/", 
+                                     file_path_sans_ext(basename(i)),
+                                     "_INDEL", ".vcf.bgz"))
+             }
+           },
+           "8"={
+             ##Saccharomyces cerevisiae sacCer3
+             library(BSgenome.Scerevisiae.UCSC.sacCer3)
+             organism <- BSgenome.Scerevisiae.UCSC.sacCer3
+             
+             ##Selects sacCer3 as the reference genome
+             ##If reference doesn't exist within package directory, create one
+             if (dir.exists(paste0(find.package("Exvar"), "/sacCer3"))) {
+               refgen <- GmapGenome(organism,
+                                    directory = find.package("Exvar"))
+             } else {
+               print("Reference genome not found. Creating reference. This might take a while...")
+               refgen <- GmapGenome(organism,
+                                    directory = find.package("Exvar"),
+                                    create = TRUE)
+             }
+             ouput <- c()
+             output <- c()
+             for(i in bam) {
+               print(paste0("Analysing ", basename(i)))
+               if (isFALSE(file.exists(paste0(i, ".bai")))) {
+                 print("Indexing bam...")
+                 setwd(dirname(i))
+                 sortBam(i, file_path_sans_ext(i))
+                 indexBam(i)
+               } 
+               tempfolder <- paste0(dirname(i), "/temp")
+               dir.create(tempfolder)
+               vcflist <- c()
+               bpp <- BiocParallel::MulticoreParam(threads)
+               chromosomes <- seqlevels(refgen)
+               bamfl <- BamFile(i)
+               tally.Param <- TallyVariantsParam(refgen, high_base_quality = 23L, indels = TRUE)
+               print("Tallying BAM file...")
+               tallies <- tallyVariants(bamfl, tally.Param, BPPARAM = bpp)
+               gc()
+               calling.filters <- VariantCallingFilters()
+               post.filters <- VariantPostFilters()
+               print("Calling variants...")
+               snp <- callVariants(tallies, calling.filters, post.filters)
+               sampleNames(snp) <- file_path_sans_ext(dirname(i))
+               mcols(snp) <- NULL
+               print("Formatting variant information as VCF...")
+               vcf <- asVCF(snp)
+               print("Writing to VCF file...")
+               setwd(outputdir)
+               writeVcf(vcf, paste0(outputdir, "/",
+                                    basename(file_path_sans_ext(i)),
+                                    "_INDEL", ".vcf"), 
+                        index = TRUE)
+               file.remove(list.files(normalizePath(tempfolder), full.names = TRUE))
+               print(paste0("Created ", file_path_sans_ext(basename(i)), "_INDEL", ".vcf.bgz"))
+               file.remove(normalizePath(tempfolder))
+               gc()
+               setwd(wd)
+               append(output, paste0(outputdir, "/", 
+                                     file_path_sans_ext(basename(i)),
+                                     "_INDEL", ".vcf.bgz"))
+             }
+           },
+           "9"={
+             ##Caenorhabditis elagans
+             library(BSgenome.Celegans.UCSC.ce11)
+             organism <- BSgenome.Celegans.UCSC.ce11
+             
+             ##Selects ce11 as the reference genome
+             ##If reference doesn't exist within package directory, create one
+             if (dir.exists(paste0(find.package("Exvar"), "/ce11"))) {
+               refgen <- GmapGenome(organism,
+                                    directory = find.package("Exvar"))
+             } else {
+               print("Reference genome not found. Creating reference. This might take a while...")
+               refgen <- GmapGenome(organism,
+                                    directory = find.package("Exvar"),
+                                    create = TRUE)
+             }
+             output <- c()
+             for(i in bam) {
+               print(paste0("Analysing ", basename(i)))
+               if (isFALSE(file.exists(paste0(i, ".bai")))) {
+                 print("Indexing bam...")
+                 setwd(dirname(i))
+                 sortBam(i, file_path_sans_ext(i))
+                 indexBam(i)
+               } 
+               tempfolder <- paste0(dirname(i), "/temp")
+               dir.create(tempfolder)
+               vcflist <- c()
+               bpp <- BiocParallel::MulticoreParam(threads)
+               chromosomes <- seqlevels(refgen)
+               bamfl <- BamFile(i)
+               tally.Param <- TallyVariantsParam(refgen, high_base_quality = 23L, indels = TRUE)
+               print("Tallying BAM file...")
+               tallies <- tallyVariants(bamfl, tally.Param, BPPARAM = bpp)
+               gc()
+               calling.filters <- VariantCallingFilters()
+               post.filters <- VariantPostFilters()
+               print("Calling variants...")
+               snp <- callVariants(tallies, calling.filters, post.filters)
+               sampleNames(snp) <- file_path_sans_ext(dirname(i))
+               mcols(snp) <- NULL
+               print("Formatting variant information as VCF...")
+               vcf <- asVCF(snp)
+               print("Writing to VCF file...")
+               setwd(outputdir)
+               writeVcf(vcf, paste0(outputdir, "/",
+                                    basename(file_path_sans_ext(i)),
+                                    "_INDEL", ".vcf"), 
+                        index = TRUE)
+               file.remove(list.files(normalizePath(tempfolder), full.names = TRUE))
+               print(paste0("Created ", file_path_sans_ext(basename(i)), "_INDEL", ".vcf.bgz"))
+               file.remove(normalizePath(tempfolder))
+               gc()
+               setwd(wd)
+               append(output, paste0(outputdir, "/", 
+                                     file_path_sans_ext(basename(i)),
+                                     "_INDEL", ".vcf.bgz"))
+             }
+           }
+    )
     }
   setwd(wd)
   return(output)
