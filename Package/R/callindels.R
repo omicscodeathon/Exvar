@@ -34,9 +34,10 @@ callindels <- function(bam,
   library(VariantAnnotation)
   library(BiocParallel)
   library(BiocGenerics)
-
-  ##Sets the reference genome that corresponds to the species chosen by the user
-  switch(species,
+  
+  if (mode == "y") {
+    ##Sets the reference genome that corresponds to the species chosen by the user
+    switch(species,
          "1"={
            library(BSgenome.Hsapiens.UCSC.hg19)
            library(XtraSNPlocs.Hsapiens.dbSNP144.GRCh37)
@@ -1225,7 +1226,13 @@ callindels <- function(bam,
            }
            file.remove(normalizePath(tempfolder))
          }
-  )
+  ) 
+    } else if(mode == "n") {
+    
+    }
   setwd(wd)
   return(output)
 }
+    }
+
+ 
