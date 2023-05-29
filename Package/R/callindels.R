@@ -1946,6 +1946,6 @@ callindels <- function(bam,
   setwd(wd)
   return(output)
 }
-    }
+    
 
  
