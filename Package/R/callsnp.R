@@ -1258,17 +1258,12 @@ callsnp <- function(bam,
                mcols(snp) <- NULL
                print("Formatting variant information as VCF...")
                vcf <- asVCF(snp)
-               writeVcf(vcf, paste0(tempfolder, "/",
-                                    basename(file_path_sans_ext(i)),
-                                    "_SNP", ".vcf"))
-               
-               
                vcflist <- c()
                
                writeVcf(vcf, paste0(tempfolder, "/",
                                     basename(file_path_sans_ext(i)),
                                     "_SNP", ".vcf"),
-                        index = TRUE)
+                        index = FALSE)
                vcf <- readVcf(paste0(tempfolder, "/",
                                      basename(file_path_sans_ext(i)),
                                      "_SNP", ".vcf"))
@@ -1399,11 +1394,6 @@ callsnp <- function(bam,
                
                
                vcflist <- c()
-               
-               writeVcf(vcf, paste0(tempfolder, "/",
-                                    basename(file_path_sans_ext(i)),
-                                    "_SNP", ".vcf"),
-                        index = TRUE)
                vcf <- readVcf(paste0(tempfolder, "/",
                                      basename(file_path_sans_ext(i)),
                                      "_SNP", ".vcf"))
