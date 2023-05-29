@@ -1281,11 +1281,6 @@ callindels <- function(bam,
                
                
                vcflist <- c()
-               
-               writeVcf(vcf, paste0(tempfolder, "/",
-                                    basename(file_path_sans_ext(i)),
-                                    "_INDEL", ".vcf"),
-                        index = TRUE)
                vcf <- readVcf(paste0(tempfolder, "/",
                                      basename(file_path_sans_ext(i)),
                                      "_INDEL", ".vcf"))
@@ -1428,11 +1423,6 @@ callindels <- function(bam,
                
                
                vcflist <- c()
-               
-               writeVcf(vcf, paste0(tempfolder, "/",
-                                    basename(file_path_sans_ext(i)),
-                                    "_INDEL", ".vcf"),
-                        index = TRUE)
                vcf <- readVcf(paste0(tempfolder, "/",
                                      basename(file_path_sans_ext(i)),
                                      "_INDEL", ".vcf"))
