@@ -1283,6 +1283,7 @@ callsnp <- function(bam,
                                         pattern = paste0(x, ":"))]
                  rd_chr <- rowRanges(vcf_chrom)
                  tar_chr <- as.vector(seqnames(rd_chr)@values)
+                 if (length(tar_chr) > 0) {
                  tar_chr <- gsub("chr", "", tar_chr)
                  my_snps <- snpsBySeqname(all_snps, c(tar_chr))
                  snp_ID <- data.frame(posIDX = paste0("chr",
@@ -1306,7 +1307,7 @@ callsnp <- function(bam,
                  vcfID <- merge(vcfID, matS, all.x = TRUE, all.y = TRUE)
                  vcfID <- merge(vcfID, matS, all.x = TRUE, all.y = TRUE)
                }  
-               
+               }
                print("Injecting rsIDs into VCF...")
                vcfID$chr <-  as.integer(gsub("chr", "", vcfID$chromosome))
                vcfID$chr[vcfID$chromosome == "chrX"] <- 23L
@@ -1413,6 +1414,7 @@ callsnp <- function(bam,
                                         pattern = paste0(x, ":"))]
                  rd_chr <- rowRanges(vcf_chrom)
                  tar_chr <- as.vector(seqnames(rd_chr)@values)
+                 if (length(tar_chr) > 0) {
                  tar_chr <- gsub("chr", "", tar_chr)
                  my_snps <- snpsBySeqname(all_snps, c(tar_chr))
                  snp_ID <- data.frame(posIDX = paste0("chr",
@@ -1436,7 +1438,7 @@ callsnp <- function(bam,
                  vcfID <- merge(vcfID, matS, all.x = TRUE, all.y = TRUE)
                  vcfID <- merge(vcfID, matS, all.x = TRUE, all.y = TRUE)
                }  
-               
+               }
                print("Injecting rsIDs into VCF...")
                vcfID$chr <-  as.integer(gsub("chr", "", vcfID$chromosome))
                vcfID$chr[vcfID$chromosome == "chrX"] <- 23L
