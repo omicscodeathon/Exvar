@@ -297,6 +297,7 @@ callindels <- function(bam,
                tally.Param <- TallyVariantsParam(refgen, high_base_quality = 23L,
                                                  mask = gr, indels = TRUE)
                print("Tallying BAM file...")
+               skip_to_next <- FALSE
                tryCatch(
                  {
                tallies <- tallyVariants(bamfl, tally.Param, BPPARAM = bpp)
