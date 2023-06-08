@@ -302,8 +302,9 @@ callindels <- function(bam,
                tallies <- tallyVariants(bamfl, tally.Param, BPPARAM = bpp)
                    }, error = function(e) {
                    print(paste0("Failed to tally chromosome ", basename(file_path_sans_ext(bam)), "."))
-                   next
+                   skip_to_next <- TRUE
                    })
+               if (skip_to_next == TRUE) {next}
                gc()
                calling.filters <- VariantCallingFilters()
                post.filters <- VariantPostFilters()
