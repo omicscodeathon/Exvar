@@ -241,6 +241,7 @@ processfastq <- function(file = list_files_with_exts(dir = dir,
       bamfl <- as(output, "BamFile")
       append(bams, bamfl)
       gc()
+      setwd(wd)
     }
   } else {
     inputFastq <- file
@@ -287,6 +288,7 @@ processfastq <- function(file = list_files_with_exts(dir = dir,
       bamfl <- as(output, "BamFile") 
       append(bams, bamfl)
       gc()
+      setwd(wd)
     }
   }
   setwd(wd)
