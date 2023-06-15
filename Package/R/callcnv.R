@@ -230,7 +230,7 @@ callcnv <- function(controldir,
   print("Control")
   control <- countBamListInGRanges(countWindows = countWindows,
                                    bam.files = control_bamfl, 
-                                   read.width = FALSE)
+                                   read.width = 200)
   print("Experiment")
   experiment <- countBamListInGRanges(countWindows = countWindows,
                                       bam.files = experiment_bamfl, 
