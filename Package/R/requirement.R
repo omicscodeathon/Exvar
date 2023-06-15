@@ -64,6 +64,7 @@ requirement <- function(){
            if (!require("BSgenome.Hsapiens.UCSC.hg38")) BiocManager::install("BSgenome.Hsapiens.UCSC.hg38")
            if (!require("org.Hs.eg.db")) BiocManager::install("org.Hs.eg.db")
            if (!require("TxDb.Hsapiens.UCSC.hg19.knownGene")) BiocManager::install("TxDb.Hsapiens.UCSC.hg19.knownGene")
+            if (!require("TxDb.Hsapiens.UCSC.hg38.knownGene")) BiocManager::install("TxDb.Hsapiens.UCSC.hg38.knownGene")
            if (!require("SNPlocs.Hsapiens.dbSNP144.GRCh37")) BiocManager::install("SNPlocs.Hsapiens.dbSNP144.GRCh37")
            if (!require("XtraSNPlocs.Hsapiens.dbSNP144.GRCh37")) BiocManager::install("XtraSNPlocs.Hsapiens.dbSNP144.GRCh37")
            if (!require("SNPlocs.Hsapiens.dbSNP151.GRCh38")) BiocManager::install("SNPlocs.Hsapiens.dbSNP151.GRCh38")
