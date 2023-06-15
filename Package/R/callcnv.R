@@ -42,8 +42,8 @@ callcnv <- function(controldir,
   switch(species,
          "1"={
            ##Homo sapiens hg19
-           library(BSgenome.Hsapiens.UCSC.hg19)
-           organism <- BSgenome.Hsapiens.UCSC.hg19
+           library(TxDb.Hsapiens.UCSC.hg19.knownGene)
+           bed <- TxDb.Hsapiens.UCSC.hg19.knownGene
          
              bedname <- paste0(metadata(bed)[metadata(bed)$name == "Genome", 2], ".bed")
     if (file.exists(bedname)){
@@ -59,8 +59,8 @@ callcnv <- function(controldir,
          },
          "2"={
            ##Homo sapiens hg38
-           library(BSgenome.Hsapiens.UCSC.hg38)
-           organism <- BSgenome.Hsapiens.UCSC.hg38
+           library(TxDb.Hsapiens.UCSC.hg38.knownGene)
+           bed <- TxDb.Hsapiens.UCSC.hg38.knownGene
            
              bedname <- paste0(metadata(bed)[metadata(bed)$name == "Genome", 2], ".bed")
     if (file.exists(bedname)){
@@ -76,8 +76,8 @@ callcnv <- function(controldir,
          },
          "3"={
            ##Mus musculus mm10
-           library(BSgenome.Mmusculus.UCSC.mm10)
-           organism <- BSgenome.Mmusculus.UCSC.mm10
+           library(TxDb.Mmusculus.UCSC.mm10.knownGene)
+           bed <- TxDb.Mmusculus.UCSC.mm10.knownGene
          
              bedname <- paste0(metadata(bed)[metadata(bed)$name == "Genome", 2], ".bed")
     if (file.exists(bedname)){
@@ -93,8 +93,8 @@ callcnv <- function(controldir,
          },
          "4"={
            ##Arabidopsis thaliana TAIR9
-           library(BSgenome.Athaliana.TAIR.TAIR9)
-           organism <- BSgenome.Athaliana.TAIR.TAIR9
+           library(TxDb.Athaliana.BioMart.plantsmart28)
+           bed <- TxDb.Athaliana.BioMart.plantsmart28
          
              bedname <- paste0(metadata(bed)[metadata(bed)$name == "Genome", 2], ".bed")
     if (file.exists(bedname)){
@@ -110,8 +110,8 @@ callcnv <- function(controldir,
          },
          "5"={
            ##Drosophilia melanogaster dm6
-           library(BSgenome.Dmelanogaster.UCSC.dm6)
-           organism <- BSgenome.Dmelanogaster.UCSC.dm6
+           library(TxDb.Dmelanogaster.UCSC.dm6.ensGene)
+           bed <- TxDb.Dmelanogaster.UCSC.dm6.ensGene
          
              bedname <- paste0(metadata(bed)[metadata(bed)$name == "Genome", 2], ".bed")
     if (file.exists(bedname)){
@@ -127,8 +127,8 @@ callcnv <- function(controldir,
          },
          "6"={
            ##Danio rerio danRer11
-           library(BSgenome.Drerio.UCSC.danRer11)
-           organism <- BSgenome.Drerio.UCSC.danRer11
+           library(TxDb.Drerio.UCSC.danRer11.refGene)
+           bed <- TxDb.Drerio.UCSC.danRer11.refGene
          
              bedname <- paste0(metadata(bed)[metadata(bed)$name == "Genome", 2], ".bed")
     if (file.exists(bedname)){
@@ -144,8 +144,8 @@ callcnv <- function(controldir,
          },
          "7"={
            ##Rattus norvegicus rn5
-           library(BSgenome.Rnorvegicus.UCSC.rn5)
-           organism <- BSgenome.Rnorvegicus.UCSC.rn5
+           library(TxDb.Rnorvegicus.UCSC.rn5.refGene)
+           bed <- TxDb.Rnorvegicus.UCSC.rn5.refGene
          
              bedname <- paste0(metadata(bed)[metadata(bed)$name == "Genome", 2], ".bed")
     if (file.exists(bedname)){
@@ -161,8 +161,8 @@ callcnv <- function(controldir,
          },
          "8"={
            ##Saccharomyces cerevisiae sacCer3
-           library(BSgenome.Scerevisiae.UCSC.sacCer3)
-           organism <- BSgenome.Scerevisiae.UCSC.sacCer3
+           library(TxDb.Scerevisiae.UCSC.sacCer3.sgdGene)
+           bed <- TxDb.Scerevisiae.UCSC.sacCer3.sgdGene
          
              bedname <- paste0(metadata(bed)[metadata(bed)$name == "Genome", 2], ".bed")
     if (file.exists(bedname)){
@@ -178,8 +178,8 @@ callcnv <- function(controldir,
          },
          "9"={
            ##Caenorhabditis elagans
-           library(BSgenome.Celegans.UCSC.ce11)
-           organism <- BSgenome.Celegans.UCSC.ce11
+           library(TxDb.Celegans.UCSC.ce11.refGene)
+           bed <- TxDb.Celegans.UCSC.ce11.refGene
          
              bedname <- paste0(metadata(bed)[metadata(bed)$name == "Genome", 2], ".bed")
     if (file.exists(bedname)){
