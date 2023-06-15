@@ -224,17 +224,21 @@ callcnv <- function(controldir,
   ##The results are stored in a dataframe list with each index corresponding to
   ##each sample
   ##Control samples are excluded
+  print("Getting gene counts...")
   a <- BamFile(experiment_bamfl[1])
   countWindows <- countWindows[countWindows$chromosome == seqlevels(a),]
+  print("Control")
   control <- countBamListInGRanges(countWindows = countWindows,
                                    bam.files = control_bamfl, 
                                    read.width = FALSE)
+  print("Experiment")
   experiment <- countBamListInGRanges(countWindows = countWindows,
                                       bam.files = experiment_bamfl, 
                                       read.width = FALSE)
   index <- length(colnames(elementMetadata(experiment)))
   elementMetadata(experiment) <- cbind(elementMetadata(experiment),
                                        elementMetadata(control))
+  print("Comparing copy numbers...")
   resultlist <- runPanelcnMops(experiment, 1:index,
                                countWindows = countWindows)
   sampleNames <- colnames(elementMetadata(experiment))
@@ -244,6 +248,7 @@ callcnv <- function(controldir,
   
   ##Creates a CSV file containing the copy number counts of all the samples
   ##CNVRanger has NE_id instead of sample_ID which is more generic
+  print("Formatting results...")
   CNV_calls <- data.frame()
   for (data in resulttable) {
     data$Sample <- gsub("\\..*","", data$Sample)
@@ -259,6 +264,7 @@ callcnv <- function(controldir,
   }
   
   setwd(outputdir)
+  print("Writing copy number variation to file...")
   write.csv(CNV_calls, "Copy Number Calls.csv", row.names = FALSE)
   CNV <- read.csv("Copy Number Calls.csv")
   setwd(wd)
