@@ -15,10 +15,7 @@
 #' @return A data frame containing copy number calls.
 #' @export
 callcnv <- function(controldir,
-                    control = NULL,
                     experimentdir,
-                    experiment = NULL,
-                    bed,
                     outputdir = getwd()) {
   cat(paste0("These are the species currently supported by Exvar: \n",
              "[1] Homo sapiens (hg19) \n",
