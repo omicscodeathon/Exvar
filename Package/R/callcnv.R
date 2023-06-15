@@ -26,14 +26,8 @@ callcnv <- function(controldir,
   library(Rsamtools)
   
   wd <- getwd()
-  if (class(bed) == "character") {
-    if (file.exists(bed)){
-      countWindows <- getWindows(bed)
-    } else {
-      stop("BED file not found.")
-    } 
-  } else if (class(bed) == "TxDb") {
-    bedname <- paste0(metadata(bed)[metadata(bed)$name == "Genome", 2], ".bed")
+
+  bedname <- paste0(metadata(bed)[metadata(bed)$name == "Genome", 2], ".bed")
     if (file.exists(bedname)){
       countWindows <- getWindows(bedname)
     } else {
@@ -44,8 +38,6 @@ callcnv <- function(controldir,
       } else {
         stop("BED file required to continue.")
       }
-    }
-  }
   
   ##Labels the folder that contains the sample folders under the path parameter
   control_samples <- list.dirs(path = controldir,
