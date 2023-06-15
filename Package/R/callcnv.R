@@ -56,6 +56,7 @@ callcnv <- function(controldir,
       } else {
         stop("BED file required to continue.")
       }
+      }
          },
          "2"={
            ##Homo sapiens hg38
@@ -72,6 +73,7 @@ callcnv <- function(controldir,
         countWindows <- getWindows(bedname)
       } else {
         stop("BED file required to continue.")
+      }
       }
          },
          "3"={
@@ -90,6 +92,7 @@ callcnv <- function(controldir,
       } else {
         stop("BED file required to continue.")
       }
+      }
          },
          "4"={
            ##Arabidopsis thaliana TAIR9
@@ -106,6 +109,7 @@ callcnv <- function(controldir,
         countWindows <- getWindows(bedname)
       } else {
         stop("BED file required to continue.")
+      }
       }
          },
          "5"={
@@ -124,6 +128,7 @@ callcnv <- function(controldir,
       } else {
         stop("BED file required to continue.")
       }
+      }
          },
          "6"={
            ##Danio rerio danRer11
@@ -140,6 +145,7 @@ callcnv <- function(controldir,
         countWindows <- getWindows(bedname)
       } else {
         stop("BED file required to continue.")
+      }
       }
          },
          "7"={
@@ -158,6 +164,7 @@ callcnv <- function(controldir,
       } else {
         stop("BED file required to continue.")
       }
+      }
          },
          "8"={
            ##Saccharomyces cerevisiae sacCer3
@@ -175,6 +182,7 @@ callcnv <- function(controldir,
       } else {
         stop("BED file required to continue.")
       }
+      }
          },
          "9"={
            ##Caenorhabditis elagans
@@ -191,6 +199,7 @@ callcnv <- function(controldir,
         countWindows <- getWindows(bedname)
       } else {
         stop("BED file required to continue.")
+      }
       }
          }
 )
