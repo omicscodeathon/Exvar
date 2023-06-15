@@ -26,8 +26,14 @@ callcnv <- function(controldir,
   library(Rsamtools)
   
   wd <- getwd()
-
-  bedname <- paste0(metadata(bed)[metadata(bed)$name == "Genome", 2], ".bed")
+##Sets the reference genome that corresponds to the species chosen by the user
+  switch(species,
+         "1"={
+           ##Homo sapiens hg19
+           library(BSgenome.Hsapiens.UCSC.hg19)
+           organism <- BSgenome.Hsapiens.UCSC.hg19
+         
+             bedname <- paste0(metadata(bed)[metadata(bed)$name == "Genome", 2], ".bed")
     if (file.exists(bedname)){
       countWindows <- getWindows(bedname)
     } else {
@@ -38,6 +44,144 @@ callcnv <- function(controldir,
       } else {
         stop("BED file required to continue.")
       }
+         },
+         "2"={
+           ##Homo sapiens hg38
+           library(BSgenome.Hsapiens.UCSC.hg38)
+           organism <- BSgenome.Hsapiens.UCSC.hg38
+           
+             bedname <- paste0(metadata(bed)[metadata(bed)$name == "Genome", 2], ".bed")
+    if (file.exists(bedname)){
+      countWindows <- getWindows(bedname)
+    } else {
+      outcome <- readline("BED file does not exist. Create one? [y/n]")
+      if (outcome == "y") {
+        export.bed(bed, bedname)
+        countWindows <- getWindows(bedname)
+      } else {
+        stop("BED file required to continue.")
+      }
+         },
+         "3"={
+           ##Mus musculus mm10
+           library(BSgenome.Mmusculus.UCSC.mm10)
+           organism <- BSgenome.Mmusculus.UCSC.mm10
+         
+             bedname <- paste0(metadata(bed)[metadata(bed)$name == "Genome", 2], ".bed")
+    if (file.exists(bedname)){
+      countWindows <- getWindows(bedname)
+    } else {
+      outcome <- readline("BED file does not exist. Create one? [y/n]")
+      if (outcome == "y") {
+        export.bed(bed, bedname)
+        countWindows <- getWindows(bedname)
+      } else {
+        stop("BED file required to continue.")
+      }
+         },
+         "4"={
+           ##Arabidopsis thaliana TAIR9
+           library(BSgenome.Athaliana.TAIR.TAIR9)
+           organism <- BSgenome.Athaliana.TAIR.TAIR9
+         
+             bedname <- paste0(metadata(bed)[metadata(bed)$name == "Genome", 2], ".bed")
+    if (file.exists(bedname)){
+      countWindows <- getWindows(bedname)
+    } else {
+      outcome <- readline("BED file does not exist. Create one? [y/n]")
+      if (outcome == "y") {
+        export.bed(bed, bedname)
+        countWindows <- getWindows(bedname)
+      } else {
+        stop("BED file required to continue.")
+      }
+         },
+         "5"={
+           ##Drosophilia melanogaster dm6
+           library(BSgenome.Dmelanogaster.UCSC.dm6)
+           organism <- BSgenome.Dmelanogaster.UCSC.dm6
+         
+             bedname <- paste0(metadata(bed)[metadata(bed)$name == "Genome", 2], ".bed")
+    if (file.exists(bedname)){
+      countWindows <- getWindows(bedname)
+    } else {
+      outcome <- readline("BED file does not exist. Create one? [y/n]")
+      if (outcome == "y") {
+        export.bed(bed, bedname)
+        countWindows <- getWindows(bedname)
+      } else {
+        stop("BED file required to continue.")
+      }
+         },
+         "6"={
+           ##Danio rerio danRer11
+           library(BSgenome.Drerio.UCSC.danRer11)
+           organism <- BSgenome.Drerio.UCSC.danRer11
+         
+             bedname <- paste0(metadata(bed)[metadata(bed)$name == "Genome", 2], ".bed")
+    if (file.exists(bedname)){
+      countWindows <- getWindows(bedname)
+    } else {
+      outcome <- readline("BED file does not exist. Create one? [y/n]")
+      if (outcome == "y") {
+        export.bed(bed, bedname)
+        countWindows <- getWindows(bedname)
+      } else {
+        stop("BED file required to continue.")
+      }
+         },
+         "7"={
+           ##Rattus norvegicus rn5
+           library(BSgenome.Rnorvegicus.UCSC.rn5)
+           organism <- BSgenome.Rnorvegicus.UCSC.rn5
+         
+             bedname <- paste0(metadata(bed)[metadata(bed)$name == "Genome", 2], ".bed")
+    if (file.exists(bedname)){
+      countWindows <- getWindows(bedname)
+    } else {
+      outcome <- readline("BED file does not exist. Create one? [y/n]")
+      if (outcome == "y") {
+        export.bed(bed, bedname)
+        countWindows <- getWindows(bedname)
+      } else {
+        stop("BED file required to continue.")
+      }
+         },
+         "8"={
+           ##Saccharomyces cerevisiae sacCer3
+           library(BSgenome.Scerevisiae.UCSC.sacCer3)
+           organism <- BSgenome.Scerevisiae.UCSC.sacCer3
+         
+             bedname <- paste0(metadata(bed)[metadata(bed)$name == "Genome", 2], ".bed")
+    if (file.exists(bedname)){
+      countWindows <- getWindows(bedname)
+    } else {
+      outcome <- readline("BED file does not exist. Create one? [y/n]")
+      if (outcome == "y") {
+        export.bed(bed, bedname)
+        countWindows <- getWindows(bedname)
+      } else {
+        stop("BED file required to continue.")
+      }
+         },
+         "9"={
+           ##Caenorhabditis elagans
+           library(BSgenome.Celegans.UCSC.ce11)
+           organism <- BSgenome.Celegans.UCSC.ce11
+         
+             bedname <- paste0(metadata(bed)[metadata(bed)$name == "Genome", 2], ".bed")
+    if (file.exists(bedname)){
+      countWindows <- getWindows(bedname)
+    } else {
+      outcome <- readline("BED file does not exist. Create one? [y/n]")
+      if (outcome == "y") {
+        export.bed(bed, bedname)
+        countWindows <- getWindows(bedname)
+      } else {
+        stop("BED file required to continue.")
+      }
+         }
+)
   
   ##Labels the folder that contains the sample folders under the path parameter
   control_samples <- list.dirs(path = controldir,
