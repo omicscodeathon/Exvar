@@ -229,13 +229,11 @@ callcnv <- function(controldir,
   countWindows <- countWindows[countWindows$chromosome == seqlevels(a),]
   print("Control")
   control <- countBamListInGRanges(countWindows = countWindows,
-                                   bam.files = control_bamfl, 
-                                   read.width = 200, min.mapq = 0)
+                                   bam.files = control_bamfl)
   #control <- getReadCountsFromBAM(control_bamfl, basename(control_bamfl), seqlevels(a), parallel = 10, min.mapq = 20, read.width = 200)
   print("Experiment")
   experiment <- countBamListInGRanges(countWindows = countWindows,
-                                      bam.files = experiment_bamfl, 
-                                      read.width = FALSE)
+                                      bam.files = experiment_bamfl)
   #experiment <- getReadCountsFromBAM(experiment_bamfl, basename(experiment_bamfl), seqlevels(a), parallel = 10, min.mapq = 20, read.width = 200)
   index <- length(colnames(elementMetadata(experiment)))
   elementMetadata(experiment) <- cbind(elementMetadata(experiment),
