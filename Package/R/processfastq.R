@@ -268,7 +268,7 @@ processfastq <- function(file = list_files_with_exts(dir = dir,
                             outputFastq = 
                               paste0(foldernames[x], 
                                      '_quality_checked'),
-                            thread = threads)
+                            thread = threads, maxReadLength = 200L)
       QC <- qcSummary(json_report)
       write.csv(QC, "QC_summary.csv")
       gc()
