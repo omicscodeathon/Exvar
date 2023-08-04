@@ -86,11 +86,11 @@ Artistic license 2.0
 
 ## Citation
 
-Hiba Ben Aribi, Imraan Dixon , Najla Abassi, and  Olaitan I. Awe. Exvar: An R Package for Gene Expression And Genetic Variation Data Analysis And Visualization. (2023) https://github.com/omicscodeathon/Exvar
+Ben Aribi H., Dixon I., Abassi N., and  Awe O. I.(2023). Exvar: An R Package for Gene Expression And Genetic Variation Data Analysis And Visualization.  https://github.com/omicscodeathon/Exvar
 
 ## Contributors
 
-   - Hiba Ben Aribi, Faculty of Sciences of Tunis, University of Tunis El Manar, Tunis, Tunisia. ![Linkdin URL][(https://www.linkedin.com/in/hiba-ben-aribi-b29634239/)](https://www.linkedin.com/in/hiba-ben-aribi-b29634239/)
+   - Hiba Ben Aribi, Faculty of Sciences of Tunis, University of Tunis El Manar, Tunis, Tunisia. 
 
    - Imraan Dixon, Faculty of Health Sciences, University of Cape Town, Cape Town, South Africa.
 
