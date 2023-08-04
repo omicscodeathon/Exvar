@@ -90,7 +90,7 @@ Hiba Ben Aribi, Imraan Dixon , Najla Abassi, and  Olaitan I. Awe. Exvar: An R Pa
 
 ## Contributors
 
-   - Hiba Ben Aribi, Faculty of Sciences of Tunis, University of Tunis El Manar, Tunis, Tunisia. [![Linkdin URL](https://www.linkedin.com/in/hiba-ben-aribi-b29634239/)
+   - Hiba Ben Aribi, Faculty of Sciences of Tunis, University of Tunis El Manar, Tunis, Tunisia. [![Linkdin URL][(https://www.linkedin.com/in/hiba-ben-aribi-b29634239/)](https://www.linkedin.com/in/hiba-ben-aribi-b29634239/)
 
    - Imraan Dixon, Faculty of Health Sciences, University of Cape Town, Cape Town, South Africa.
 
