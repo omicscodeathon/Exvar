@@ -28,7 +28,7 @@ It is developed to facilitate and minimize the skills required for the genetic e
 
 It could be used to analyze data from eight species including:
 
-    * Homo Sapiens
+    * Homo Sapiens (19, 37, and 38)
 
     * Mus Musculus
 
@@ -50,11 +50,11 @@ The package could be installed as follows:
 
     install.packages("devtools")
 
-    Library(devtools)
+   lLibrary(devtools)
 
     devtools::install_github("omicscodeathon/Exvar/Package")
 
-    Library(Exvar)
+   lLibrary(Exvar)
 
 ## Functions
 
@@ -83,9 +83,6 @@ The package could be installed as follows:
 
 Artistic license 2.0
 
-## Contact
-
-For issues reporting, please send an email to : hiba.bioinf@gmail.com
 
 ## Citation
 
@@ -93,7 +90,7 @@ Hiba Ben Aribi, Imraan Dixon , Najla Abassi, and  Olaitan I. Awe. Exvar: An R Pa
 
 ## Contributors
 
-   - Hiba Ben Aribi, Faculty of Sciences of Tunis, University of Tunis El Manar, Tunis, Tunisia.
+   - Hiba Ben Aribi, Faculty of Sciences of Tunis, University of Tunis El Manar, Tunis, Tunisia. [![Linkdin](https://www.linkedin.com/in/hiba-ben-aribi-b29634239/)
 
    - Imraan Dixon, Faculty of Health Sciences, University of Cape Town, Cape Town, South Africa.
 
