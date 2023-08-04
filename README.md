@@ -50,11 +50,11 @@ The package could be installed as follows:
 
     install.packages("devtools")
 
-   lLibrary(devtools)
+    library(devtools)
 
     devtools::install_github("omicscodeathon/Exvar/Package")
 
-   lLibrary(Exvar)
+    library(Exvar)
 
 ## Functions
 
