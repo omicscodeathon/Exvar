@@ -17,20 +17,25 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
 Depends: 
+    AnnotationDbi,
+    BiocGenerics,
     BiocParallel,
     DESeq2,
     dplyr,
     GenomeInfoDb,
     GenomicAlignments,
     GenomicFeatures,
+    GenomicRanges,
     gmapR,
     panelcn.mops,
     R.utils,
     Rfastp,
     Rsamtools,
+    rtracklayer,
+    SummarizedExperiment,
     tools,
     VariantAnnotation,
-    VariantTools
+    VariantTools,
 Suggests: 
     BSgenome.Hsapiens.UCSC.hg19,
     org.Hs.eg.db,
