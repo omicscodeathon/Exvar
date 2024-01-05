@@ -19,14 +19,7 @@ callcnv <- function(controldir,
                     outputdir = getwd()) {
   cat(paste0("These are the species currently supported by Exvar: \n",
              "[1] Homo sapiens (hg19) \n",
-             "[2] Homo sapiens (hg38) \n", 
-             "[3] Mus musculus \n",
-             "[4] Arabidopsis thaliana \n",
-             "[5] Drosophila melanogaster \n",
-             "[6] Danio rerio \n",
-             "[7] Rattus norvegicus \n",
-             "[8] Saccharomyces cerevisiae \n",
-             "[9] Caenorhabditis elegans \n"))
+             "[2] Homo sapiens (hg38) \n"))
   species <- readline("Type the number of the species that you would like to use as a reference: ")
   
   library(panelcn.mops)
