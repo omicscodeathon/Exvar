@@ -69,6 +69,7 @@ The package could be installed as follows:
 
     library(Exvar)
 
+
 ## Functions
 
 The package consists of 6 data analysis functions (processfastq(); counts(); expression(); callsnp(); callcnv(); and callindel()), 3 data visualization functions (vizexp(), vizsnp(), and vizcnv()), and a requirement() function is also provided to install all the dependencies. The list of functions and their roles are represented in Table 1.
@@ -87,10 +88,20 @@ The package consists of 6 data analysis functions (processfastq(); counts(); exp
 | `vizcnv()`      | Analyze and visualize CNV data          | CSV file                 | Interactive interface       |
 
 
+#### Operating system : 
+- Linux for the processfastq(), counts(), expression(), callsnp(), callcnv(), and callindel() functions
+  
+- The visualization functions vizexp(), vizsnp(), and vizcnv() are platform-independent.
+
+#### Programming language: R 4.2.1
+
+#### Requirements: 
+The RAM and CPU requirements differ according to the analyzed data size. For Human whole genome data 16  CPUs and  65 GB RAM are required.
 
 ## License  
 
 Artistic license 2.0
+Any restrictions to use by non-academics: None.
 
 ## Citation
 
