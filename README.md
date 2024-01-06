@@ -44,6 +44,19 @@ It could be used to analyze data from eight species including:
 
     * and Saccharomyces Cerevisiae.
 
+### Limitations:
+
+| Function/Species           | processfastq | counts | expression | callsnp | callcnv | callindel | vizexp | vizsnp | vizcnv |
+|-----------------------------|--------------|--------|------------|---------|---------|-----------|--------|--------|--------|
+| **Homo Sapiens**           | ✓            | ✓      | ✓          | ✓       | ✓       | ✓         | ✓      | ✓      | ✓      |
+| **Mus Musculus**           | ✓            | ✓      | ✓          | ✓       | ✗       | ✓         | ✓      | ✓      | ✓      |
+| **Arabidopsis Thaliana**   | ✓            | ✓      | ✓          | ✓       | ✗       | ✓         | ✓      | ✓      | ✓      |
+| **Drosophila Melanogaster**| ✓            | ✓      | ✓          | ✓       | ✗       | ✓         | ✓      | ✓      | ✓      |
+| **Danio rerio**            | ✓            | ✓      | ✓          | ✓       | ✗       | ✓         | ✓      | ✓      | ✓      |
+| **Rattus norvegicus**      | ✓            | ✓      | ✓          | ✓       | ✗       | ✓         | ✓      | ✓      | ✓      |
+| **Caenorhabditis elegans** | ✓            | ✓      | ✓          | ✓       | ✗       | ✓         | ✗      | ✓      | ✗      |
+| **Saccharomyces Cerevisiae**| ✓           | ✓      | ✓          | ✓       | ✗       | ✓         | ✓      | ✓      | ✓      |
+
 ## Installation
 
 The package could be installed as follows:
@@ -56,33 +69,39 @@ The package could be installed as follows:
 
     library(Exvar)
 
+
 ## Functions
 
-    - requirement() >> Install required packages
+The package consists of 6 data analysis functions (processfastq(); counts(); expression(); callsnp(); callcnv(); and callindel()), 3 data visualization functions (vizexp(), vizsnp(), and vizcnv()), and a requirement() function is also provided to install all the dependencies. The list of functions and their roles are represented in Table 1.
 
-    - processfastq() >>Preprocess fastq files
+| Function        | Role                                   | Input                    | Output                     |
+|-----------------|----------------------------------------|--------------------------|-----------------------------|
+| `requirement()` | Install required packages              | -                        | -                           |
+| `processfastq()`| Preprocess fastq files                 | Fastq files              | BAM files                   |
+| `counts()`      | Gene count analysis                    | BAM files                | CSV file                    |
+| `expression()`  | Identify DEGs                          | BAM files                | CSV file                    |
+| `callsnp()`     | SNP calling                            | BAM files                | VCF files                   |
+| `callcnv()`     | CNV calling                            | BAM files                | CSV file                    |
+| `callindel()`   | Indel calling                          | BAM files                | VCF files                   |
+| `vizexp()`      | Analyze and visualize gene expression  | CSV file                 | Interactive interface       |
+| `vizsnp()`      | Analyze and visualize SNP data          | VCF files                | Interactive interface       |
+| `vizcnv()`      | Analyze and visualize CNV data          | CSV file                 | Interactive interface       |
 
-    - counts() >> gene Count analysis
 
-    - expression() >>Identify DEGs
+#### Operating system : 
+- Linux for the processfastq(), counts(), expression(), callsnp(), callcnv(), and callindel() functions
+  
+- The visualization functions vizexp(), vizsnp(), and vizcnv() are platform-independent.
 
-    - callsnp() >> SNP calling
+#### Programming language: R 4.2.1
 
-    - callcnv() >> CNV calling
-
-    - callindel() >> Indel calling
-
-    - vizexp() >> Analyze and visualize gene expression data
-
-    - vizsnp() >> Analyze and visualize SNP data
-
-    - vizcnv() >> Analyze and visualize CNV data
-
+#### Requirements: 
+The RAM and CPU requirements differ according to the analyzed data size. For Human whole genome data 16  CPUs and  65 GB RAM are required.
 
 ## License  
 
 Artistic license 2.0
-
+Any restrictions to use by non-academics: None.
 
 ## Citation
 
