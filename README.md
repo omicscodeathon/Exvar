@@ -50,11 +50,11 @@ It could be used to analyze data from eight species including:
 |-----------------------------|--------------|--------|------------|---------|---------|-----------|--------|--------|--------|
 | **Homo Sapiens**           | ✓            | ✓      | ✓          | ✓       | ✓       | ✓         | ✓      | ✓      | ✓      |
 | **Mus Musculus**           | ✓            | ✓      | ✓          | ✓       | ✗       | ✓         | ✓      | ✓      | ✓      |
-| **Arabidopsis Thaliana**   | ✓            | ✓      | ✓          | ✓       | ✗       | ✓         | ✓      | ✓      | ✗      |
-| **Drosophila Melanogaster**| ✓            | ✓      | ✓          | ✓       | ✗       | ✓         | ✓      | ✓      | ✗      |
-| **Danio rerio**            | ✓            | ✓      | ✓          | ✓       | ✗       | ✓         | ✓      | ✓      | ✗      |
-| **Rattus norvegicus**      | ✓            | ✓      | ✓          | ✓       | ✗       | ✓         | ✓      | ✓      | ✗      |
-| **Caenorhabditis elegans** | ✓            | ✓      | ✓          | ✓       | ✗       | ✓         | ✗      | ✗      | ✗      |
+| **Arabidopsis Thaliana**   | ✓            | ✓      | ✓          | ✓       | ✗       | ✓         | ✓      | ✓      | ✓      |
+| **Drosophila Melanogaster**| ✓            | ✓      | ✓          | ✓       | ✗       | ✓         | ✓      | ✓      | ✓      |
+| **Danio rerio**            | ✓            | ✓      | ✓          | ✓       | ✗       | ✓         | ✓      | ✓      | ✓      |
+| **Rattus norvegicus**      | ✓            | ✓      | ✓          | ✓       | ✗       | ✓         | ✓      | ✓      | ✓      |
+| **Caenorhabditis elegans** | ✓            | ✓      | ✓          | ✓       | ✗       | ✓         | ✗      | ✓      | ✗      |
 | **Saccharomyces Cerevisiae**| ✓           | ✓      | ✓          | ✓       | ✗       | ✓         | ✓      | ✓      | ✓      |
 
 ## Installation
