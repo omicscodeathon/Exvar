@@ -26,16 +26,12 @@ Depends:
     GenomicAlignments,
     GenomicFeatures,
     GenomicRanges,
-    gmapR,
-    panelcn.mops,
     R.utils,
-    Rfastp,
     Rsamtools,
     rtracklayer,
     SummarizedExperiment,
     tools,
     VariantAnnotation,
-    VariantTools,
 Suggests: 
     BSgenome.Hsapiens.UCSC.hg19,
     org.Hs.eg.db,
@@ -65,4 +61,8 @@ Suggests:
     TxDb.Scerevisiae.UCSC.sacCer3.sgdGene,
     BSgenome.Celegans.UCSC.ce11,
     org.Ce.eg.db,
-    TxDb.Celegans.UCSC.ce11.refGene
+    TxDb.Celegans.UCSC.ce11.refGene,
+    gmapR,
+    panelcn.mops,
+    Rfastp,
+    VariantTools
