@@ -200,7 +200,7 @@ requirement <- function(){
            message("Checking tibble")
            if (!require("tibble")) install.packages("tibble")
            if (require("tibble")) message("tibble installed")
-           message("Packages related to variant calling are unavailable on Windows systems. For full Exvar functionality, a Linux operating system is required.")
+           message("Only packages related to visualisation functions are available for Windows. For full Exvar functionality, a Linux operating system is required.")
          },
          "Darwin"={
            message("The package require a Linux or Windows system")
