@@ -18,6 +18,10 @@ processfastq <- function(file = list_files_with_exts(dir = dir,
                             paired = FALSE, 
                             threads = 4L,
                             molecule = "RNA") {
+    if(Sys.info()[['sysname']] != "Linux"){
+    message("This function is only available on Linux.")
+    stop()
+    }
   cat(paste0("These are the species currently supported by Exvar: \n",
              "[1] Homo sapiens (hg19) \n",
              "[2] Homo sapiens (hg38) \n", 
