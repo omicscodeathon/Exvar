@@ -20,7 +20,7 @@ requirement <- function(){
   # Detect operating system
   switch(Sys.info()[['sysname']],
          "Linux"={
-           messsage("Detected operating system: Linux")
+           message("Detected operating system: Linux")
            #for all species
            message("Checking BiocManager")
            if (!require("BiocManager")) install.packages("BiocManager")
