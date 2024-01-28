@@ -7,13 +7,12 @@
 vizcnv<- function( cnvdata) {
 # specie
 cat(paste0("These are the species currently supported by ExpVar: \n",
-           "[1] Homo sapiens 38 \n",
+           "[1] Homo sapiens \n",
            "[2] Mus musculus \n",
-           "[3] Arabidopsis thaliana \n",
-           "[4] Drosophila melanogaster \n",
-           "[5] Danio rerio \n",
-           "[6] Rattus norvegicus \n",
-           "[7] Saccharomyces cerevisiae \n"))
+           "[3] Drosophila melanogaster \n",
+           "[4] Danio rerio \n",
+           "[5] Rattus norvegicus \n",
+           "[6] Saccharomyces cerevisiae \n"))
 species <- readline("Type the number of the species that you would like to use as a reference: ")
 #  load requirements
 library(shiny)
@@ -39,33 +38,27 @@ switch(species,
          sp <- "Mus musculus"
        },
        "3"={
-         library(BSgenome.Athaliana.TAIR.TAIR9)
-         genome_species <- "TAIR9"
-         sp <- "Arabidopsis thaliana"
-       },
-       "4"={
          library(BSgenome.Dmelanogaster.UCSC.dm6)
          genome_species <- "dm3"
          sp <-"Drosophila melanogaster"
        },
-       "5"={
+       "4"={
          library(BSgenome.Drerio.UCSC.danRer11)
          genome_species <- "danRer10"
          sp <- "Danio rerio"
        },
-       "6"={ # rat
+       "5"={ 
          library(BSgenome.Rnorvegicus.UCSC.rn5)
          genome_species <- "rn5"
          sp <- "Rattus norvegicus"
        },
-       "7"={
+       "6"={
          library(BSgenome.Scerevisiae.UCSC.sacCer3)
          genome_species <- "sacCer3"
          sp <-"Saccharomyces cerevisiae"
        }
 )
-  # demo
-  cnvdata
+
   #read data
   calls <- read.csv(cnvdata, as.is=TRUE)
   #run app
@@ -90,21 +83,19 @@ switch(species,
                                           choices = c("chr1", "chr2","chr3","chr4","chr5","chr6","chr7","chr8","chr9","chr10",
                                                       "chr11", "chr12","chr13","chr14","chr15","chr16","chr17","chr18",
                                                       "chr19", "chrY", "chrX")
-                                        } else if (species == "3"){
-                                          choices = c("chr1", "chr2","chr3","chr4","chr5")
                                         }
-                                        else if (species == "4"){
+                                        else if (species == "3"){
                                           choices = c("chr1", "chr2","chr3","chr4", "chrY", "chrX")
                                           
-                                        } else if (species == "5"){
+                                        } else if (species == "4"){
                                           choices = c("chr1", "chr2","chr3","chr4","chr5","chr6","chr7","chr8","chr9","chr10",
                                                       "chr11", "chr12","chr13","chr14","chr15","chr16","chr17","chr18",
                                                       "chr19", "chr23", "chr24", "chr25")
-                                        } else if (species == "6"){
+                                        } else if (species == "5"){
                                           choices = c("chr1", "chr2","chr3","chr4","chr5","chr6","chr7","chr8","chr9","chr10",
                                                       "chr11", "chr12","chr13","chr14","chr15","chr16","chr17","chr18",
                                                       "chr19", "chr20", "chrY", "chrX")
-                                        } else if (species == "7"){
+                                        } else if (species == "6"){
                                           choices = c("chr1", "chr2","chr3","chr4","chr5","chr6","chr7","chr8","chr9","chr10",
                                                       "chr11", "chr12","chr13","chr14","chr15","chr16")
                                         } ,
@@ -139,19 +130,16 @@ switch(species,
                                                       "11", "12","13","14","15","16","17","18",
                                                       "19", "Y", "X")
                                         } else if (species == "3"){
-                                          choices = c("1", "2","3","4","5")
-                                        }
-                                        else if (species == "4"){
                                           choices = c("1", "2","3","4", "Y", "X")
-                                        } else if (species == "5"){
+                                        } else if (species == "4"){
                                           choices = c("1", "2","3","4","5","6","7","8","9","10",
                                                       "11", "12","13","14","15","16","17","18",
                                                       "19", "23", "24", "25")
-                                        } else if (species == "6"){
+                                        } else if (species == "5"){
                                           choices = c("1", "2","3","4","5","6","7","8","9","10",
                                                       "11", "12","13","14","15","16","17","18",
                                                       "19", "20", "Y", "X")
-                                        } else if (species == "7"){
+                                        } else if (species == "6"){
                                           choices = c("1", "2","3","4","5","6","7","8","9","10",
                                                       "11", "12","13","14","15","16")
                                         },
@@ -185,19 +173,16 @@ switch(species,
                                                       "11", "12","13","14","15","16","17","18",
                                                       "19", "Y", "X")
                                         } else if (species == "3"){
-                                          choices = c("1", "2","3","4","5")
-                                        }
-                                        else if (species == "4"){
                                           choices = c("1", "2","3","4", "Y", "X")
-                                        } else if (species == "5"){
+                                        } else if (species == "4"){
                                           choices = c("1", "2","3","4","5","6","7","8","9","10",
                                                       "11", "12","13","14","15","16","17","18",
                                                       "19", "23", "24", "25")
-                                        } else if (species == "6"){
+                                        } else if (species == "5"){
                                           choices = c("1", "2","3","4","5","6","7","8","9","10",
                                                       "11", "12","13","14","15","16","17","18",
                                                       "19", "20", "Y", "X")
-                                        } else if (species == "7"){
+                                        } else if (species == "6"){
                                           choices = c("1", "2","3","4","5","6","7","8","9","10",
                                                       "11", "12","13","14","15","16")
                                         } else {
@@ -248,14 +233,12 @@ switch(species,
     } else if (species == "2"){
       ahEdb <- ahDb[["AH104895"]]
     } else if (species == "3"){
-      ahEdb <- ahDb[[""]]## no data
-    } else if (species == "4"){
       ahEdb <- ahDb[["AH104833"]]
-    } else if (species == "5"){
+    } else if (species == "4"){
       ahEdb <- ahDb[["AH104837"]]
-    } else if (species == "6"){
+    } else if (species == "5"){
       ahEdb <- ahDb[["AH104966"]]
-    } else if (species == "7"){
+    } else if (species == "6"){
       ahEdb <- ahDb[["AH104972"]]
     }
     bt.genes <- ensembldb::genes(ahEdb)
@@ -296,7 +279,7 @@ switch(species,
       },
       content = function(file){
         png(file)
-        plotRecurrentRegions(cnvrs, genome =genome_species, chr = input$chrI )   ###specie
+        plotRecurrentRegions(cnvrs, genome =genome_species, chr = input$chrI )   
         dev.off()
       })
     #
