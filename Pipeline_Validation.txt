@@ -20,4 +20,4 @@ Pipeline validation was performed on publicly available datasets on SRA database
 
 ## Note : 
 
-All functions were validated using the analyzed data, except the CNVviz() function which was validated using simulation data for species other than Homo Sapiens.
+All functions were validated using the analyzed data, except the vizcnv() function which was validated using simulation data for species other than Homo Sapiens.
