@@ -1,4 +1,4 @@
-# Exvar: A gene expression and genetic variation data analysis and visualization R package
+# Exvar: An R Package for Gene Expression and Genetic Variation Data Analysis and Visualization
 
 ## Table of Contents
 1. [Motivation](#Motivation)
@@ -88,14 +88,14 @@ The package consists of 6 data analysis functions (processfastq(); counts(); exp
 | `vizcnv()`      | Analyze and visualize CNV data          | CSV file                 | Interactive interface       |
 
 
-#### Operating system : 
+#### Operating system :
 - Linux for the processfastq(), counts(), expression(), callsnp(), callcnv(), and callindel() functions
-  
+
 - The visualization functions vizexp(), vizsnp(), and vizcnv() are platform-independent.
 
 #### Programming language: R 4.2.1
 
-#### Requirements: 
+#### Requirements:
 The RAM and CPU requirements differ according to the analyzed data size. For Human whole genome data 16  CPUs and  65 GB RAM are required.
 
 ## License  
@@ -109,7 +109,7 @@ Ben Aribi H., Dixon I., Abassi N., and  Awe O. I.(2023). Exvar: An R Package for
 
 ## Contributors
 
-   - Hiba Ben Aribi, Faculty of Sciences of Tunis, University of Tunis El Manar, Tunis, Tunisia. 
+   - Hiba Ben Aribi, Faculty of Sciences of Tunis, University of Tunis El Manar, Tunis, Tunisia.
 
    - Imraan Dixon, Faculty of Health Sciences, University of Cape Town, Cape Town, South Africa.
 
