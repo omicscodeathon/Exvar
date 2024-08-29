@@ -1,5 +1,8 @@
 # Exvar: An R Package for Gene Expression and Genetic Variation Data Analysis and Visualization
 
+[![License: Artistic-2.0](https://img.shields.io/badge/License-Artistic_2.0-0298c3.svg)](https://opensource.org/licenses/Artistic-2.0)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13459761.svg)](https://doi.org/10.5281/zenodo.13459761)
+
 <p align="center">
   <img src="https://raw.githubusercontent.com/omicscodeathon/Exvar/main/logo.png" alt="exvar logo" width="300"  />
 </p>
@@ -110,7 +113,7 @@ Any restrictions to use by non-academics: None.
 
 ## Citation
 
-Ben Aribi H., Dixon I., Abassi N., and  Awe O. I.(2023). Exvar: An R Package for Gene Expression And Genetic Variation Data Analysis And Visualization.  https://github.com/omicscodeathon/Exvar
+Ben Aribi, H., Dixon, I., Abassi, N., & Awe, O. I. (2024). Exvar: An R Package for Gene Expression and Genetic Variation Data Analysis and Visualization. Zenodo. https://doi.org/10.5281/zenodo.13459761
 
 ## Contributors
 
