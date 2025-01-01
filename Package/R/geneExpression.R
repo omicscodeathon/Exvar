@@ -1,3 +1,4 @@
+
 #' Analyse differential gene expression
 #' 
 #' This function analyses differentially expressed genes between sample groups.
@@ -50,8 +51,8 @@ geneExpression <- function(dir = getwd(),
            organism <- BSgenome.Hsapiens.UCSC.hg19
            
            wd <- getwd()
-           bpp = MulticoreParam(threads)
-           geneExons <- exonsBy(TxDb.Hsapiens.UCSC.hg19.knownGene, by = "gene")
+           bpp = BiocParallel::MulticoreParam(threads)
+           geneExons <- GenomicFeatures::exonsBy(TxDb.Hsapiens.UCSC.hg19.knownGene, by = "gene")
            if (is.null(groups)) {
              folders <- list.dirs(path = dir, full.names = TRUE, recursive = FALSE)
            } else {
@@ -73,7 +74,7 @@ geneExpression <- function(dir = getwd(),
                sampletype <- basename(dirname(sampledir[c(i)]))
                groupNames <- append(groupNames, sampletype)
                print(tail(groupNames, n = 1L))
-               bam <- list_files_with_exts(dir = sampledir[c(i)], exts = "bam")
+               bam <- tools::list_files_with_exts(dir = sampledir[c(i)], exts = "bam")
                bamFilesToCount <- append(bamFilesToCount, bam)
                names <- basename(dirname(bam))
                samples <- append(samples, names)
@@ -88,20 +89,20 @@ geneExpression <- function(dir = getwd(),
            
            ##A DESeq object is created from the gene counts
            names(bamFilesToCount) <- samples
-           myBams <- BamFileList(bamFilesToCount, yieldSize = 10000, asMates = paired)
-           geneCounts <- summarizeOverlaps(geneExons, myBams, ignore.strand = TRUE,
+           myBams <- Rsamtools::BamFileList(bamFilesToCount, yieldSize = 10000, asMates = paired)
+           geneCounts <- GenomicAlignments::summarizeOverlaps(geneExons, myBams, ignore.strand = TRUE,
                                            BPPARAM = bpp, singleEnd = isFALSE(paired))
            metaData <- data.frame(Group = groupNames, 
                                   row.names = colnames(geneCounts))
-           countMatrix <- assay(geneCounts)
-           countGRanges <- rowRanges(geneCounts)
-           ddse <- DESeqDataSetFromMatrix(countMatrix, colData = metaData, 
+           countMatrix <- SummarizedExperiment::assay(geneCounts)
+           countGRanges <- SummarizedExperiment::rowRanges(geneCounts)
+           ddse <- DESeq2::DESeqDataSetFromMatrix(countMatrix, colData = metaData, 
                                           design = ~Group, rowRanges = countGRanges)
-           dds <- DESeq(ddse)
+           dds <- DESeq2::DESeq(ddse)
            
-           normCounts <- counts(dds, normalized = TRUE)
-           dispersion <- plotDispEsts(dds)
-           ##Dispersion can be plotted with plotDispEsts(dds)
+           normCounts <- DESeq2::counts(dds, normalized = TRUE)
+           dispersion <- DESeq2::plotDispEsts(dds)
+           ##Dispersion can be plotted with DESeq2::plotDispEsts(dds)
            
            ##Regardless of how many conditions there are, we can compare different
            ##conditions to each other as long as there are replicate samples
@@ -114,35 +115,35 @@ geneExpression <- function(dir = getwd(),
            DFcompare <- c()
            
            for (x in num_comparison) {
-             myRes <- results(dds, contrast = c("Group", 
+             myRes <- DESeq2::results(dds, contrast = c("Group", 
                                                 groupmatrix[c(2*x)], 
                                                 groupmatrix[c(2*x-1)]))
              myRes <- myRes[order(myRes$pvalue), ]
              compare <- append(compare, myRes)
              
              myResAsDF <- as.data.frame(myRes)
-             myResAsDF$newPadj <- p.adjust(myResAsDF$pvalue)
+             myResAsDF$newPadj <- stats::p.adjust(myResAsDF$pvalue)
              myResAsDF <- myResAsDF[!is.na(myResAsDF$padj), ]
              myResAsDF <- myResAsDF[order(myResAsDF$pvalue), ]
              annotatedRes <- myResAsDF
              
-
-               eToSym <- AnnotationDbi::select(org.Hs.eg.db,
-                                               keys = rownames(myResAsDF),
-                                               keytype = "ENTREZID",
-                                               columns= c("SYMBOL", "ENSEMBL"))
-               annotatedRes <- merge(eToSym,myResAsDF,
-                                     by.x=1,
-                                     by.y=0,
-                                     all.x=FALSE,
-                                     all.y=TRUE)
+             
+             eToSym <- AnnotationDbi::select(org.Hs.eg.db,
+                                             keys = rownames(myResAsDF),
+                                             keytype = "ENTREZID",
+                                             columns= c("SYMBOL", "ENSEMBL"))
+             annotatedRes <- merge(eToSym,myResAsDF,
+                                   by.x=1,
+                                   by.y=0,
+                                   all.x=FALSE,
+                                   all.y=TRUE)
              
              annotatedRes <- annotatedRes[order(annotatedRes$SYMBOL, annotatedRes$padj),]
              annotatedRes <- annotatedRes[!duplicated(annotatedRes$SYMBOL),]
              annotatedRes <- annotatedRes[order(annotatedRes$padj),]
              DFcompare <- append(DFcompare, annotatedRes)
              
-             myRes_lfc <- lfcShrink(dds, coef = paste0("Group_",
+             myRes_lfc <- DESeq2::lfcShrink(dds, coef = paste0("Group_",
                                                        groupmatrix[c(2*x)],
                                                        "_vs_",
                                                        groupmatrix[c(2*x-1)]))
@@ -156,7 +157,7 @@ geneExpression <- function(dir = getwd(),
                                             ".csv"))
              
            }
-           },
+         },
          "2"={
            ## Homo sapiens hg38
            library(BSgenome.Hsapiens.UCSC.hg38)
@@ -165,8 +166,8 @@ geneExpression <- function(dir = getwd(),
            organism <- BSgenome.Hsapiens.UCSC.hg38
            
            wd <- getwd()
-           bpp = MulticoreParam(threads)
-           geneExons <- exonsBy(TxDb.Hsapiens.UCSC.hg38.knownGene, by = "gene")
+           bpp = BiocParallel::MulticoreParam(threads)
+           geneExons <- GenomicFeatures::exonsBy(TxDb.Hsapiens.UCSC.hg38.knownGene, by = "gene")
            if (is.null(groups)) {
              folders <- list.dirs(path = dir, full.names = TRUE, recursive = FALSE)
            } else {
@@ -188,7 +189,7 @@ geneExpression <- function(dir = getwd(),
                sampletype <- basename(dirname(sampledir[c(i)]))
                groupNames <- append(groupNames, sampletype)
                print(tail(groupNames, n = 1L))
-               bam <- list_files_with_exts(dir = sampledir[c(i)], exts = "bam")
+               bam <- tools::list_files_with_exts(dir = sampledir[c(i)], exts = "bam")
                bamFilesToCount <- append(bamFilesToCount, bam)
                names <- basename(dirname(bam))
                samples <- append(samples, names)
@@ -203,20 +204,20 @@ geneExpression <- function(dir = getwd(),
            
            ##A DESeq object is created from the gene counts
            names(bamFilesToCount) <- samples
-           myBams <- BamFileList(bamFilesToCount, yieldSize = 10000, asMates = paired)
-           geneCounts <- summarizeOverlaps(geneExons, myBams, ignore.strand = TRUE,
+           myBams <- Rsamtools::BamFileList(bamFilesToCount, yieldSize = 10000, asMates = paired)
+           geneCounts <- GenomicAlignments::summarizeOverlaps(geneExons, myBams, ignore.strand = TRUE,
                                            BPPARAM = bpp, singleEnd = isFALSE(paired))
            metaData <- data.frame(Group = groupNames, 
                                   row.names = colnames(geneCounts))
-           countMatrix <- assay(geneCounts)
-           countGRanges <- rowRanges(geneCounts)
-           ddse <- DESeqDataSetFromMatrix(countMatrix, colData = metaData, 
+           countMatrix <- SummarizedExperiment::assay(geneCounts)
+           countGRanges <- SummarizedExperiment::rowRanges(geneCounts)
+           ddse <- DESeq2::DESeqDataSetFromMatrix(countMatrix, colData = metaData, 
                                           design = ~Group, rowRanges = countGRanges)
-           dds <- DESeq(ddse)
+           dds <- DESeq2::DESeq(ddse)
            
-           normCounts <- counts(dds, normalized = TRUE)
-           dispersion <- plotDispEsts(dds)
-           ##Dispersion can be plotted with plotDispEsts(dds)
+           normCounts <- DESeq2::counts(dds, normalized = TRUE)
+           dispersion <- DESeq2::plotDispEsts(dds)
+           ##Dispersion can be plotted with DESeq2::plotDispEsts(dds)
            
            ##Regardless of how many conditions there are, we can compare different
            ##conditions to each other as long as there are replicate samples
@@ -229,35 +230,35 @@ geneExpression <- function(dir = getwd(),
            DFcompare <- c()
            
            for (x in num_comparison) {
-             myRes <- results(dds, contrast = c("Group", 
+             myRes <- DESeq2::results(dds, contrast = c("Group", 
                                                 groupmatrix[c(2*x)], 
                                                 groupmatrix[c(2*x-1)]))
              myRes <- myRes[order(myRes$pvalue), ]
              compare <- append(compare, myRes)
              
              myResAsDF <- as.data.frame(myRes)
-             myResAsDF$newPadj <- p.adjust(myResAsDF$pvalue)
+             myResAsDF$newPadj <- stats::p.adjust(myResAsDF$pvalue)
              myResAsDF <- myResAsDF[!is.na(myResAsDF$padj), ]
              myResAsDF <- myResAsDF[order(myResAsDF$pvalue), ]
              annotatedRes <- myResAsDF
              
-
-               eToSym <- AnnotationDbi::select(org.Hs.eg.db,
-                                               keys = rownames(myResAsDF),
-                                               keytype = "ENTREZID",
-                                               columns= c("SYMBOL", "ENSEMBL"))
-               annotatedRes <- merge(eToSym,myResAsDF,
-                                     by.x=1,
-                                     by.y=0,
-                                     all.x=FALSE,
-                                     all.y=TRUE)
+             
+             eToSym <- AnnotationDbi::select(org.Hs.eg.db,
+                                             keys = rownames(myResAsDF),
+                                             keytype = "ENTREZID",
+                                             columns= c("SYMBOL", "ENSEMBL"))
+             annotatedRes <- merge(eToSym,myResAsDF,
+                                   by.x=1,
+                                   by.y=0,
+                                   all.x=FALSE,
+                                   all.y=TRUE)
              
              annotatedRes <- annotatedRes[order(annotatedRes$SYMBOL, annotatedRes$padj),]
              annotatedRes <- annotatedRes[!duplicated(annotatedRes$SYMBOL),]
              annotatedRes <- annotatedRes[order(annotatedRes$padj),]
              DFcompare <- append(DFcompare, annotatedRes)
              
-             myRes_lfc <- lfcShrink(dds, coef = paste0("Group_",
+             myRes_lfc <- DESeq2::lfcShrink(dds, coef = paste0("Group_",
                                                        groupmatrix[c(2*x)],
                                                        "_vs_",
                                                        groupmatrix[c(2*x-1)]))
@@ -280,8 +281,8 @@ geneExpression <- function(dir = getwd(),
            organism <- BSgenome.Mmusculus.UCSC.mm10
            
            wd <- getwd()
-           bpp = MulticoreParam(threads)
-           geneExons <- exonsBy(TxDb.Mmusculus.UCSC.mm10.knownGene, by = "gene")
+           bpp = BiocParallel::MulticoreParam(threads)
+           geneExons <- GenomicFeatures::exonsBy(TxDb.Mmusculus.UCSC.mm10.knownGene, by = "gene")
            if (is.null(groups)) {
              folders <- list.dirs(path = dir, full.names = TRUE, recursive = FALSE)
            } else {
@@ -303,7 +304,7 @@ geneExpression <- function(dir = getwd(),
                sampletype <- basename(dirname(sampledir[c(i)]))
                groupNames <- append(groupNames, sampletype)
                print(tail(groupNames, n = 1L))
-               bam <- list_files_with_exts(dir = sampledir[c(i)], exts = "bam")
+               bam <- tools::list_files_with_exts(dir = sampledir[c(i)], exts = "bam")
                bamFilesToCount <- append(bamFilesToCount, bam)
                names <- basename(dirname(bam))
                samples <- append(samples, names)
@@ -318,20 +319,20 @@ geneExpression <- function(dir = getwd(),
            
            ##A DESeq object is created from the gene counts
            names(bamFilesToCount) <- samples
-           myBams <- BamFileList(bamFilesToCount, yieldSize = 10000, asMates = paired)
-           geneCounts <- summarizeOverlaps(geneExons, myBams, ignore.strand = TRUE,
+           myBams <- Rsamtools::BamFileList(bamFilesToCount, yieldSize = 10000, asMates = paired)
+           geneCounts <- GenomicAlignments::summarizeOverlaps(geneExons, myBams, ignore.strand = TRUE,
                                            BPPARAM = bpp, singleEnd = isFALSE(paired))
            metaData <- data.frame(Group = groupNames, 
                                   row.names = colnames(geneCounts))
-           countMatrix <- assay(geneCounts)
-           countGRanges <- rowRanges(geneCounts)
-           ddse <- DESeqDataSetFromMatrix(countMatrix, colData = metaData, 
+           countMatrix <- SummarizedExperiment::assay(geneCounts)
+           countGRanges <- SummarizedExperiment::rowRanges(geneCounts)
+           ddse <- DESeq2::DESeqDataSetFromMatrix(countMatrix, colData = metaData, 
                                           design = ~Group, rowRanges = countGRanges)
-           dds <- DESeq(ddse)
+           dds <- DESeq2::DESeq(ddse)
            
-           normCounts <- counts(dds, normalized = TRUE)
-           dispersion <- plotDispEsts(dds)
-           ##Dispersion can be plotted with plotDispEsts(dds)
+           normCounts <- DESeq2::counts(dds, normalized = TRUE)
+           dispersion <- DESeq2::plotDispEsts(dds)
+           ##Dispersion can be plotted with DESeq2::plotDispEsts(dds)
            
            ##Regardless of how many conditions there are, we can compare different
            ##conditions to each other as long as there are replicate samples
@@ -344,35 +345,35 @@ geneExpression <- function(dir = getwd(),
            DFcompare <- c()
            
            for (x in num_comparison) {
-             myRes <- results(dds, contrast = c("Group", 
+             myRes <- DESeq2::results(dds, contrast = c("Group", 
                                                 groupmatrix[c(2*x)], 
                                                 groupmatrix[c(2*x-1)]))
              myRes <- myRes[order(myRes$pvalue), ]
              compare <- append(compare, myRes)
              
              myResAsDF <- as.data.frame(myRes)
-             myResAsDF$newPadj <- p.adjust(myResAsDF$pvalue)
+             myResAsDF$newPadj <- stats::p.adjust(myResAsDF$pvalue)
              myResAsDF <- myResAsDF[!is.na(myResAsDF$padj), ]
              myResAsDF <- myResAsDF[order(myResAsDF$pvalue), ]
              annotatedRes <- myResAsDF
              
-
-               eToSym <- AnnotationDbi::select(org.Mm.eg.db,
-                                               keys = rownames(myResAsDF),
-                                               keytype = "ENTREZID",
-                                               columns= c("SYMBOL", "ENSEMBL"))
-               annotatedRes <- merge(eToSym,myResAsDF,
-                                     by.x=1,
-                                     by.y=0,
-                                     all.x=FALSE,
-                                     all.y=TRUE)
-         
+             
+             eToSym <- AnnotationDbi::select(org.Mm.eg.db,
+                                             keys = rownames(myResAsDF),
+                                             keytype = "ENTREZID",
+                                             columns= c("SYMBOL", "ENSEMBL"))
+             annotatedRes <- merge(eToSym,myResAsDF,
+                                   by.x=1,
+                                   by.y=0,
+                                   all.x=FALSE,
+                                   all.y=TRUE)
+             
              annotatedRes <- annotatedRes[order(annotatedRes$SYMBOL, annotatedRes$padj),]
              annotatedRes <- annotatedRes[!duplicated(annotatedRes$SYMBOL),]
              annotatedRes <- annotatedRes[order(annotatedRes$padj),]
              DFcompare <- append(DFcompare, annotatedRes)
              
-             myRes_lfc <- lfcShrink(dds, coef = paste0("Group_",
+             myRes_lfc <- DESeq2::lfcShrink(dds, coef = paste0("Group_",
                                                        groupmatrix[c(2*x)],
                                                        "_vs_",
                                                        groupmatrix[c(2*x-1)]))
@@ -395,8 +396,8 @@ geneExpression <- function(dir = getwd(),
            organism <- BSgenome.Athaliana.TAIR.TAIR9
            
            wd <- getwd()
-           bpp = MulticoreParam(threads)
-           geneExons <- exonsBy(TxDb.Athaliana.BioMart.plantsmart28, by = "gene")
+           bpp = BiocParallel::MulticoreParam(threads)
+           geneExons <- GenomicFeatures::exonsBy(TxDb.Athaliana.BioMart.plantsmart28, by = "gene")
            if (is.null(groups)) {
              folders <- list.dirs(path = dir, full.names = TRUE, recursive = FALSE)
            } else {
@@ -418,7 +419,7 @@ geneExpression <- function(dir = getwd(),
                sampletype <- basename(dirname(sampledir[c(i)]))
                groupNames <- append(groupNames, sampletype)
                print(tail(groupNames, n = 1L))
-               bam <- list_files_with_exts(dir = sampledir[c(i)], exts = "bam")
+               bam <- tools::list_files_with_exts(dir = sampledir[c(i)], exts = "bam")
                bamFilesToCount <- append(bamFilesToCount, bam)
                names <- basename(dirname(bam))
                samples <- append(samples, names)
@@ -433,20 +434,20 @@ geneExpression <- function(dir = getwd(),
            
            ##A DESeq object is created from the gene counts
            names(bamFilesToCount) <- samples
-           myBams <- BamFileList(bamFilesToCount, yieldSize = 10000, asMates = paired)
-           geneCounts <- summarizeOverlaps(geneExons, myBams, ignore.strand = TRUE,
+           myBams <- Rsamtools::BamFileList(bamFilesToCount, yieldSize = 10000, asMates = paired)
+           geneCounts <- GenomicAlignments::summarizeOverlaps(geneExons, myBams, ignore.strand = TRUE,
                                            BPPARAM = bpp, singleEnd = isFALSE(paired))
            metaData <- data.frame(Group = groupNames, 
                                   row.names = colnames(geneCounts))
-           countMatrix <- assay(geneCounts)
-           countGRanges <- rowRanges(geneCounts)
-           ddse <- DESeqDataSetFromMatrix(countMatrix, colData = metaData, 
+           countMatrix <- SummarizedExperiment::assay(geneCounts)
+           countGRanges <- SummarizedExperiment::rowRanges(geneCounts)
+           ddse <- DESeq2::DESeqDataSetFromMatrix(countMatrix, colData = metaData, 
                                           design = ~Group, rowRanges = countGRanges)
-           dds <- DESeq(ddse)
+           dds <- DESeq2::DESeq(ddse)
            
-           normCounts <- counts(dds, normalized = TRUE)
-           dispersion <- plotDispEsts(dds)
-           ##Dispersion can be plotted with plotDispEsts(dds)
+           normCounts <- DESeq2::counts(dds, normalized = TRUE)
+           dispersion <- DESeq2::plotDispEsts(dds)
+           ##Dispersion can be plotted with DESeq2::plotDispEsts(dds)
            
            ##Regardless of how many conditions there are, we can compare different
            ##conditions to each other as long as there are replicate samples
@@ -459,14 +460,14 @@ geneExpression <- function(dir = getwd(),
            DFcompare <- c()
            
            for (x in num_comparison) {
-             myRes <- results(dds, contrast = c("Group", 
+             myRes <- DESeq2::results(dds, contrast = c("Group", 
                                                 groupmatrix[c(2*x)], 
                                                 groupmatrix[c(2*x-1)]))
              myRes <- myRes[order(myRes$pvalue), ]
              compare <- append(compare, myRes)
              
              myResAsDF <- as.data.frame(myRes)
-             myResAsDF$newPadj <- p.adjust(myResAsDF$pvalue)
+             myResAsDF$newPadj <- stats::p.adjust(myResAsDF$pvalue)
              myResAsDF <- myResAsDF[!is.na(myResAsDF$padj), ]
              myResAsDF <- myResAsDF[order(myResAsDF$pvalue), ]
              annotatedRes <- myResAsDF
@@ -486,7 +487,7 @@ geneExpression <- function(dir = getwd(),
              annotatedRes <- annotatedRes[order(annotatedRes$padj),]
              DFcompare <- append(DFcompare, annotatedRes)
              
-             myRes_lfc <- lfcShrink(dds, coef = paste0("Group_",
+             myRes_lfc <- DESeq2::lfcShrink(dds, coef = paste0("Group_",
                                                        groupmatrix[c(2*x)],
                                                        "_vs_",
                                                        groupmatrix[c(2*x-1)]))
@@ -509,8 +510,8 @@ geneExpression <- function(dir = getwd(),
            organism <- BSgenome.Dmelanogaster.UCSC.dm6
            
            wd <- getwd()
-           bpp = MulticoreParam(threads)
-           geneExons <- exonsBy(TxDb.Dmelanogaster.UCSC.dm6.ensGene, by = "gene")
+           bpp = BiocParallel::MulticoreParam(threads)
+           geneExons <- GenomicFeatures::exonsBy(TxDb.Dmelanogaster.UCSC.dm6.ensGene, by = "gene")
            if (is.null(groups)) {
              folders <- list.dirs(path = dir, full.names = TRUE, recursive = FALSE)
            } else {
@@ -532,7 +533,7 @@ geneExpression <- function(dir = getwd(),
                sampletype <- basename(dirname(sampledir[c(i)]))
                groupNames <- append(groupNames, sampletype)
                print(tail(groupNames, n = 1L))
-               bam <- list_files_with_exts(dir = sampledir[c(i)], exts = "bam")
+               bam <- tools::list_files_with_exts(dir = sampledir[c(i)], exts = "bam")
                bamFilesToCount <- append(bamFilesToCount, bam)
                names <- basename(dirname(bam))
                samples <- append(samples, names)
@@ -547,20 +548,20 @@ geneExpression <- function(dir = getwd(),
            
            ##A DESeq object is created from the gene counts
            names(bamFilesToCount) <- samples
-           myBams <- BamFileList(bamFilesToCount, yieldSize = 10000, asMates = paired)
-           geneCounts <- summarizeOverlaps(geneExons, myBams, ignore.strand = TRUE,
+           myBams <- Rsamtools::BamFileList(bamFilesToCount, yieldSize = 10000, asMates = paired)
+           geneCounts <- GenomicAlignments::summarizeOverlaps(geneExons, myBams, ignore.strand = TRUE,
                                            BPPARAM = bpp, singleEnd = isFALSE(paired))
            metaData <- data.frame(Group = groupNames, 
                                   row.names = colnames(geneCounts))
-           countMatrix <- assay(geneCounts)
-           countGRanges <- rowRanges(geneCounts)
-           ddse <- DESeqDataSetFromMatrix(countMatrix, colData = metaData, 
+           countMatrix <- SummarizedExperiment::assay(geneCounts)
+           countGRanges <- SummarizedExperiment::rowRanges(geneCounts)
+           ddse <- DESeq2::DESeqDataSetFromMatrix(countMatrix, colData = metaData, 
                                           design = ~Group, rowRanges = countGRanges)
-           dds <- DESeq(ddse)
+           dds <- DESeq2::DESeq(ddse)
            
-           normCounts <- counts(dds, normalized = TRUE)
-           dispersion <- plotDispEsts(dds)
-           ##Dispersion can be plotted with plotDispEsts(dds)
+           normCounts <- DESeq2::counts(dds, normalized = TRUE)
+           dispersion <- DESeq2::plotDispEsts(dds)
+           ##Dispersion can be plotted with DESeq2::plotDispEsts(dds)
            
            ##Regardless of how many conditions there are, we can compare different
            ##conditions to each other as long as there are replicate samples
@@ -573,34 +574,34 @@ geneExpression <- function(dir = getwd(),
            DFcompare <- c()
            
            for (x in num_comparison) {
-             myRes <- results(dds, contrast = c("Group", 
+             myRes <- DESeq2::results(dds, contrast = c("Group", 
                                                 groupmatrix[c(2*x)], 
                                                 groupmatrix[c(2*x-1)]))
              myRes <- myRes[order(myRes$pvalue), ]
              compare <- append(compare, myRes)
              
              myResAsDF <- as.data.frame(myRes)
-             myResAsDF$newPadj <- p.adjust(myResAsDF$pvalue)
+             myResAsDF$newPadj <- stats::p.adjust(myResAsDF$pvalue)
              myResAsDF <- myResAsDF[!is.na(myResAsDF$padj), ]
              myResAsDF <- myResAsDF[order(myResAsDF$pvalue), ]
              annotatedRes <- myResAsDF
-    
-               eToSym <- AnnotationDbi::select(org.Dm.eg.db,
-                                               keys = rownames(myResAsDF),
-                                               keytype = "ENTREZID",
-                                               columns= c("SYMBOL", "ENSEMBL"))
-               annotatedRes <- merge(eToSym,myResAsDF,
-                                     by.x=1,
-                                     by.y=0,
-                                     all.x=FALSE,
-                                     all.y=TRUE)
-
+             
+             eToSym <- AnnotationDbi::select(org.Dm.eg.db,
+                                             keys = rownames(myResAsDF),
+                                             keytype = "ENTREZID",
+                                             columns= c("SYMBOL", "ENSEMBL"))
+             annotatedRes <- merge(eToSym,myResAsDF,
+                                   by.x=1,
+                                   by.y=0,
+                                   all.x=FALSE,
+                                   all.y=TRUE)
+             
              annotatedRes <- annotatedRes[order(annotatedRes$SYMBOL, annotatedRes$padj),]
              annotatedRes <- annotatedRes[!duplicated(annotatedRes$SYMBOL),]
              annotatedRes <- annotatedRes[order(annotatedRes$padj),]
              DFcompare <- append(DFcompare, annotatedRes)
              
-             myRes_lfc <- lfcShrink(dds, coef = paste0("Group_",
+             myRes_lfc <- DESeq2::lfcShrink(dds, coef = paste0("Group_",
                                                        groupmatrix[c(2*x)],
                                                        "_vs_",
                                                        groupmatrix[c(2*x-1)]))
@@ -623,8 +624,8 @@ geneExpression <- function(dir = getwd(),
            organism <- BSgenome.Drerio.UCSC.danRer11
            
            wd <- getwd()
-           bpp = MulticoreParam(threads)
-           geneExons <- exonsBy(TxDb.Drerio.UCSC.danRer11.refGene, by = "gene")
+           bpp = BiocParallel::MulticoreParam(threads)
+           geneExons <- GenomicFeatures::exonsBy(TxDb.Drerio.UCSC.danRer11.refGene, by = "gene")
            if (is.null(groups)) {
              folders <- list.dirs(path = dir, full.names = TRUE, recursive = FALSE)
            } else {
@@ -646,7 +647,7 @@ geneExpression <- function(dir = getwd(),
                sampletype <- basename(dirname(sampledir[c(i)]))
                groupNames <- append(groupNames, sampletype)
                print(tail(groupNames, n = 1L))
-               bam <- list_files_with_exts(dir = sampledir[c(i)], exts = "bam")
+               bam <- tools::list_files_with_exts(dir = sampledir[c(i)], exts = "bam")
                bamFilesToCount <- append(bamFilesToCount, bam)
                names <- basename(dirname(bam))
                samples <- append(samples, names)
@@ -661,20 +662,20 @@ geneExpression <- function(dir = getwd(),
            
            ##A DESeq object is created from the gene counts
            names(bamFilesToCount) <- samples
-           myBams <- BamFileList(bamFilesToCount, yieldSize = 10000, asMates = paired)
-           geneCounts <- summarizeOverlaps(geneExons, myBams, ignore.strand = TRUE,
+           myBams <- Rsamtools::BamFileList(bamFilesToCount, yieldSize = 10000, asMates = paired)
+           geneCounts <- GenomicAlignments::summarizeOverlaps(geneExons, myBams, ignore.strand = TRUE,
                                            BPPARAM = bpp, singleEnd = isFALSE(paired))
            metaData <- data.frame(Group = groupNames, 
                                   row.names = colnames(geneCounts))
-           countMatrix <- assay(geneCounts)
-           countGRanges <- rowRanges(geneCounts)
-           ddse <- DESeqDataSetFromMatrix(countMatrix, colData = metaData, 
+           countMatrix <- SummarizedExperiment::assay(geneCounts)
+           countGRanges <- SummarizedExperiment::rowRanges(geneCounts)
+           ddse <- DESeq2::DESeqDataSetFromMatrix(countMatrix, colData = metaData, 
                                           design = ~Group, rowRanges = countGRanges)
-           dds <- DESeq(ddse)
+           dds <- DESeq2::DESeq(ddse)
            
-           normCounts <- counts(dds, normalized = TRUE)
-           dispersion <- plotDispEsts(dds)
-           ##Dispersion can be plotted with plotDispEsts(dds)
+           normCounts <- DESeq2::counts(dds, normalized = TRUE)
+           dispersion <- DESeq2::plotDispEsts(dds)
+           ##Dispersion can be plotted with DESeq2::plotDispEsts(dds)
            
            ##Regardless of how many conditions there are, we can compare different
            ##conditions to each other as long as there are replicate samples
@@ -687,14 +688,14 @@ geneExpression <- function(dir = getwd(),
            DFcompare <- c()
            
            for (x in num_comparison) {
-             myRes <- results(dds, contrast = c("Group", 
+             myRes <- DESeq2::results(dds, contrast = c("Group", 
                                                 groupmatrix[c(2*x)], 
                                                 groupmatrix[c(2*x-1)]))
              myRes <- myRes[order(myRes$pvalue), ]
              compare <- append(compare, myRes)
              
              myResAsDF <- as.data.frame(myRes)
-             myResAsDF$newPadj <- p.adjust(myResAsDF$pvalue)
+             myResAsDF$newPadj <- stats::p.adjust(myResAsDF$pvalue)
              myResAsDF <- myResAsDF[!is.na(myResAsDF$padj), ]
              myResAsDF <- myResAsDF[order(myResAsDF$pvalue), ]
              annotatedRes <- myResAsDF
@@ -714,7 +715,7 @@ geneExpression <- function(dir = getwd(),
              annotatedRes <- annotatedRes[order(annotatedRes$padj),]
              DFcompare <- append(DFcompare, annotatedRes)
              
-             myRes_lfc <- lfcShrink(dds, coef = paste0("Group_",
+             myRes_lfc <- DESeq2::lfcShrink(dds, coef = paste0("Group_",
                                                        groupmatrix[c(2*x)],
                                                        "_vs_",
                                                        groupmatrix[c(2*x-1)]))
@@ -737,8 +738,8 @@ geneExpression <- function(dir = getwd(),
            organism <- BSgenome.Rnorvegicus.UCSC.rn5
            
            wd <- getwd()
-           bpp = MulticoreParam(threads)
-           geneExons <- exonsBy(TxDb.Dnorvegicus.UCSC.rn5.refGene, by = "gene")
+           bpp = BiocParallel::MulticoreParam(threads)
+           geneExons <- GenomicFeatures::exonsBy(TxDb.Dnorvegicus.UCSC.rn5.refGene, by = "gene")
            if (is.null(groups)) {
              folders <- list.dirs(path = dir, full.names = TRUE, recursive = FALSE)
            } else {
@@ -760,7 +761,7 @@ geneExpression <- function(dir = getwd(),
                sampletype <- basename(dirname(sampledir[c(i)]))
                groupNames <- append(groupNames, sampletype)
                print(tail(groupNames, n = 1L))
-               bam <- list_files_with_exts(dir = sampledir[c(i)], exts = "bam")
+               bam <- tools::list_files_with_exts(dir = sampledir[c(i)], exts = "bam")
                bamFilesToCount <- append(bamFilesToCount, bam)
                names <- basename(dirname(bam))
                samples <- append(samples, names)
@@ -775,20 +776,20 @@ geneExpression <- function(dir = getwd(),
            
            ##A DESeq object is created from the gene counts
            names(bamFilesToCount) <- samples
-           myBams <- BamFileList(bamFilesToCount, yieldSize = 10000, asMates = paired)
-           geneCounts <- summarizeOverlaps(geneExons, myBams, ignore.strand = TRUE,
+           myBams <- Rsamtools::BamFileList(bamFilesToCount, yieldSize = 10000, asMates = paired)
+           geneCounts <- GenomicAlignments::summarizeOverlaps(geneExons, myBams, ignore.strand = TRUE,
                                            BPPARAM = bpp, singleEnd = isFALSE(paired))
            metaData <- data.frame(Group = groupNames, 
                                   row.names = colnames(geneCounts))
-           countMatrix <- assay(geneCounts)
-           countGRanges <- rowRanges(geneCounts)
-           ddse <- DESeqDataSetFromMatrix(countMatrix, colData = metaData, 
+           countMatrix <- SummarizedExperiment::assay(geneCounts)
+           countGRanges <- SummarizedExperiment::rowRanges(geneCounts)
+           ddse <- DESeq2::DESeqDataSetFromMatrix(countMatrix, colData = metaData, 
                                           design = ~Group, rowRanges = countGRanges)
-           dds <- DESeq(ddse)
+           dds <- DESeq2::DESeq(ddse)
            
-           normCounts <- counts(dds, normalized = TRUE)
-           dispersion <- plotDispEsts(dds)
-           ##Dispersion can be plotted with plotDispEsts(dds)
+           normCounts <- DESeq2::counts(dds, normalized = TRUE)
+           dispersion <- DESeq2::plotDispEsts(dds)
+           ##Dispersion can be plotted with DESeq2::plotDispEsts(dds)
            
            ##Regardless of how many conditions there are, we can compare different
            ##conditions to each other as long as there are replicate samples
@@ -801,14 +802,14 @@ geneExpression <- function(dir = getwd(),
            DFcompare <- c()
            
            for (x in num_comparison) {
-             myRes <- results(dds, contrast = c("Group", 
+             myRes <- DESeq2::results(dds, contrast = c("Group", 
                                                 groupmatrix[c(2*x)], 
                                                 groupmatrix[c(2*x-1)]))
              myRes <- myRes[order(myRes$pvalue), ]
              compare <- append(compare, myRes)
              
              myResAsDF <- as.data.frame(myRes)
-             myResAsDF$newPadj <- p.adjust(myResAsDF$pvalue)
+             myResAsDF$newPadj <- stats::p.adjust(myResAsDF$pvalue)
              myResAsDF <- myResAsDF[!is.na(myResAsDF$padj), ]
              myResAsDF <- myResAsDF[order(myResAsDF$pvalue), ]
              annotatedRes <- myResAsDF
@@ -828,7 +829,7 @@ geneExpression <- function(dir = getwd(),
              annotatedRes <- annotatedRes[order(annotatedRes$padj),]
              DFcompare <- append(DFcompare, annotatedRes)
              
-             myRes_lfc <- lfcShrink(dds, coef = paste0("Group_",
+             myRes_lfc <- DESeq2::lfcShrink(dds, coef = paste0("Group_",
                                                        groupmatrix[c(2*x)],
                                                        "_vs_",
                                                        groupmatrix[c(2*x-1)]))
@@ -851,8 +852,8 @@ geneExpression <- function(dir = getwd(),
            organism <- BSgenome.Scerevisiae.UCSC.sacCer3
            
            wd <- getwd()
-           bpp = MulticoreParam(threads)
-           geneExons <- exonsBy(TxDb.Scerevisiae.UCSC.sacCer3.sgdGene, by = "gene")
+           bpp = BiocParallel::MulticoreParam(threads)
+           geneExons <- GenomicFeatures::exonsBy(TxDb.Scerevisiae.UCSC.sacCer3.sgdGene, by = "gene")
            if (is.null(groups)) {
              folders <- list.dirs(path = dir, full.names = TRUE, recursive = FALSE)
            } else {
@@ -874,7 +875,7 @@ geneExpression <- function(dir = getwd(),
                sampletype <- basename(dirname(sampledir[c(i)]))
                groupNames <- append(groupNames, sampletype)
                print(tail(groupNames, n = 1L))
-               bam <- list_files_with_exts(dir = sampledir[c(i)], exts = "bam")
+               bam <- tools::list_files_with_exts(dir = sampledir[c(i)], exts = "bam")
                bamFilesToCount <- append(bamFilesToCount, bam)
                names <- basename(dirname(bam))
                samples <- append(samples, names)
@@ -889,20 +890,20 @@ geneExpression <- function(dir = getwd(),
            
            ##A DESeq object is created from the gene counts
            names(bamFilesToCount) <- samples
-           myBams <- BamFileList(bamFilesToCount, yieldSize = 10000, asMates = paired)
-           geneCounts <- summarizeOverlaps(geneExons, myBams, ignore.strand = TRUE,
+           myBams <- Rsamtools::BamFileList(bamFilesToCount, yieldSize = 10000, asMates = paired)
+           geneCounts <- GenomicAlignments::summarizeOverlaps(geneExons, myBams, ignore.strand = TRUE,
                                            BPPARAM = bpp, singleEnd = isFALSE(paired))
            metaData <- data.frame(Group = groupNames, 
                                   row.names = colnames(geneCounts))
-           countMatrix <- assay(geneCounts)
-           countGRanges <- rowRanges(geneCounts)
-           ddse <- DESeqDataSetFromMatrix(countMatrix, colData = metaData, 
+           countMatrix <- SummarizedExperiment::assay(geneCounts)
+           countGRanges <- SummarizedExperiment::rowRanges(geneCounts)
+           ddse <- DESeq2::DESeqDataSetFromMatrix(countMatrix, colData = metaData, 
                                           design = ~Group, rowRanges = countGRanges)
-           dds <- DESeq(ddse)
+           dds <- DESeq2::DESeq(ddse)
            
-           normCounts <- counts(dds, normalized = TRUE)
-           dispersion <- plotDispEsts(dds)
-           ##Dispersion can be plotted with plotDispEsts(dds)
+           normCounts <- DESeq2::counts(dds, normalized = TRUE)
+           dispersion <- DESeq2::plotDispEsts(dds)
+           ##Dispersion can be plotted with DESeq2::plotDispEsts(dds)
            
            ##Regardless of how many conditions there are, we can compare different
            ##conditions to each other as long as there are replicate samples
@@ -915,14 +916,14 @@ geneExpression <- function(dir = getwd(),
            DFcompare <- c()
            
            for (x in num_comparison) {
-             myRes <- results(dds, contrast = c("Group", 
+             myRes <- DESeq2::results(dds, contrast = c("Group", 
                                                 groupmatrix[c(2*x)], 
                                                 groupmatrix[c(2*x-1)]))
              myRes <- myRes[order(myRes$pvalue), ]
              compare <- append(compare, myRes)
              
              myResAsDF <- as.data.frame(myRes)
-             myResAsDF$newPadj <- p.adjust(myResAsDF$pvalue)
+             myResAsDF$newPadj <- stats::p.adjust(myResAsDF$pvalue)
              myResAsDF <- myResAsDF[!is.na(myResAsDF$padj), ]
              myResAsDF <- myResAsDF[order(myResAsDF$pvalue), ]
              annotatedRes <- myResAsDF
@@ -942,7 +943,7 @@ geneExpression <- function(dir = getwd(),
              annotatedRes <- annotatedRes[order(annotatedRes$padj),]
              DFcompare <- append(DFcompare, annotatedRes)
              
-             myRes_lfc <- lfcShrink(dds, coef = paste0("Group_",
+             myRes_lfc <- DESeq2::lfcShrink(dds, coef = paste0("Group_",
                                                        groupmatrix[c(2*x)],
                                                        "_vs_",
                                                        groupmatrix[c(2*x-1)]))
@@ -965,8 +966,8 @@ geneExpression <- function(dir = getwd(),
            organism <- BSgenome.Celegans.UCSC.ce11
            
            wd <- getwd()
-           bpp = MulticoreParam(threads)
-           geneExons <- exonsBy(TxDb.Delegans.UCSC.ce11.refGene, by = "gene")
+           bpp = BiocParallel::MulticoreParam(threads)
+           geneExons <- GenomicFeatures::exonsBy(TxDb.Delegans.UCSC.ce11.refGene, by = "gene")
            if (is.null(groups)) {
              folders <- list.dirs(path = dir, full.names = TRUE, recursive = FALSE)
            } else {
@@ -988,7 +989,7 @@ geneExpression <- function(dir = getwd(),
                sampletype <- basename(dirname(sampledir[c(i)]))
                groupNames <- append(groupNames, sampletype)
                print(tail(groupNames, n = 1L))
-               bam <- list_files_with_exts(dir = sampledir[c(i)], exts = "bam")
+               bam <- tools::list_files_with_exts(dir = sampledir[c(i)], exts = "bam")
                bamFilesToCount <- append(bamFilesToCount, bam)
                names <- basename(dirname(bam))
                samples <- append(samples, names)
@@ -1003,20 +1004,20 @@ geneExpression <- function(dir = getwd(),
            
            ##A DESeq object is created from the gene counts
            names(bamFilesToCount) <- samples
-           myBams <- BamFileList(bamFilesToCount, yieldSize = 10000, asMates = paired)
-           geneCounts <- summarizeOverlaps(geneExons, myBams, ignore.strand = TRUE,
+           myBams <- Rsamtools::BamFileList(bamFilesToCount, yieldSize = 10000, asMates = paired)
+           geneCounts <- GenomicAlignments::summarizeOverlaps(geneExons, myBams, ignore.strand = TRUE,
                                            BPPARAM = bpp, singleEnd = isFALSE(paired))
            metaData <- data.frame(Group = groupNames, 
                                   row.names = colnames(geneCounts))
-           countMatrix <- assay(geneCounts)
-           countGRanges <- rowRanges(geneCounts)
-           ddse <- DESeqDataSetFromMatrix(countMatrix, colData = metaData, 
+           countMatrix <- SummarizedExperiment::assay(geneCounts)
+           countGRanges <- SummarizedExperiment::rowRanges(geneCounts)
+           ddse <- DESeq2::DESeqDataSetFromMatrix(countMatrix, colData = metaData, 
                                           design = ~Group, rowRanges = countGRanges)
-           dds <- DESeq(ddse)
+           dds <- DESeq2::DESeq(ddse)
            
-           normCounts <- counts(dds, normalized = TRUE)
-           dispersion <- plotDispEsts(dds)
-           ##Dispersion can be plotted with plotDispEsts(dds)
+           normCounts <- DESeq2::counts(dds, normalized = TRUE)
+           dispersion <- DESeq2::plotDispEsts(dds)
+           ##Dispersion can be plotted with DESeq2::plotDispEsts(dds)
            
            ##Regardless of how many conditions there are, we can compare different
            ##conditions to each other as long as there are replicate samples
@@ -1029,14 +1030,14 @@ geneExpression <- function(dir = getwd(),
            DFcompare <- c()
            
            for (x in num_comparison) {
-             myRes <- results(dds, contrast = c("Group", 
+             myRes <- DESeq2::results(dds, contrast = c("Group", 
                                                 groupmatrix[c(2*x)], 
                                                 groupmatrix[c(2*x-1)]))
              myRes <- myRes[order(myRes$pvalue), ]
              compare <- append(compare, myRes)
              
              myResAsDF <- as.data.frame(myRes)
-             myResAsDF$newPadj <- p.adjust(myResAsDF$pvalue)
+             myResAsDF$newPadj <- stats::p.adjust(myResAsDF$pvalue)
              myResAsDF <- myResAsDF[!is.na(myResAsDF$padj), ]
              myResAsDF <- myResAsDF[order(myResAsDF$pvalue), ]
              annotatedRes <- myResAsDF
@@ -1056,7 +1057,7 @@ geneExpression <- function(dir = getwd(),
              annotatedRes <- annotatedRes[order(annotatedRes$padj),]
              DFcompare <- append(DFcompare, annotatedRes)
              
-             myRes_lfc <- lfcShrink(dds, coef = paste0("Group_",
+             myRes_lfc <- DESeq2::lfcShrink(dds, coef = paste0("Group_",
                                                        groupmatrix[c(2*x)],
                                                        "_vs_",
                                                        groupmatrix[c(2*x-1)]))
@@ -1075,4 +1076,3 @@ geneExpression <- function(dir = getwd(),
   setwd(wd)
   return(DFcompare)
 }
-
