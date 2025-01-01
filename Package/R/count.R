@@ -15,10 +15,10 @@
 #' @return A data frame containing gene counts.
 
 count <- function(dir = getwd(),
-                           groups = NULL,
-                           outputdir = getwd(),
-                           threads = 4L,
-                           paired = FALSE) {
+                  groups = NULL,
+                  outputdir = getwd(),
+                  threads = 4L,
+                  paired = FALSE) {
   cat(paste0("These are the species currently supported by ExpVar: \n",
              "[1] Homo sapiens (hg19) \n",
              "[2] Homo sapiens (hg38) \n", 
@@ -31,15 +31,8 @@ count <- function(dir = getwd(),
              "[9] Caenorhabditis elegans \n"))
   species <- readline("Type the number of the species that you would like to use as a reference: ")
   
-  library(BiocParallel)
-  library(GenomicFeatures)
-  library(Rsamtools)
-  library(AnnotationDbi)
-  library(GenomicAlignments)
-  library(SummarizedExperiment)
-  
   wd <- getwd()
-  bpp = MulticoreParam(threads)
+  bpp <- BiocParallel::MulticoreParam(threads)
   ##Sets the reference genome that corresponds to the species chosen by the user
   switch(species,
          "1"={
@@ -49,7 +42,7 @@ count <- function(dir = getwd(),
            library(org.Hs.eg.db)
            organism <- BSgenome.Hsapiens.UCSC.hg19
            
-           geneExons <- exonsBy(TxDb.Hsapiens.UCSC.hg19.knownGene, by = "gene")
+           geneExons <- GenomicFeatures::exonsBy(TxDb.Hsapiens.UCSC.hg19.knownGene, by = "gene")
            if (is.null(groups)) {
              folders <- list.dirs(path = dir, full.names = TRUE, recursive = FALSE)
            } else {
@@ -71,7 +64,7 @@ count <- function(dir = getwd(),
                sampletype <- basename(dirname(sampledir[c(i)]))
                groupNames <- append(groupNames, sampletype)
                print(tail(groupNames, n = 1L))
-               bam <- list_files_with_exts(dir = sampledir[c(i)], exts = "bam")
+               bam <- tools::list_files_with_exts(dir = sampledir[c(i)], exts = "bam")
                bamFilesToCount <- append(bamFilesToCount, bam)
                names <- basename(dirname(bam))
                samples <- append(samples, names)
@@ -86,12 +79,12 @@ count <- function(dir = getwd(),
            
            ##A DESeq object is created from the gene counts
            names(bamFilesToCount) <- samples
-           myBams <- BamFileList(bamFilesToCount, yieldSize = 10000, asMates = paired)
-           geneCounts <- summarizeOverlaps(geneExons, myBams, ignore.strand = TRUE,
+           myBams <- Rsamtools::BamFileList(bamFilesToCount, yieldSize = 10000, asMates = paired)
+           geneCounts <- GenomicAlignments::summarizeOverlaps(geneExons, myBams, ignore.strand = TRUE,
                                            BPPARAM = bpp, singleEnd = isFALSE(paired))
            metaData <- data.frame(Group = groupNames, 
                                   row.names = colnames(geneCounts))
-           countMatrix <- assay(geneCounts)
+           countMatrix <- SummarizedExperiment::assay(geneCounts)
            countDF <- data.frame(countMatrix)
            annotatedCount <- countDF
            
@@ -115,7 +108,7 @@ count <- function(dir = getwd(),
            library(org.Hs.eg.db)
            organism <- BSgenome.Hsapiens.UCSC.hg38
            
-           geneExons <- exonsBy(TxDb.Hsapiens.UCSC.hg38.knownGene, by = "gene")
+           geneExons <- GenomicFeatures::exonsBy(TxDb.Hsapiens.UCSC.hg38.knownGene, by = "gene")
            if (is.null(groups)) {
              folders <- list.dirs(path = dir, full.names = TRUE, recursive = FALSE)
            } else {
@@ -137,7 +130,7 @@ count <- function(dir = getwd(),
                sampletype <- basename(dirname(sampledir[c(i)]))
                groupNames <- append(groupNames, sampletype)
                print(tail(groupNames, n = 1L))
-               bam <- list_files_with_exts(dir = sampledir[c(i)], exts = "bam")
+               bam <- tools::list_files_with_exts(dir = sampledir[c(i)], exts = "bam")
                bamFilesToCount <- append(bamFilesToCount, bam)
                names <- basename(dirname(bam))
                samples <- append(samples, names)
@@ -152,12 +145,12 @@ count <- function(dir = getwd(),
            
            ##A DESeq object is created from the gene counts
            names(bamFilesToCount) <- samples
-           myBams <- BamFileList(bamFilesToCount, yieldSize = 10000, asMates = paired)
-           geneCounts <- summarizeOverlaps(geneExons, myBams, ignore.strand = TRUE,
+           myBams <- Rsamtools::BamFileList(bamFilesToCount, yieldSize = 10000, asMates = paired)
+           geneCounts <- GenomicAlignments::summarizeOverlaps(geneExons, myBams, ignore.strand = TRUE,
                                            BPPARAM = bpp, singleEnd = isFALSE(paired))
            metaData <- data.frame(Group = groupNames, 
                                   row.names = colnames(geneCounts))
-           countMatrix <- assay(geneCounts)
+           countMatrix <- SummarizedExperiment::assay(geneCounts)
            countDF <- data.frame(countMatrix)
            annotatedCount <- countDF
            
@@ -181,7 +174,7 @@ count <- function(dir = getwd(),
            library(org.Mm.eg.db)
            organism <- BSgenome.Mmusculus.UCSC.mm10
            
-           geneExons <- exonsBy(TxDb.Mmusculus.UCSC.mm10.knownGene, by = "gene")
+           geneExons <- GenomicFeatures::exonsBy(TxDb.Mmusculus.UCSC.mm10.knownGene, by = "gene")
            if (is.null(groups)) {
              folders <- list.dirs(path = dir, full.names = TRUE, recursive = FALSE)
            } else {
@@ -203,7 +196,7 @@ count <- function(dir = getwd(),
                sampletype <- basename(dirname(sampledir[c(i)]))
                groupNames <- append(groupNames, sampletype)
                print(tail(groupNames, n = 1L))
-               bam <- list_files_with_exts(dir = sampledir[c(i)], exts = "bam")
+               bam <- tools::list_files_with_exts(dir = sampledir[c(i)], exts = "bam")
                bamFilesToCount <- append(bamFilesToCount, bam)
                names <- basename(dirname(bam))
                samples <- append(samples, names)
@@ -218,12 +211,12 @@ count <- function(dir = getwd(),
            
            ##A DESeq object is created from the gene counts
            names(bamFilesToCount) <- samples
-           myBams <- BamFileList(bamFilesToCount, yieldSize = 10000, asMates = paired)
-           geneCounts <- summarizeOverlaps(geneExons, myBams, ignore.strand = TRUE,
+           myBams <- Rsamtools::BamFileList(bamFilesToCount, yieldSize = 10000, asMates = paired)
+           geneCounts <- GenomicAlignments::summarizeOverlaps(geneExons, myBams, ignore.strand = TRUE,
                                            BPPARAM = bpp, singleEnd = isFALSE(paired))
            metaData <- data.frame(Group = groupNames, 
                                   row.names = colnames(geneCounts))
-           countMatrix <- assay(geneCounts)
+           countMatrix <- SummarizedExperiment::assay(geneCounts)
            countDF <- data.frame(countMatrix)
            annotatedCount <- countDF
            
@@ -247,7 +240,7 @@ count <- function(dir = getwd(),
            library(org.At.tair.db)
            organism <- BSgenome.Athaliana.TAIR.TAIR9
            
-           geneExons <- exonsBy(xDb.Athaliana.BioMart.plantsmart28, by = "gene")
+           geneExons <- GenomicFeatures::exonsBy(xDb.Athaliana.BioMart.plantsmart28, by = "gene")
            if (is.null(groups)) {
              folders <- list.dirs(path = dir, full.names = TRUE, recursive = FALSE)
            } else {
@@ -269,7 +262,7 @@ count <- function(dir = getwd(),
                sampletype <- basename(dirname(sampledir[c(i)]))
                groupNames <- append(groupNames, sampletype)
                print(tail(groupNames, n = 1L))
-               bam <- list_files_with_exts(dir = sampledir[c(i)], exts = "bam")
+               bam <- tools::list_files_with_exts(dir = sampledir[c(i)], exts = "bam")
                bamFilesToCount <- append(bamFilesToCount, bam)
                names <- basename(dirname(bam))
                samples <- append(samples, names)
@@ -284,12 +277,12 @@ count <- function(dir = getwd(),
            
            ##A DESeq object is created from the gene counts
            names(bamFilesToCount) <- samples
-           myBams <- BamFileList(bamFilesToCount, yieldSize = 10000, asMates = paired)
-           geneCounts <- summarizeOverlaps(geneExons, myBams, ignore.strand = TRUE,
+           myBams <- Rsamtools::BamFileList(bamFilesToCount, yieldSize = 10000, asMates = paired)
+           geneCounts <- GenomicAlignments::summarizeOverlaps(geneExons, myBams, ignore.strand = TRUE,
                                            BPPARAM = bpp, singleEnd = isFALSE(paired))
            metaData <- data.frame(Group = groupNames, 
                                   row.names = colnames(geneCounts))
-           countMatrix <- assay(geneCounts)
+           countMatrix <- SummarizedExperiment::assay(geneCounts)
            countDF <- data.frame(countMatrix)
            annotatedCount <- countDF
            
@@ -313,7 +306,7 @@ count <- function(dir = getwd(),
            library(org.Dm.eg.db)
            organism <- BSgenome.Dmelanogaster.UCSC.dm6
            
-           geneExons <- exonsBy(TxDb.Dmelanogaster.UCSC.dm6.ensGene, by = "gene")
+           geneExons <- GenomicFeatures::exonsBy(TxDb.Dmelanogaster.UCSC.dm6.ensGene, by = "gene")
            if (is.null(groups)) {
              folders <- list.dirs(path = dir, full.names = TRUE, recursive = FALSE)
            } else {
@@ -335,7 +328,7 @@ count <- function(dir = getwd(),
                sampletype <- basename(dirname(sampledir[c(i)]))
                groupNames <- append(groupNames, sampletype)
                print(tail(groupNames, n = 1L))
-               bam <- list_files_with_exts(dir = sampledir[c(i)], exts = "bam")
+               bam <- tools::list_files_with_exts(dir = sampledir[c(i)], exts = "bam")
                bamFilesToCount <- append(bamFilesToCount, bam)
                names <- basename(dirname(bam))
                samples <- append(samples, names)
@@ -350,12 +343,12 @@ count <- function(dir = getwd(),
            
            ##A DESeq object is created from the gene counts
            names(bamFilesToCount) <- samples
-           myBams <- BamFileList(bamFilesToCount, yieldSize = 10000, asMates = paired)
-           geneCounts <- summarizeOverlaps(geneExons, myBams, ignore.strand = TRUE,
+           myBams <- Rsamtools::BamFileList(bamFilesToCount, yieldSize = 10000, asMates = paired)
+           geneCounts <- GenomicAlignments::summarizeOverlaps(geneExons, myBams, ignore.strand = TRUE,
                                            BPPARAM = bpp, singleEnd = isFALSE(paired))
            metaData <- data.frame(Group = groupNames, 
                                   row.names = colnames(geneCounts))
-           countMatrix <- assay(geneCounts)
+           countMatrix <- SummarizedExperiment::assay(geneCounts)
            countDF <- data.frame(countMatrix)
            annotatedCount <- countDF
            
@@ -379,7 +372,7 @@ count <- function(dir = getwd(),
            library(org.Dr.eg.db)
            organism <- BSgenome.Drerio.UCSC.danRer11
            
-           geneExons <- exonsBy(TxDb.Drerio.UCSC,danRer11.refGene, by = "gene")
+           geneExons <- GenomicFeatures::exonsBy(TxDb.Drerio.UCSC,danRer11.refGene, by = "gene")
            if (is.null(groups)) {
              folders <- list.dirs(path = dir, full.names = TRUE, recursive = FALSE)
            } else {
@@ -401,7 +394,7 @@ count <- function(dir = getwd(),
                sampletype <- basename(dirname(sampledir[c(i)]))
                groupNames <- append(groupNames, sampletype)
                print(tail(groupNames, n = 1L))
-               bam <- list_files_with_exts(dir = sampledir[c(i)], exts = "bam")
+               bam <- tools::list_files_with_exts(dir = sampledir[c(i)], exts = "bam")
                bamFilesToCount <- append(bamFilesToCount, bam)
                names <- basename(dirname(bam))
                samples <- append(samples, names)
@@ -416,12 +409,12 @@ count <- function(dir = getwd(),
            
            ##A DESeq object is created from the gene counts
            names(bamFilesToCount) <- samples
-           myBams <- BamFileList(bamFilesToCount, yieldSize = 10000, asMates = paired)
-           geneCounts <- summarizeOverlaps(geneExons, myBams, ignore.strand = TRUE,
+           myBams <- Rsamtools::BamFileList(bamFilesToCount, yieldSize = 10000, asMates = paired)
+           geneCounts <- GenomicAlignments::summarizeOverlaps(geneExons, myBams, ignore.strand = TRUE,
                                            BPPARAM = bpp, singleEnd = isFALSE(paired))
            metaData <- data.frame(Group = groupNames, 
                                   row.names = colnames(geneCounts))
-           countMatrix <- assay(geneCounts)
+           countMatrix <- SummarizedExperiment::assay(geneCounts)
            countDF <- data.frame(countMatrix)
            annotatedCount <- countDF
            
@@ -445,7 +438,7 @@ count <- function(dir = getwd(),
            library(org.Rn.eg.db)
            organism <- BSgenome.Rnorvegicus.UCSC.rn5
            
-           geneExons <- exonsBy(TxDb.Rnorvegicus.UCSC.rn5.refGene, by = "gene")
+           geneExons <- GenomicFeatures::exonsBy(TxDb.Rnorvegicus.UCSC.rn5.refGene, by = "gene")
            if (is.null(groups)) {
              folders <- list.dirs(path = dir, full.names = TRUE, recursive = FALSE)
            } else {
@@ -467,7 +460,7 @@ count <- function(dir = getwd(),
                sampletype <- basename(dirname(sampledir[c(i)]))
                groupNames <- append(groupNames, sampletype)
                print(tail(groupNames, n = 1L))
-               bam <- list_files_with_exts(dir = sampledir[c(i)], exts = "bam")
+               bam <- tools::list_files_with_exts(dir = sampledir[c(i)], exts = "bam")
                bamFilesToCount <- append(bamFilesToCount, bam)
                names <- basename(dirname(bam))
                samples <- append(samples, names)
@@ -482,12 +475,12 @@ count <- function(dir = getwd(),
            
            ##A DESeq object is created from the gene counts
            names(bamFilesToCount) <- samples
-           myBams <- BamFileList(bamFilesToCount, yieldSize = 10000, asMates = paired)
-           geneCounts <- summarizeOverlaps(geneExons, myBams, ignore.strand = TRUE,
+           myBams <- Rsamtools::BamFileList(bamFilesToCount, yieldSize = 10000, asMates = paired)
+           geneCounts <- GenomicAlignments::summarizeOverlaps(geneExons, myBams, ignore.strand = TRUE,
                                            BPPARAM = bpp, singleEnd = isFALSE(paired))
            metaData <- data.frame(Group = groupNames, 
                                   row.names = colnames(geneCounts))
-           countMatrix <- assay(geneCounts)
+           countMatrix <- SummarizedExperiment::assay(geneCounts)
            countDF <- data.frame(countMatrix)
            annotatedCount <- countDF
            
@@ -511,7 +504,7 @@ count <- function(dir = getwd(),
            library(org.Sc.sgd.db)
            organism <- BSgenome.Scerevisiae.UCSC.sacCer3
            
-           geneExons <- exonsBy(TxDb.Scerevisiae.UCSC.sacCer3.sgdGene, by = "gene")
+           geneExons <- GenomicFeatures::exonsBy(TxDb.Scerevisiae.UCSC.sacCer3.sgdGene, by = "gene")
            if (is.null(groups)) {
              folders <- list.dirs(path = dir, full.names = TRUE, recursive = FALSE)
            } else {
@@ -533,7 +526,7 @@ count <- function(dir = getwd(),
                sampletype <- basename(dirname(sampledir[c(i)]))
                groupNames <- append(groupNames, sampletype)
                print(tail(groupNames, n = 1L))
-               bam <- list_files_with_exts(dir = sampledir[c(i)], exts = "bam")
+               bam <- tools::list_files_with_exts(dir = sampledir[c(i)], exts = "bam")
                bamFilesToCount <- append(bamFilesToCount, bam)
                names <- basename(dirname(bam))
                samples <- append(samples, names)
@@ -548,12 +541,12 @@ count <- function(dir = getwd(),
            
            ##A DESeq object is created from the gene counts
            names(bamFilesToCount) <- samples
-           myBams <- BamFileList(bamFilesToCount, yieldSize = 10000, asMates = paired)
-           geneCounts <- summarizeOverlaps(geneExons, myBams, ignore.strand = TRUE,
+           myBams <- Rsamtools::BamFileList(bamFilesToCount, yieldSize = 10000, asMates = paired)
+           geneCounts <- GenomicAlignments::summarizeOverlaps(geneExons, myBams, ignore.strand = TRUE,
                                            BPPARAM = bpp, singleEnd = isFALSE(paired))
            metaData <- data.frame(Group = groupNames, 
                                   row.names = colnames(geneCounts))
-           countMatrix <- assay(geneCounts)
+           countMatrix <- SummarizedExperiment::assay(geneCounts)
            countDF <- data.frame(countMatrix)
            annotatedCount <- countDF
            
@@ -577,7 +570,7 @@ count <- function(dir = getwd(),
            library(org.Ce.eg.db)
            organism <- BSgenome.Celegans.UCSC.ce11
            
-           geneExons <- exonsBy(TxDb.Celegans.UCSC.ce11.refGene, by = "gene")
+           geneExons <- GenomicFeatures::exonsBy(TxDb.Celegans.UCSC.ce11.refGene, by = "gene")
            if (is.null(groups)) {
              folders <- list.dirs(path = dir, full.names = TRUE, recursive = FALSE)
            } else {
@@ -599,7 +592,7 @@ count <- function(dir = getwd(),
                sampletype <- basename(dirname(sampledir[c(i)]))
                groupNames <- append(groupNames, sampletype)
                print(tail(groupNames, n = 1L))
-               bam <- list_files_with_exts(dir = sampledir[c(i)], exts = "bam")
+               bam <- tools::list_files_with_exts(dir = sampledir[c(i)], exts = "bam")
                bamFilesToCount <- append(bamFilesToCount, bam)
                names <- basename(dirname(bam))
                samples <- append(samples, names)
@@ -614,12 +607,12 @@ count <- function(dir = getwd(),
            
            ##A DESeq object is created from the gene counts
            names(bamFilesToCount) <- samples
-           myBams <- BamFileList(bamFilesToCount, yieldSize = 10000, asMates = paired)
-           geneCounts <- summarizeOverlaps(geneExons, myBams, ignore.strand = TRUE,
+           myBams <- Rsamtools::BamFileList(bamFilesToCount, yieldSize = 10000, asMates = paired)
+           geneCounts <- GenomicAlignments::summarizeOverlaps(geneExons, myBams, ignore.strand = TRUE,
                                            BPPARAM = bpp, singleEnd = isFALSE(paired))
            metaData <- data.frame(Group = groupNames, 
                                   row.names = colnames(geneCounts))
-           countMatrix <- assay(geneCounts)
+           countMatrix <- SummarizedExperiment::assay(geneCounts)
            countDF <- data.frame(countMatrix)
            annotatedCount <- countDF
            
@@ -641,5 +634,3 @@ count <- function(dir = getwd(),
   setwd(wd)
   return(annotatedCount)
 }
-
-
