@@ -34,14 +34,6 @@ geneExpression <- function(dir = getwd(),
              "[9] Caenorhabditis elegans \n"))
   species <- readline("Type the number of the species that you would like to use as a reference: ")
   
-  library(BiocParallel)
-  library(GenomicFeatures)
-  library(Rsamtools)
-  library(DESeq2)
-  library(AnnotationDbi)
-  library(GenomicAlignments)
-  library(SummarizedExperiment)
-  
   switch(species,
          "1"={
            ## Homo sapiens hg19
