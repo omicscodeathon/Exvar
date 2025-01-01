@@ -14,14 +14,14 @@
 #' @export
 processfastq <- function(file = list_files_with_exts(dir = dir, 
                                                      exts = "fastq"),
-                            dir = getwd(), 
-                            paired = FALSE, 
-                            threads = 4L,
-                            molecule = "RNA") {
-    if(Sys.info()[['sysname']] != "Linux"){
+                         dir = getwd(), 
+                         paired = FALSE, 
+                         threads = 4L,
+                         molecule = "RNA") {
+  if(Sys.info()[['sysname']] != "Linux"){
     message("This function is only available on Linux.")
     stop()
-    }
+  }
   cat(paste0("These are the species currently supported by Exvar: \n",
              "[1] Homo sapiens (hg19) \n",
              "[2] Homo sapiens (hg38) \n", 
@@ -34,9 +34,6 @@ processfastq <- function(file = list_files_with_exts(dir = dir,
              "[9] Caenorhabditis elegans \n"))
   species <- readline("Type the number of the species that you would like to use as a reference: ")
   
-  library(Rfastp)
-  library(gmapR)
-  
   wd <- getwd()
   ##Sets the reference genome that corresponds to the species chosen by the user
   switch(species,
@@ -44,15 +41,15 @@ processfastq <- function(file = list_files_with_exts(dir = dir,
            ##Homo sapiens hg19
            library(BSgenome.Hsapiens.UCSC.hg19)
            organism <- BSgenome.Hsapiens.UCSC.hg19
-         
+           
            ##Selects hg19 as the reference genome
            ##If reference doesn't exist within package directory, create one
            if (dir.exists(paste0(find.package("Exvar"), "/hg19"))) {
-             refgen <- GmapGenome(organism,
+             refgen <- gmapR::GmapGenome(organism,
                                   directory = find.package("Exvar"))
            } else {
              print("Reference genome not found. Creating reference. This might take a while...")
-             refgen <- GmapGenome(organism,
+             refgen <- gmapR::GmapGenome(organism,
                                   directory = find.package("Exvar"),
                                   create = TRUE)
            }
@@ -65,11 +62,11 @@ processfastq <- function(file = list_files_with_exts(dir = dir,
            ##Selects hg38 as the reference genome
            ##If reference doesn't exist within package directory, create one
            if (dir.exists(paste0(find.package("Exvar"), "/hg38"))) {
-             refgen <- GmapGenome(organism,
+             refgen <- gmapR::GmapGenome(organism,
                                   directory = find.package("Exvar"))
            } else {
              print("Reference genome not found. Creating reference. This might take a while...")
-             refgen <- GmapGenome(organism,
+             refgen <- gmapR::GmapGenome(organism,
                                   directory = find.package("Exvar"),
                                   create = TRUE)
            }
@@ -78,15 +75,15 @@ processfastq <- function(file = list_files_with_exts(dir = dir,
            ##Mus musculus mm10
            library(BSgenome.Mmusculus.UCSC.mm10)
            organism <- BSgenome.Mmusculus.UCSC.mm10
-         
+           
            ##Selects mm10 as the reference genome
            ##If reference doesn't exist within package directory, create one
            if (dir.exists(paste0(find.package("Exvar"), "/mm10"))) {
-             refgen <- GmapGenome(organism,
+             refgen <- gmapR::GmapGenome(organism,
                                   directory = find.package("Exvar"))
            } else {
              print("Reference genome not found. Creating reference. This might take a while...")
-             refgen <- GmapGenome(organism,
+             refgen <- gmapR::GmapGenome(organism,
                                   directory = find.package("Exvar"),
                                   create = TRUE)
            }
@@ -95,15 +92,15 @@ processfastq <- function(file = list_files_with_exts(dir = dir,
            ##Arabidopsis thaliana TAIR9
            library(BSgenome.Athaliana.TAIR.TAIR9)
            organism <- BSgenome.Athaliana.TAIR.TAIR9
-         
+           
            ##Selects hg19 as the reference genome
            ##If reference doesn't exist within package directory, create one
            if (dir.exists(paste0(find.package("Exvar"), "/TAIR9"))) {
-             refgen <- GmapGenome(organism,
+             refgen <- gmapR::GmapGenome(organism,
                                   directory = find.package("Exvar"))
            } else {
              print("Reference genome not found. Creating reference. This might take a while...")
-             refgen <- GmapGenome(organism,
+             refgen <- gmapR::GmapGenome(organism,
                                   directory = find.package("Exvar"),
                                   create = TRUE)
            }
@@ -112,15 +109,15 @@ processfastq <- function(file = list_files_with_exts(dir = dir,
            ##Drosophilia melanogaster dm6
            library(BSgenome.Dmelanogaster.UCSC.dm6)
            organism <- BSgenome.Dmelanogaster.UCSC.dm6
-         
+           
            ##Selects dm6 as the reference genome
            ##If reference doesn't exist within package directory, create one
            if (dir.exists(paste0(find.package("Exvar"), "/dm6"))) {
-             refgen <- GmapGenome(organism,
+             refgen <- gmapR::GmapGenome(organism,
                                   directory = find.package("Exvar"))
            } else {
              print("Reference genome not found. Creating reference. This might take a while...")
-             refgen <- GmapGenome(organism,
+             refgen <- gmapR::GmapGenome(organism,
                                   directory = find.package("Exvar"),
                                   create = TRUE)
            }
@@ -129,15 +126,15 @@ processfastq <- function(file = list_files_with_exts(dir = dir,
            ##Danio rerio danRer11
            library(BSgenome.Drerio.UCSC.danRer11)
            organism <- BSgenome.Drerio.UCSC.danRer11
-         
+           
            ##Selects danRer11 as the reference genome
            ##If reference doesn't exist within package directory, create one
            if (dir.exists(paste0(find.package("Exvar"), "/danRer11"))) {
-             refgen <- GmapGenome(organism,
+             refgen <- gmapR::GmapGenome(organism,
                                   directory = find.package("Exvar"))
            } else {
              print("Reference genome not found. Creating reference. This might take a while...")
-             refgen <- GmapGenome(organism,
+             refgen <- gmapR::GmapGenome(organism,
                                   directory = find.package("Exvar"),
                                   create = TRUE)
            }
@@ -146,15 +143,15 @@ processfastq <- function(file = list_files_with_exts(dir = dir,
            ##Rattus norvegicus rn5
            library(BSgenome.Rnorvegicus.UCSC.rn5)
            organism <- BSgenome.Rnorvegicus.UCSC.rn5
-         
+           
            ##Selects danRer11 as the reference genome
            ##If reference doesn't exist within package directory, create one
            if (dir.exists(paste0(find.package("Exvar"), "/rn5"))) {
-             refgen <- GmapGenome(organism,
+             refgen <- gmapR::GmapGenome(organism,
                                   directory = find.package("Exvar"))
            } else {
              print("Reference genome not found. Creating reference. This might take a while...")
-             refgen <- GmapGenome(organism,
+             refgen <- gmapR::GmapGenome(organism,
                                   directory = find.package("Exvar"),
                                   create = TRUE)
            }
@@ -163,15 +160,15 @@ processfastq <- function(file = list_files_with_exts(dir = dir,
            ##Saccharomyces cerevisiae sacCer3
            library(BSgenome.Scerevisiae.UCSC.sacCer3)
            organism <- BSgenome.Scerevisiae.UCSC.sacCer3
-         
+           
            ##Selects sacCer3 as the reference genome
            ##If reference doesn't exist within package directory, create one
            if (dir.exists(paste0(find.package("Exvar"), "/sacCer3"))) {
-             refgen <- GmapGenome(organism,
+             refgen <- gmapR::GmapGenome(organism,
                                   directory = find.package("Exvar"))
            } else {
              print("Reference genome not found. Creating reference. This might take a while...")
-             refgen <- GmapGenome(organism,
+             refgen <- gmapR::GmapGenome(organism,
                                   directory = find.package("Exvar"),
                                   create = TRUE)
            }
@@ -180,30 +177,30 @@ processfastq <- function(file = list_files_with_exts(dir = dir,
            ##Caenorhabditis elagans
            library(BSgenome.Celegans.UCSC.ce11)
            organism <- BSgenome.Celegans.UCSC.ce11
-         
+           
            ##Selects ce11 as the reference genome
            ##If reference doesn't exist within package directory, create one
            if (dir.exists(paste0(find.package("Exvar"), "/ce11"))) {
-             refgen <- GmapGenome(organism,
+             refgen <- gmapR::GmapGenome(organism,
                                   directory = find.package("Exvar"))
            } else {
              print("Reference genome not found. Creating reference. This might take a while...")
-             refgen <- GmapGenome(organism,
+             refgen <- gmapR::GmapGenome(organism,
                                   directory = find.package("Exvar"),
                                   create = TRUE)
            }
          }
-)
-      
+  )
+  
   print("Obtaining GSNAP parameters...")
-  snapParam <- GsnapParam(refgen, unique_only = TRUE,
+  snapParam <- gmapR::GsnapParam(refgen, unique_only = TRUE,
                           molecule = molecule, nthreads = threads)
   bams <- c()
   
   if (isTRUE(paired)) {
     inputFastq <- file
     print("Receiving fastq file...")
-    inputFastq <- sort(inputFastq)
+    inputFastq <- Rfastp::sort(inputFastq)
     fastqn <- length(inputFastq)/2
     inputfl <- 1:fastqn
     foldernames <- gsub("\\_.*","", file_path_sans_ext(basename(inputFastq)))
@@ -222,12 +219,12 @@ processfastq <- function(file = list_files_with_exts(dir = dir,
       setwd(paste0(dir, 
                    "/", 
                    foldernames[c(2*x)]))
-      json_report <- rfastp(read1 = read1, read2 = read2,  
+      json_report <- Rfastp::rfastp(read1 = read1, read2 = read2,  
                             outputFastq = 
                               paste0(foldernames[2*x], 
                                      '_quality_checked'),
                             thread = threads, maxReadLength = 200L)
-      QC <- qcSummary(json_report)
+      QC <- Rfastp::qcSummary(json_report)
       write.csv(QC, "QC_summary.csv")
       gc()
       
@@ -239,7 +236,7 @@ processfastq <- function(file = list_files_with_exts(dir = dir,
       read2 <- paste0(foldernames[2*x], 
                       '_quality_checked_R2.fastq.gz')
       print("Aligning reads...")
-      output <- gsnap(read1, read2, params = snapParam,
+      output <- gmapR::gsnap(read1, read2, params = snapParam,
                       output = paste0(getwd(), "/", foldernames[x]))
       print("Creating bam file...")
       bamfl <- as(output, "BamFile")
@@ -250,7 +247,7 @@ processfastq <- function(file = list_files_with_exts(dir = dir,
   } else {
     inputFastq <- file
     print("Receiving fastq file...")
-    inputFastq <- sort(inputFastq)
+    inputFastq <- Rfastp::sort(inputFastq)
     fastqn <- length(inputFastq)
     inputfl <- 1:fastqn
     foldernames <- gsub("\\_.*","", file_path_sans_ext(basename(inputFastq)))
@@ -268,7 +265,7 @@ processfastq <- function(file = list_files_with_exts(dir = dir,
       setwd(paste0(dir, 
                    "/", 
                    foldernames[c(x)]))
-      json_report <- rfastp(read1 = read1, 
+      json_report <- Rfastp::rfastp(read1 = read1, 
                             outputFastq = 
                               paste0(foldernames[x], 
                                      '_quality_checked'),
@@ -281,12 +278,12 @@ processfastq <- function(file = list_files_with_exts(dir = dir,
       ## Iterates over all previously selected files
       ## Output is an indexed bam file
       print("Unzipping fastq.gz")
-      gunzip(paste0(foldernames[x], 
+      R.utils::gunzip(paste0(foldernames[x], 
                     '_quality_checked_R1.fastq.gz'))
       read <- paste0(foldernames[x], 
                      '_quality_checked_R1.fastq')
       print("Aligning reads...")
-      output <- gsnap(read, input_b = NULL, params = snapParam,
+      output <- gmapR::gsnap(read, input_b = NULL, params = snapParam,
                       output = paste0(getwd(), "/", foldernames[x]))
       print("Creating bam file...")
       bamfl <- as(output, "BamFile") 
@@ -298,4 +295,3 @@ processfastq <- function(file = list_files_with_exts(dir = dir,
   setwd(wd)
   return(bams)
 }
-           
