@@ -12,7 +12,7 @@
 #' @param molecule A character string indicating either DNA or RNA samples.
 #' @return A list of file paths to created BAM files
 #' @export
-processfastq <- function(file = list_files_with_exts(dir = dir, 
+processfastq <- function(file = tools::list_files_with_exts(dir = dir, 
                                                      exts = "fastq"),
                          dir = getwd(), 
                          paired = FALSE, 
@@ -200,7 +200,7 @@ processfastq <- function(file = list_files_with_exts(dir = dir,
   if (isTRUE(paired)) {
     inputFastq <- file
     print("Receiving fastq file...")
-    inputFastq <- Rfastp::sort(inputFastq)
+    inputFastq <- sort(inputFastq)
     fastqn <- length(inputFastq)/2
     inputfl <- 1:fastqn
     foldernames <- gsub("\\_.*","", file_path_sans_ext(basename(inputFastq)))
@@ -214,8 +214,8 @@ processfastq <- function(file = list_files_with_exts(dir = dir,
     for (x in inputfl) {
       print("Quality checking fastq...")
       fastqPath <- file.path(c(inputFastq[c(2*x-1)], inputFastq[c(2*x)]))
-      read1 <- file_path_as_absolute(fastqPath[1])
-      read2 <- file_path_as_absolute(fastqPath[2])
+      read1 <- tools::file_path_as_absolute(fastqPath[1])
+      read2 <- tools::file_path_as_absolute(fastqPath[2])
       setwd(paste0(dir, 
                    "/", 
                    foldernames[c(2*x)]))
@@ -247,7 +247,7 @@ processfastq <- function(file = list_files_with_exts(dir = dir,
   } else {
     inputFastq <- file
     print("Receiving fastq file...")
-    inputFastq <- Rfastp::sort(inputFastq)
+    inputFastq <- sort(inputFastq)
     fastqn <- length(inputFastq)
     inputfl <- 1:fastqn
     foldernames <- gsub("\\_.*","", file_path_sans_ext(basename(inputFastq)))
@@ -261,7 +261,7 @@ processfastq <- function(file = list_files_with_exts(dir = dir,
     for (x in inputfl) {
       print("Quality checking fastq...")
       fastqPath <- file.path(inputFastq[c(x)])
-      read1 <- file_path_as_absolute(fastqPath)
+      read1 <- tools::file_path_as_absolute(fastqPath)
       setwd(paste0(dir, 
                    "/", 
                    foldernames[c(x)]))
