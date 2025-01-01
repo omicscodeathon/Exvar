@@ -32,14 +32,6 @@ callsnp <- function(bam,
   mode <- readline("Type [y/n] for [yes/no]: ")
   wd <- getwd()
   
-  library(gmapR)
-  library(Rsamtools)
-  library(VariantTools)
-  library(GenomicRanges)
-  library(GenomeInfoDb)
-  library(VariantAnnotation)
-  library(BiocParallel)
-  
   if(mode == "y") {
     ##Sets the reference genome that corresponds to the species chosen by the user
     switch(species,
