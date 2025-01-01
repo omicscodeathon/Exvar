@@ -1,3 +1,4 @@
+
 #' Call copy number variants
 #' 
 #' This function calls copy number variants from sample BAM files compared to
@@ -20,57 +21,52 @@ callcnv <- function(controldir,
   if(Sys.info()[['sysname']] != "Linux"){
     message("This function is only available on Linux.")
     stop()
-    }
+  }
   cat(paste0("These are the species currently supported by Exvar: \n",
              "[1] Homo sapiens (hg19) \n",
              "[2] Homo sapiens (hg38) \n"))
   species <- readline("Type the number of the species that you would like to use as a reference: ")
   
-  library(panelcn.mops)
-  library(rtracklayer)
-  library(utils)
-  library(Rsamtools)
-  
   wd <- getwd()
-##Sets the reference genome that corresponds to the species chosen by the user
+  ##Sets the reference genome that corresponds to the species chosen by the user
   switch(species,
          "1"={
            ##Homo sapiens hg19
            library(TxDb.Hsapiens.UCSC.hg19.knownGene)
            bed <- TxDb.Hsapiens.UCSC.hg19.knownGene
-         
-             bedname <- paste0(metadata(bed)[metadata(bed)$name == "Genome", 2], ".bed")
-    if (file.exists(bedname)){
-      countWindows <- getWindows(bedname)
-    } else {
-      outcome <- readline("BED file does not exist. Create one? [y/n]")
-      if (outcome == "y") {
-        export.bed(bed, bedname)
-        countWindows <- getWindows(bedname)
-      } else {
-        stop("BED file required to continue.")
-      }
-      }
+           
+           bedname <- paste0(metadata(bed)[metadata(bed)$name == "Genome", 2], ".bed")
+           if (file.exists(bedname)){
+             countWindows <- panelcn.mops::getWindows(bedname)
+           } else {
+             outcome <- readline("BED file does not exist. Create one? [y/n]")
+             if (outcome == "y") {
+               rtracklayer::export.bed(bed, bedname)
+               countWindows <- panelcn.mops::getWindows(bedname)
+             } else {
+               stop("BED file required to continue.")
+             }
+           }
          },
          "2"={
            ##Homo sapiens hg38
            library(TxDb.Hsapiens.UCSC.hg38.knownGene)
            bed <- TxDb.Hsapiens.UCSC.hg38.knownGene
            
-             bedname <- paste0(metadata(bed)[metadata(bed)$name == "Genome", 2], ".bed")
-    if (file.exists(bedname)){
-      countWindows <- getWindows(bedname)
-    } else {
-      outcome <- readline("BED file does not exist. Create one? [y/n]")
-      if (outcome == "y") {
-        export.bed(bed, bedname)
-        countWindows <- getWindows(bedname)
-      } else {
-        stop("BED file required to continue.")
-      }
-      }
+           bedname <- paste0(metadata(bed)[metadata(bed)$name == "Genome", 2], ".bed")
+           if (file.exists(bedname)){
+             countWindows <- panelcn.mops::getWindows(bedname)
+           } else {
+             outcome <- readline("BED file does not exist. Create one? [y/n]")
+             if (outcome == "y") {
+               rtracklayer::export.bed(bed, bedname)
+               countWindows <- panelcn.mops::getWindows(bedname)
+             } else {
+               stop("BED file required to continue.")
+             }
+           }
          }
-)
+  )
   
   ##Labels the folder that contains the sample folders under the path parameter
   control_samples <- list.dirs(path = controldir,
@@ -82,12 +78,12 @@ callcnv <- function(controldir,
   control_bamfl <- c()
   experiment_bamfl <- c()
   for (i in control_samples) {
-    bam <- list_files_with_exts(dir = i, exts = "bam")
+    bam <- tools::list_files_with_exts(dir = i, exts = "bam")
     control_bamfl <- append(control_bamfl, bam)
   }
   
   for (i in experiment_samples) {
-    bam <- list_files_with_exts(dir = i, exts = "bam")
+    bam <- tools::list_files_with_exts(dir = i, exts = "bam")
     experiment_bamfl <- append(experiment_bamfl, bam)
   }
   
@@ -96,24 +92,24 @@ callcnv <- function(controldir,
   ##each sample
   ##Control samples are excluded
   print("Getting gene counts...")
-  a <- BamFile(experiment_bamfl[1])
+  a <- Rsamtools::BamFile(experiment_bamfl[1])
   countWindows <- countWindows[countWindows$chromosome == seqlevels(a),]
   print("Control")
-  control <- countBamListInGRanges(countWindows = countWindows,
+  control <- panelcn.mops::countBamListInGRanges(countWindows = countWindows,
                                    bam.files = control_bamfl)
   #control <- getReadCountsFromBAM(control_bamfl, basename(control_bamfl), seqlevels(a), parallel = 10, min.mapq = 20, read.width = 200)
   print("Experiment")
-  experiment <- countBamListInGRanges(countWindows = countWindows,
+  experiment <- panelcn.mops::countBamListInGRanges(countWindows = countWindows,
                                       bam.files = experiment_bamfl)
   #experiment <- getReadCountsFromBAM(experiment_bamfl, basename(experiment_bamfl), seqlevels(a), parallel = 10, min.mapq = 20, read.width = 200)
-  index <- length(colnames(elementMetadata(experiment)))
-  elementMetadata(experiment) <- cbind(elementMetadata(experiment),
-                                       elementMetadata(control))
+  index <- length(colnames(GenomicRanges::elementMetadata(experiment)))
+  GenomicRanges::elementMetadata(experiment) <- cbind(GenomicRanges::elementMetadata(experiment),
+                                       GenomicRanges::elementMetadata(control))
   print("Comparing copy numbers...")
-  resultlist <- runPanelcnMops(experiment, 1:index,
+  resultlist <- panelcn.mops::runPanelcnMops(experiment, 1:index,
                                countWindows = countWindows)
-  sampleNames <- colnames(elementMetadata(experiment))
-  resulttable <- createResultTable(resultlist = resultlist, XandCB = experiment,
+  sampleNames <- colnames(GenomicRanges::elementMetadata(experiment))
+  resulttable <- panelcn.mops::createResultTable(resultlist = resultlist, XandCB = experiment,
                                    countWindows = countWindows,
                                    sampleNames = sampleNames)
   
