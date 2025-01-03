@@ -195,10 +195,10 @@ callsnp <- function(bam,
                print("Merging VCF files...")
                vcflist <- tools::list_files_with_exts(tempfolder, "vcf")
                vcfpath <- normalizePath(vcflist)
-               match <- VariantAnnotation::VariantAnnotation::readVcf(vcfpath[1])
+               match <- VariantAnnotation::readVcf(vcfpath[1])
                print(paste0(gsub(".vcf", "", basename(vcfpath[1])), " OKAY"))
                for (item in vcfpath[-1]) {
-                 b <- VariantAnnotation::VariantAnnotation::readVcf(item)
+                 b <- VariantAnnotation::readVcf(item)
                  match <- BiocGenerics::rbind(match, b)
                  print(paste0(gsub(".vcf", "", basename(item)), " OKAY"))
                }
@@ -378,10 +378,10 @@ callsnp <- function(bam,
                print("Merging VCF files...")
                vcflist <- tools::list_files_with_exts(tempfolder, "vcf")
                vcfpath <- normalizePath(vcflist)
-               match <- VariantAnnotation::VariantAnnotation::readVcf(vcfpath[1])
+               match <- VariantAnnotation::readVcf(vcfpath[1])
                print(paste0(gsub(".vcf", "", basename(vcfpath[1])), " OKAY"))
                for (item in vcfpath[-1]) {
-                 b <- VariantAnnotation::VariantAnnotation::readVcf(item)
+                 b <- VariantAnnotation::readVcf(item)
                  match <- BiocGenerics::rbind(match, b)
                  print(paste0(gsub(".vcf", "", basename(item)), " OKAY"))
                }
@@ -493,10 +493,10 @@ callsnp <- function(bam,
                print("Merging VCF files...")
                vcflist <- tools::list_files_with_exts(tempfolder, "vcf")
                vcfpath <- normalizePath(vcflist)
-               match <- VariantAnnotation::VariantAnnotation::readVcf(vcfpath[1])
+               match <- VariantAnnotation::readVcf(vcfpath[1])
                print(paste0(gsub(".vcf", "", basename(vcfpath[1])), " OKAY"))
                for (item in vcfpath[-1]) {
-                 b <- VariantAnnotation::VariantAnnotation::readVcf(item)
+                 b <- VariantAnnotation::readVcf(item)
                  match <- BiocGenerics::rbind(match, b)
                  print(paste0(gsub(".vcf", "", basename(item)), " OKAY"))
                }
@@ -608,10 +608,10 @@ callsnp <- function(bam,
                print("Merging VCF files...")
                vcflist <- tools::list_files_with_exts(tempfolder, "vcf")
                vcfpath <- normalizePath(vcflist)
-               match <- VariantAnnotation::VariantAnnotation::readVcf(vcfpath[1])
+               match <- VariantAnnotation::readVcf(vcfpath[1])
                print(paste0(gsub(".vcf", "", basename(vcfpath[1])), " OKAY"))
                for (item in vcfpath[-1]) {
-                 b <- VariantAnnotation::VariantAnnotation::readVcf(item)
+                 b <- VariantAnnotation::readVcf(item)
                  match <- BiocGenerics::rbind(match, b)
                  print(paste0(gsub(".vcf", "", basename(item)), " OKAY"))
                }
@@ -723,10 +723,10 @@ callsnp <- function(bam,
                print("Merging VCF files...")
                vcflist <- tools::list_files_with_exts(tempfolder, "vcf")
                vcfpath <- normalizePath(vcflist)
-               match <- VariantAnnotation::VariantAnnotation::readVcf(vcfpath[1])
+               match <- VariantAnnotation::readVcf(vcfpath[1])
                print(paste0(gsub(".vcf", "", basename(vcfpath[1])), " OKAY"))
                for (item in vcfpath[-1]) {
-                 b <- VariantAnnotation::VariantAnnotation::readVcf(item)
+                 b <- VariantAnnotation::readVcf(item)
                  match <- BiocGenerics::rbind(match, b)
                  print(paste0(gsub(".vcf", "", basename(item)), " OKAY"))
                }
@@ -838,10 +838,10 @@ callsnp <- function(bam,
                print("Merging VCF files...")
                vcflist <- tools::list_files_with_exts(tempfolder, "vcf")
                vcfpath <- normalizePath(vcflist)
-               match <- VariantAnnotation::VariantAnnotation::readVcf(vcfpath[1])
+               match <- VariantAnnotation::readVcf(vcfpath[1])
                print(paste0(gsub(".vcf", "", basename(vcfpath[1])), " OKAY"))
                for (item in vcfpath[-1]) {
-                 b <- VariantAnnotation::VariantAnnotation::readVcf(item)
+                 b <- VariantAnnotation::readVcf(item)
                  match <- BiocGenerics::rbind(match, b)
                  print(paste0(gsub(".vcf", "", basename(item)), " OKAY"))
                }
@@ -953,10 +953,10 @@ callsnp <- function(bam,
                print("Merging VCF files...")
                vcflist <- tools::list_files_with_exts(tempfolder, "vcf")
                vcfpath <- normalizePath(vcflist)
-               match <- VariantAnnotation::VariantAnnotation::readVcf(vcfpath[1])
+               match <- VariantAnnotation::readVcf(vcfpath[1])
                print(paste0(gsub(".vcf", "", basename(vcfpath[1])), " OKAY"))
                for (item in vcfpath[-1]) {
-                 b <- VariantAnnotation::VariantAnnotation::readVcf(item)
+                 b <- VariantAnnotation::readVcf(item)
                  match <- BiocGenerics::rbind(match, b)
                  print(paste0(gsub(".vcf", "", basename(item)), " OKAY"))
                }
@@ -1068,10 +1068,10 @@ callsnp <- function(bam,
                print("Merging VCF files...")
                vcflist <- tools::list_files_with_exts(tempfolder, "vcf")
                vcfpath <- normalizePath(vcflist)
-               match <- VariantAnnotation::VariantAnnotation::readVcf(vcfpath[1])
+               match <- VariantAnnotation::readVcf(vcfpath[1])
                print(paste0(gsub(".vcf", "", basename(vcfpath[1])), " OKAY"))
                for (item in vcfpath[-1]) {
-                 b <- VariantAnnotation::VariantAnnotation::readVcf(item)
+                 b <- VariantAnnotation::readVcf(item)
                  match <- BiocGenerics::rbind(match, b)
                  print(paste0(gsub(".vcf", "", basename(item)), " OKAY"))
                }
@@ -1183,10 +1183,10 @@ callsnp <- function(bam,
                print("Merging VCF files...")
                vcflist <- tools::list_files_with_exts(tempfolder, "vcf")
                vcfpath <- normalizePath(vcflist)
-               match <- VariantAnnotation::VariantAnnotation::readVcf(vcfpath[1])
+               match <- VariantAnnotation::readVcf(vcfpath[1])
                print(paste0(gsub(".vcf", "", basename(vcfpath[1])), " OKAY"))
                for (item in vcfpath[-1]) {
-                 b <- VariantAnnotation::VariantAnnotation::readVcf(item)
+                 b <- VariantAnnotation::readVcf(item)
                  match <- BiocGenerics::rbind(match, b)
                  print(paste0(gsub(".vcf", "", basename(item)), " OKAY"))
                }
