@@ -4,10 +4,11 @@
 #'
 #' @examples exvar::requirement()
 
-requirement <- function(){
+requirement <- function(all = FALSE){
   
   #species selection
-  cat(paste0("These are the species currently supported by Exvar, choose the number corresponding to the target specie: \n",
+  if (all == FALSE){
+    cat(paste0("These are the species currently supported by Exvar, choose the number corresponding to the target specie: \n",
              "[1] Homo sapiens \n",
              "[2] Mus musculus \n",
              "[3] Arabidopsis thaliana \n",
@@ -17,6 +18,10 @@ requirement <- function(){
              "[7] Saccharomyces cerevisiae \n",
              "[8] Caenorhabditis elegans \n"))
   species <- readline("Type the number of the species that you would like to use as a reference: ")
+    } else {
+    species <- 1:8
+    }
+  
   # Detect operating system
   switch(Sys.info()[['sysname']],
          "Linux"={
@@ -207,7 +212,8 @@ requirement <- function(){
          }) # is Darwin correct ?
   
   #species specific
-  switch(species,
+  for (species in species){
+    switch(species,
          "1"={
            message("Checking BSgenome.Hsapiens.UCSC.hg19")
            if (!require("BSgenome.Hsapiens.UCSC.hg19")) BiocManager::install("BSgenome.Hsapiens.UCSC.hg19")
@@ -323,4 +329,5 @@ requirement <- function(){
            
          }
   )
+  }
 }
