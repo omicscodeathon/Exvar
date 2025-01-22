@@ -75,7 +75,7 @@ The package could be installed as follows:
 
     devtools::install_github("omicscodeathon/Exvar/Package")
 
-    library(Exvar)
+    library(exvar)
 
 
 ## Functions
