@@ -73,7 +73,7 @@ The package could be installed as follows:
 
     library(devtools)
 
-    devtools::install_github("omicscodeathon/Exvar/Package")
+    devtools::install_github("omicscodeathon/exvar/Package")
 
     library(exvar)
 
