@@ -10,7 +10,7 @@
 
 ## Table of Contents
 1. [Motivation](#Motivation)
-2. [About Exvar](#About-Exvar)
+2. [About exvar](#About-exvar)
 3. [Supported Species](#Supported-Species)
 4. [Installation](#Installation)
 5. [Functions](#Functions)
